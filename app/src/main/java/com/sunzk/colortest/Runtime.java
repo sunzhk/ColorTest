@@ -4,4 +4,13 @@ public class Runtime {
 	
 	public static int testResultNumber = 0;
 	
+	private static boolean needBGM = true;
+
+	public static boolean isNeedBGM() {
+		return needBGM;
+	}
+
+	public static void setNeedBGM(boolean needBGM) {
+		Runtime.needBGM = needBGM;
+	}
 }

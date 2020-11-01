@@ -43,10 +43,15 @@ public class ColorUtils {
 			0xFFFF0000};//红色	R255,G0,B0
 
 	public static float[] randomHSBColor() {
+		return randomHSBColor(0, 0, 0);
+	}
+
+
+	public static float[] randomHSBColor(float minH, float minS, float minB) {
 		Random random = new Random();
-		float r = random.nextInt(360);
-		float g = random.nextFloat();
-		float b = random.nextFloat();
-		return new float[]{r, g, b};
+		float h = random.nextInt((int) (360 - minH)) + minH;
+		float s = (1.0f - minS) * random.nextFloat() + minS;
+		float b = (1.0f - minB) * random.nextFloat() + minB;
+		return new float[]{h, s, b};
 	}
 }

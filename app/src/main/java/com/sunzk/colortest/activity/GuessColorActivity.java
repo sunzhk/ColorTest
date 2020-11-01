@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sunzk.colortest.BaseActivity;
 import com.sunzk.colortest.R;
 import com.sunzk.colortest.utils.AppUtils;
 import com.sunzk.colortest.utils.ColorUtils;
@@ -18,10 +19,10 @@ import java.util.Locale;
 import java.util.Random;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 
-public class GuessColorActivity extends AppCompatActivity {
+public class GuessColorActivity extends BaseActivity {
 	
 	private static final String TAG = "GuessColorActivity";
 	
@@ -70,6 +71,11 @@ public class GuessColorActivity extends AppCompatActivity {
 		nextQuestion();
 	}
 
+	@Override
+	protected boolean needBGM() {
+		return true;
+	}
+
 	private void initColorContentView() {
 		int spacing = DisplayUtil.dip2px(this, 25);
 		int sideLength = (AppUtils.getScreenWidth(this) - spacing * 4) / 3;
@@ -102,7 +108,7 @@ public class GuessColorActivity extends AppCompatActivity {
 	private void nextQuestion() {
 		tvAnswer.setText(null);
 		
-		float[] color = ColorUtils.randomHSBColor();
+		float[] color = ColorUtils.randomHSBColor(0, difficulty.minSBPercent / 100f, difficulty.minSBPercent / 100f);
 
 		leftColor[0] = color[0];
 		leftColor[1] = color[1];
@@ -185,23 +191,43 @@ public class GuessColorActivity extends AppCompatActivity {
 //		TestResultDataBase.getInstance(this).recordScore(showH, showS, showB, hsbColorSelector.getProgressH(), hsbColorSelector.getProgressS(), hsbColorSelector.getProgressB());
 //		showScore(Runtime.testResultNumber);
 //		checkAnswer();
+		float difH = Math.abs(hsbColorSelector.getColorH() - centerColor[0]) * 100f / 360f;
+		float difS = Math.abs(hsbColorSelector.getColorS() - centerColor[1]) * 100f;
+		float difB = Math.abs(hsbColorSelector.getColorB() - centerColor[2]) * 100f;
+		if (difH > difficulty.allowDeviation || difS > difficulty.allowDeviation || difB > difficulty.allowDeviation) {
+			new AlertDialog.Builder(this)
+					.setTitle("就这？")
+					.setMessage("就这也敢玩地狱模式？")
+					.setPositiveButton("再来！", (dialog, which) -> dialog.cancel())
+					.create()
+					.show();
+		} else {
+			new AlertDialog.Builder(this)
+					.setTitle("哎哟")
+					.setMessage("哎哟不错哦")
+					.setPositiveButton("不愧是我", (dialog, which) -> dialog.cancel())
+					.create()
+					.show();
+		}
 	}
-	
+
 	public enum Difficulty {
-		
-		EASY(20, 50, 50, 10),
-		MEDIUM(15, 30, 30, 10),
-		DIFFICULT(10, 15, 15, 10);
+
+		EASY(40, 35, 35, 60, 15),
+		MEDIUM(30, 30, 30, 40, 10),
+		DIFFICULT(15, 25, 25, 20, 10);
 
 		private int colorHDifferencePercent;
 		private int colorSDifferencePercent;
 		private int colorBDifferencePercent;
+		private int minSBPercent;
 		private int allowDeviation;
 
-		Difficulty(int colorHDifferencePercent, int colorSDifferencePercent, int colorBDifferencePercent, int allowDeviation) {
+		Difficulty(int colorHDifferencePercent, int colorSDifferencePercent, int colorBDifferencePercent, int minSBPercent, int allowDeviation) {
 			this.colorHDifferencePercent = colorHDifferencePercent;
 			this.colorSDifferencePercent = colorSDifferencePercent;
 			this.colorBDifferencePercent = colorBDifferencePercent;
+			this.minSBPercent = minSBPercent;
 			this.allowDeviation = allowDeviation;
 		}
 
