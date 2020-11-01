@@ -22,6 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import com.sunzk.colortest.BaseActivity;
 import com.sunzk.colortest.R;
 import com.sunzk.colortest.Runtime;
 import com.sunzk.colortest.db.TestResultDataBase;
@@ -38,7 +39,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-public class MockColorActivity extends AppCompatActivity {
+public class MockColorActivity extends BaseActivity {
 	
 	private static final String TAG = "MockColorActivity";
 	
@@ -125,7 +126,12 @@ public class MockColorActivity extends AppCompatActivity {
 
 		nextProblem();
 	}
-
+	
+	@Override
+	protected boolean needBGM() {
+		return true;
+	}
+	
 	/**
 	 * 对比答案
 	 */

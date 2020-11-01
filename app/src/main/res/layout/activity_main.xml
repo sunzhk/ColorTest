@@ -4,7 +4,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="#FFFFFFFF"
+	android:background="#FF006396"
 	tools:context=".MainActivity">
 
 	<TextView
@@ -12,8 +12,9 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Color Test"
-		android:textColor="#FF000000"
-		android:textSize="48sp"
+		android:textColor="#FFF0F0F0"
+		android:textSize="58sp"
+		android:textStyle="bold"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintHorizontal_bias="0.538"
 		app:layout_constraintLeft_toLeftOf="parent"
@@ -25,10 +26,10 @@
 		android:id="@+id/activity_main_tv_for"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="172dp"
+		android:layout_marginTop="256dp"
 		android:text="for 寂书予"
-		android:textColor="#FF000000"
-		android:textSize="28sp"
+		android:textColor="#FFA0A0A0"
+		android:textSize="21sp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/activity_main_tv_title" />

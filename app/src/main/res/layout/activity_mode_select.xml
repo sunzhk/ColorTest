@@ -26,7 +26,7 @@
 		android:gravity="center"
 		android:textSize="21sp"
 		android:layout_marginBottom="10dp"
-		android:text="地狱模式(简单版)"/>
+		android:text="地狱模式(体验版)"/>
 	<Button
 		android:id="@+id/activity_mode_select_bt_hell2"
 		android:layout_width="match_parent"
@@ -35,6 +35,7 @@
 		android:gravity="center"
 		android:textSize="21sp"
 		android:layout_marginBottom="10dp"
+		android:visibility="gone"
 		android:text="地狱模式(中级)"/>
 	<Button
 		android:id="@+id/activity_mode_select_bt_hell3"
@@ -44,11 +45,42 @@
 		android:gravity="center"
 		android:textSize="21sp"
 		android:layout_marginBottom="10dp"
+		android:visibility="gone"
 		android:text="地狱模式(魔鬼)"/>
 		
 	<View
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"/>
+	
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="15dp"
+		android:gravity="center_vertical"
+		android:layout_gravity="center_horizontal">
+		<CheckBox
+			android:id="@+id/activity_mode_select_cb_bgm_switch"
+			android:layout_width="30dp"
+			android:layout_height="30dp"
+			android:layout_marginEnd="10dp"/>
+		
+		<TextView
+			android:id="@+id/activity_mode_select_tv_bgm_switch"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/bgm_switch_on"/>
+
+	</LinearLayout>
+	
+	
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_marginBottom="30dp"
+		android:textSize="18sp"
+		android:text="@string/hint_send_suggestion_to_mail"
+		/>
 
 </LinearLayout>
