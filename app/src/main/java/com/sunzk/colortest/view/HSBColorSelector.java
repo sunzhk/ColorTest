@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
@@ -28,11 +29,19 @@ public class HSBColorSelector extends LinearLayout {
 	private GradientDrawable saturationGradientDrawable;
 	private GradientDrawable valueGradientDrawable;
 
+	private ImageView tvHFineTuningLeft;
 	private SeekBar sbH;
+	private ImageView tvHFineTuningRight;
 	private EditText tvH;
+	
+	private ImageView tvSFineTuningLeft;
 	private SeekBar sbS;
+	private ImageView tvSFineTuningRight;
 	private EditText tvS;
+	
+	private ImageView tvBFineTuningLeft;
 	private SeekBar sbB;
+	private ImageView tvBFineTuningRight;
 	private EditText tvB;
 	
 	private OnColorSelectedListener onColorSelectedListener;
@@ -65,9 +74,20 @@ public class HSBColorSelector extends LinearLayout {
 		sbH = findViewById(R.id.activity_mock_color_sb_h);
 		sbS = findViewById(R.id.activity_mock_color_sb_s);
 		sbB = findViewById(R.id.activity_mock_color_sb_b);
+		
 		tvH = findViewById(R.id.activity_mock_color_tv_h);
 		tvS = findViewById(R.id.activity_mock_color_tv_s);
 		tvB = findViewById(R.id.activity_mock_color_tv_b);
+
+		tvHFineTuningLeft = findViewById(R.id.activity_mock_color_iv_h_fine_tuning_left);
+		tvHFineTuningRight = findViewById(R.id.activity_mock_color_iv_h_fine_tuning_right);
+
+		tvSFineTuningLeft = findViewById(R.id.activity_mock_color_iv_s_fine_tuning_left);
+		tvSFineTuningRight = findViewById(R.id.activity_mock_color_iv_s_fine_tuning_right);
+
+		tvBFineTuningLeft = findViewById(R.id.activity_mock_color_iv_b_fine_tuning_left);
+		tvBFineTuningRight = findViewById(R.id.activity_mock_color_iv_b_fine_tuning_right);
+		
 		initSeekBarArea();
 	}
 
@@ -145,6 +165,45 @@ public class HSBColorSelector extends LinearLayout {
 		sbH.setOnSeekBarChangeListener(onSeekBarChangeListener);
 		sbS.setOnSeekBarChangeListener(onSeekBarChangeListener);
 		sbB.setOnSeekBarChangeListener(onSeekBarChangeListener);
+
+		tvHFineTuningLeft.setOnClickListener(v -> {
+			int progress = sbH.getProgress();
+			if (progress > 0) {
+				sbH.setProgress(progress - 1);
+			}
+		});
+		tvHFineTuningRight.setOnClickListener(v -> {
+			int progress = sbH.getProgress();
+			if (progress < sbH.getMax()) {
+				sbH.setProgress(progress + 1);
+			}
+		});
+
+		tvSFineTuningLeft.setOnClickListener(v -> {
+			int progress = sbS.getProgress();
+			if (progress > 0) {
+				sbS.setProgress(progress - 1);
+			}
+		});
+		tvSFineTuningRight.setOnClickListener(v -> {
+			int progress = sbS.getProgress();
+			if (progress < sbS.getMax()) {
+				sbS.setProgress(progress + 1);
+			}
+		});
+
+		tvBFineTuningLeft.setOnClickListener(v -> {
+			int progress = sbB.getProgress();
+			if (progress > 0) {
+				sbB.setProgress(progress - 1);
+			}
+		});
+		tvBFineTuningRight.setOnClickListener(v -> {
+			int progress = sbB.getProgress();
+			if (progress < sbB.getMax()) {
+				sbB.setProgress(progress + 1);
+			}
+		});
 	}
 
 	private void resetResultColor() {
