@@ -102,10 +102,12 @@ public class FindDiffColorActivity extends BaseActivity {
 			flContainer.setBackgroundResource(R.color.bg_activity_find_diff_color_light);
 			btLightSwitch.setText(R.string.light_switch_text_turn_off);
 			tvLevel.setTextColor(getResources().getColor(R.color.text_default_light));
+			findDiffView.setResultStrokeColor(getResources().getColor(R.color.text_default_light));
 		} else {
 			flContainer.setBackgroundResource(R.color.bg_activity_find_diff_color_dark);
 			btLightSwitch.setText(R.string.light_switch_text_turn_on);
 			tvLevel.setTextColor(getResources().getColor(R.color.text_default_dark));
+			findDiffView.setResultStrokeColor(getResources().getColor(R.color.text_default_dark));
 		}
 	}
 
