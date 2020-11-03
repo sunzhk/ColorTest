@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.FrameLayout;
 
+import com.sunzk.colortest.R;
 import com.sunzk.colortest.entity.HSB;
 import com.sunzk.colortest.utils.DisplayUtil;
 
@@ -20,9 +21,9 @@ public class FindDiffView extends FrameLayout {
 	
 	private static final String TAG = "FindDiffView";
 	
-	private static final int CORNER_RADIUS = 10;
+	private static final int CORNER_RADIUS = 5;
 	
-	private final int spacing;
+	private int spacing;
 	
 	private CustomCardView[][] colorViewMap;
 	private ArrayList<CustomCardView> viewArrayList = new ArrayList<>();
@@ -32,25 +33,31 @@ public class FindDiffView extends FrameLayout {
 	private boolean waitForLayout = false;
 	private HSB tempBaseColor;
 	private HSB tempDiffColor;
+	private int resultStrokeColor;
+	private boolean isShowingResult = false;
 
 	public FindDiffView(@NonNull Context context) {
 		super(context);
-		spacing = calSpacing(context);
+		init();
 	}
 
 	public FindDiffView(@NonNull Context context, @Nullable AttributeSet attrs) {
 		super(context, attrs);
-		spacing = calSpacing(context);
+		init();
 	}
 
 	public FindDiffView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		spacing = calSpacing(context);
+		init();
 	}
 
 	public FindDiffView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
-		spacing = calSpacing(context);
+		init();
+	}
+	
+	private void init() {
+		resultStrokeColor = getResources().getColor(R.color.text_default_dark);
 	}
 
 	@Override
@@ -66,8 +73,8 @@ public class FindDiffView extends FrameLayout {
 		}
 	}
 
-	private int calSpacing(Context context) {
-		return DisplayUtil.dip2px(context, 5);
+	private int calSpacing(Context context, int countPerSide) {
+		return DisplayUtil.dip2px(context, 3 + 3 * 1.0f / countPerSide);
 	}
 
 	/**
@@ -125,6 +132,7 @@ public class FindDiffView extends FrameLayout {
 			CustomCardView customCardView = viewArrayList.get(i);
 			customCardView.setBackground(null);
 			customCardView.getCardView().setVisibility(VISIBLE);
+			isShowingResult = false;
 			if (i == diffIndex) {
 				customCardView.getCardView().setCardBackgroundColor(diffColor.getRGBColor());
 			} else {
@@ -138,17 +146,26 @@ public class FindDiffView extends FrameLayout {
 	}
 	
 	public void showResult() {
+		isShowingResult = true;
 		CustomCardView cardView = viewArrayList.get(diffIndex);
 		GradientDrawable gradientDrawable = new GradientDrawable();
 		gradientDrawable.setCornerRadius(CORNER_RADIUS);
-		gradientDrawable.setStroke(DisplayUtil.dip2px(getContext(), 2), 0xFFFFFFFF);
+		gradientDrawable.setStroke(DisplayUtil.dip2px(getContext(), 3), resultStrokeColor);
 		gradientDrawable.setColor(cardView.getCardView().getCardBackgroundColor());
 		cardView.getCardView().setVisibility(INVISIBLE);
 		cardView.setBackground(gradientDrawable);
 	}
 
+	public void setResultStrokeColor(int resultStrokeColor) {
+		this.resultStrokeColor = resultStrokeColor;
+		if (isShowingResult) {
+			showResult();
+		}
+	}
+
 	private int calViewSideLength(int countPerSide) {
 		int viewWidth = getWidth();
+		spacing = calSpacing(getContext(), countPerSide);
 		return ((viewWidth + spacing) / countPerSide) - spacing;
 	}
 	

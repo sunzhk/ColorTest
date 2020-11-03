@@ -100,10 +100,18 @@ public class ModeSelectActivity extends BaseActivity {
 		SharedPreferences sharedPreferences = getSharedPreferences("versionHint", MODE_PRIVATE);
 		int versionCode = AppUtils.getVersionCode(this);
 		int lastHintVersionCode = sharedPreferences.getInt("lastHintVersionCode", -1);
+//		String upgradeMessage = "    已更新至正式版，可以尽情使用了";
+		String upgradeMessage = "    1. 增加了背景音乐的开关，现在可以一边网抑云一边玩啦\n" +
+								"    2. 颜色选择器增加了微调按钮\n" +
+								"    3. 增加了找一找模式~\n" +
+								"    再次感谢可爱的寂书予~";
 		if (versionCode > lastHintVersionCode) {
-			new AlertDialog.Builder(this).setTitle("v" + AppUtils.getVersionName(this)).setMessage("更新说明:\n    已更新至正式版，可以尽情使用了\n\n    design by 寂书予\n    develop by 作死菌").setPositiveButton("知道了", (dialog, which) -> {
-				dialog.dismiss();
-			}).create().show();
+			new AlertDialog.Builder(this)
+					.setTitle("v" + AppUtils.getVersionName(this))
+					.setMessage("更新说明:\n" + upgradeMessage + "\n\n    design by 寂书予\n    develop by 作死菌")
+					.setPositiveButton("知道了", (dialog, which) -> {
+						dialog.dismiss();
+					}).create().show();
 		}
 		sharedPreferences.edit().putInt("lastHintVersionCode", versionCode).apply();
 	}
