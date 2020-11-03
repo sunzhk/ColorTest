@@ -55,6 +55,10 @@ public class ModeSelectActivity extends BaseActivity {
 			intent.putExtra(INTENT_KEY_DIFFICULTY, GuessColorActivity.Difficulty.DIFFICULT);
 			startActivity(intent);
 		});
+		findViewById(R.id.activity_mode_select_bt_find_diff).setOnClickListener(v -> {
+			Intent intent = new Intent(this, FindDiffColorActivity.class);
+			startActivity(intent);
+		});
 
 		cbBgmSwitch = findViewById(R.id.activity_mode_select_cb_bgm_switch);
 		tvBgmSwitch = findViewById(R.id.activity_mode_select_tv_bgm_switch);

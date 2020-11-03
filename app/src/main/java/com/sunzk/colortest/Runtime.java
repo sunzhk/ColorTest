@@ -4,7 +4,7 @@ public class Runtime {
 	
 	public static int testResultNumber = 0;
 	
-	private static boolean needBGM = true;
+	private static boolean needBGM = false;
 
 	public static boolean isNeedBGM() {
 		return needBGM;

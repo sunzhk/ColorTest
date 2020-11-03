@@ -9,4 +9,8 @@
     <dimen name="view_hsb_color_selector_seek_bar_size">20dp</dimen>
     <dimen name="view_hsb_color_selector_seek_bar_fine_tuning_margin">20dp</dimen>
 
+    <dimen name="activity_find_diff_color_controller_button_size">28dp</dimen>
+    <dimen name="activity_find_diff_color_controller_text_size">28dp</dimen>
+    <dimen name="activity_find_diff_color_controller_button_spacing">25dp</dimen>
+
 </resources>

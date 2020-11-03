@@ -19,6 +19,7 @@
 			android:windowSoftInputMode="adjustPan"/>
 		<activity android:name=".activity.GuessColorActivity" />
 		<activity android:name=".activity.ModeSelectActivity" />
+		<activity android:name=".activity.FindDiffColorActivity" />
 	</application>
 
 </manifest>

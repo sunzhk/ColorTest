@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/activity_find_diff_color_fl_container"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/bg_activity_find_diff_color_dark">
+
+	<TextView
+		android:id="@+id/activity_find_diff_color_tv_hint"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:layout_centerInParent="true"
+		android:visibility="invisible"
+		android:layout_marginTop="30dp"
+		android:textSize="30sp"/>
+	
+	<Button
+		android:id="@+id/activity_find_diff_color_bt_light_switch"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentEnd="true"
+		android:layout_margin="15dp"
+		android:theme="@android:style/ThemeOverlay.Material.Dark"
+		android:text="@string/light_switch_text_turn_off"/>
+
+	<com.sunzk.colortest.view.FindDiffView
+		android:id="@+id/activity_find_diff_color_fd"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" 
+		android:layout_centerVertical="true"
+		android:layout_marginBottom="20dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginEnd="20dp"/>
+	
+	<LinearLayout
+		android:id="@+id/activity_find_diff_color_ll_controller1"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_alignParentBottom="true"
+		android:layout_marginBottom="10dp"
+		android:layout_above="@id/activity_find_diff_color_ll_controller2">
+		
+	</LinearLayout>
+	
+	<LinearLayout
+		android:id="@+id/activity_find_diff_color_ll_controller2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:gravity="center_vertical"
+		android:layout_marginBottom="30dp"
+		android:layout_centerHorizontal="true"
+		android:layout_above="@id/activity_find_diff_color_bt_change">
+
+		<ImageView
+			android:id="@+id/activity_find_diff_color_iv_level_left"
+			android:layout_width="@dimen/activity_find_diff_color_controller_button_size"
+			android:layout_height="@dimen/activity_find_diff_color_controller_button_size"
+			android:clickable="true"
+			android:focusable="true"
+			android:src="@drawable/seek_fine_tuning_left"/>
+		
+		<TextView
+			android:id="@+id/activity_find_diff_color_tv_level"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/activity_find_diff_color_controller_button_spacing"
+			android:layout_marginEnd="@dimen/activity_find_diff_color_controller_button_spacing"
+			android:textColor="@color/text_default_dark"
+			android:textSize="@dimen/activity_find_diff_color_controller_text_size"/>
+		
+		<ImageView
+			android:id="@+id/activity_find_diff_color_iv_level_right"
+			android:layout_width="@dimen/activity_find_diff_color_controller_button_size"
+			android:layout_height="@dimen/activity_find_diff_color_controller_button_size"
+			android:clickable="true"
+			android:focusable="true"
+			android:src="@drawable/seek_fine_tuning_right"/>
+		
+	</LinearLayout>
+	
+	<Button
+		android:id="@+id/activity_find_diff_color_bt_change"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:theme="@android:style/ThemeOverlay.Material.Dark"
+		android:layout_alignParentBottom="true"
+		android:layout_centerInParent="true"
+		android:layout_marginBottom="25dp"
+		android:layout_marginStart="50dp"
+		android:layout_marginEnd="50dp"
+		android:padding="10dp"
+		android:text="下一局"
+		android:textSize="21sp"
+		android:textColor="#FFD0D0D0"/>
+
+</RelativeLayout>

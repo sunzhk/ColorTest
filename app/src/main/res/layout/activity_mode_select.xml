@@ -47,6 +47,15 @@
 		android:layout_marginBottom="10dp"
 		android:visibility="gone"
 		android:text="地狱模式(魔鬼)"/>
+	<Button
+		android:id="@+id/activity_mode_select_bt_find_diff"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="10dp"
+		android:gravity="center"
+		android:textSize="21sp"
+		android:layout_marginBottom="10dp"
+		android:text="找不同"/>
 		
 	<View
 		android:layout_width="match_parent"
