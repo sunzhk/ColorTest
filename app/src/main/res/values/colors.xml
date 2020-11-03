@@ -5,4 +5,11 @@
 	<color name="colorAccent">#03DAC5</color>
 	<color name="default_activity_background">#FFD0D0D0</color>
 	<color name="activity_mock_color_color_seek_bar_text_color">#FFFFFFFF</color>
+	
+	<color name="bg_activity_find_diff_color_light">#FFDFDFDF</color>
+	<color name="bg_activity_find_diff_color_dark">#FF101010</color>
+	
+	<color name="text_default_light">#FF101010</color>
+	<color name="text_default_dark">#FFDFDFDF</color>
+	
 </resources>

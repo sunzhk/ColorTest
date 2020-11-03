@@ -1,7 +1,5 @@
 package com.sunzk.colortest.entity;
 
-import java.util.Date;
-
 public class TestResult {
 	
 	private int id;
