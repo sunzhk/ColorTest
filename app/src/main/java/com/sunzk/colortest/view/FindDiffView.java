@@ -8,7 +8,7 @@ import android.widget.FrameLayout;
 
 import com.sunzk.colortest.R;
 import com.sunzk.colortest.entity.HSB;
-import com.sunzk.colortest.utils.DisplayUtil;
+import com.sunzk.base.utils.DisplayUtil;
 
 import java.util.ArrayList;
 import java.util.Random;

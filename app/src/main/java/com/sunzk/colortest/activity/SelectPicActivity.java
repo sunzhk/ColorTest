@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +22,8 @@ import com.shizhefei.view.largeimage.LargeImageView;
 import com.shizhefei.view.largeimage.factory.FileBitmapDecoderFactory;
 import com.sunzk.colortest.BaseActivity;
 import com.sunzk.colortest.R;
-import com.sunzk.colortest.utils.ColorUtils;
-import com.sunzk.colortest.utils.Logger;
+import com.sunzk.colortest.databinding.ActivitySelectPicBinding;
+import com.sunzk.base.utils.Logger;
 import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.wildma.pictureselector.FileUtils;
 import com.wildma.pictureselector.PictureBean;
@@ -36,25 +35,21 @@ public class SelectPicActivity extends BaseActivity {
 
 	private static final String TAG = "SelectPicActivity";
 
-	private LargeImageView imageView;
-	private FrameLayout flFloat;
-	private TextView tvColor;
+	private ActivitySelectPicBinding viewBinding;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_select_pic);
-		imageView = findViewById(R.id.activity_select_pic_liv_main);
-		flFloat = findViewById(R.id.activity_select_pic_fl_float);
-		tvColor = findViewById(R.id.activity_select_pic_tv_color);
-		imageView.setOnTouchListener((v, event) -> {
+		viewBinding = ActivitySelectPicBinding.inflate(getLayoutInflater());
+		setContentView(viewBinding.getRoot());
+		viewBinding.livMain.setOnTouchListener((v, event) -> {
 			switch (event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
 				case MotionEvent.ACTION_MOVE:
 					showColor(v, event);
 					break;
 				case MotionEvent.ACTION_UP:
-					imageView.performClick();
+					viewBinding.livMain.performClick();
 					break;
 			}
 			return false;
@@ -74,15 +69,15 @@ public class SelectPicActivity extends BaseActivity {
 		Bitmap bitmapFromView = getBitmapFromView(v);
 		int pixel = bitmapFromView.getPixel((int) event.getX(), (int) event.getY());
 		try {
-			ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) flFloat.getLayoutParams();
+			ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) viewBinding.flFloat.getLayoutParams();
 			layoutParams.leftMargin = (int) event.getX();
 			layoutParams.topMargin = (int) event.getY();
-			flFloat.setLayoutParams(layoutParams);
+			viewBinding.flFloat.setLayoutParams(layoutParams);
 		} catch (Throwable throwable) {
 
 		}
-		flFloat.setVisibility(View.VISIBLE);
-		tvColor.setText(Color.red(pixel) + "," + Color.green(pixel) + "," + Color.blue(pixel));
+		viewBinding.flFloat.setVisibility(View.VISIBLE);
+		viewBinding.tvColor.setText(Color.red(pixel) + "," + Color.green(pixel) + "," + Color.blue(pixel));
 	}
 
 	private void selectPic() {
@@ -101,7 +96,7 @@ public class SelectPicActivity extends BaseActivity {
 				if (pictureBean != null) {
 					Logger.d(TAG, "SelectPicActivity#onActivityResult- ", pictureBean.isCut(), pictureBean.getPath(), pictureBean.getUri());
 					if (pictureBean.isCut()) {
-						imageView.setImage(new FileBitmapDecoderFactory(pictureBean.getPath()));
+						viewBinding.livMain.setImage(new FileBitmapDecoderFactory(pictureBean.getPath()));
 					} else {
 						Uri mediaUri;
 //						if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
@@ -109,7 +104,7 @@ public class SelectPicActivity extends BaseActivity {
 //						} else {
 						mediaUri = pictureBean.getUri();
 //						}
-						imageView.setImage(getDrawableFromFileUri(mediaUri));
+						viewBinding.livMain.setImage(getDrawableFromFileUri(mediaUri));
 					}
 				}
 

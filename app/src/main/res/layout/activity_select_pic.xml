@@ -6,12 +6,12 @@
 	android:clipToPadding="false">
 	
 	<com.shizhefei.view.largeimage.LargeImageView
-		android:id="@+id/activity_select_pic_liv_main"
+		android:id="@+id/liv_main"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
 	
 	<FrameLayout
-		android:id="@+id/activity_select_pic_fl_float"
+		android:id="@+id/fl_float"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:visibility="invisible">
@@ -22,7 +22,7 @@
 			android:background="#FF000000"/>
 
 		<TextView
-			android:id="@+id/activity_select_pic_tv_color"
+			android:id="@+id/tv_color"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="10dp"

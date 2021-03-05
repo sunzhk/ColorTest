@@ -10,7 +10,7 @@
 		android:layout_weight="1"/>
 	
 	<androidx.recyclerview.widget.RecyclerView
-		android:id="@+id/activity_mode_select_rv_mode_list"
+		android:id="@+id/rv_mode_list"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="30dp"
@@ -28,13 +28,13 @@
 		android:gravity="center_vertical"
 		android:layout_gravity="center_horizontal">
 		<CheckBox
-			android:id="@+id/activity_mode_select_cb_bgm_switch"
+			android:id="@+id/cb_bgm_switch"
 			android:layout_width="30dp"
 			android:layout_height="30dp"
 			android:layout_marginEnd="10dp"/>
 		
 		<TextView
-			android:id="@+id/activity_mode_select_tv_bgm_switch"
+			android:id="@+id/tv_bgm_switch"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/bgm_switch_on"/>

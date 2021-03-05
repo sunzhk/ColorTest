@@ -10,13 +10,13 @@ android {
         }
     }
 
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.sunzk.colortest"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 14
         versionName "2.4.0"
 
@@ -47,6 +47,10 @@ android {
         targetCompatibility = 1.8
     }
 
+    viewBinding {
+        enabled = true
+    }
+    
 }
 
 dependencies {
@@ -56,9 +60,13 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation project(path: ':base')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     //RxJava2的依赖包
     implementation 'io.reactivex.rxjava2:rxjava:2.1.14-RC1'
@@ -76,4 +84,12 @@ dependencies {
     implementation 'com.github.wildma:PictureSelector:2.1.0'
     // 显示大图，缩放、拖动
     implementation 'com.shizhefei:LargeImageView:1.1.0'
+
+    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha07"
+    implementation "androidx.datastore:datastore-preferences-rxjava3:1.0.0-alpha07"
+    implementation "androidx.datastore:datastore-preferences-core:1.0.0-alpha07"
+
+//    implementation "androidx.datastore:datastore:1.0.0-alpha07"
+//    implementation "androidx.datastore:datastore-rxjava3:1.0.0-alpha07"
+//    implementation "androidx.datastore:datastore-core:1.0.0-alpha07"
 }
