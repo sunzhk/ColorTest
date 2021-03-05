@@ -6,22 +6,29 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.TextView;
 
 import com.sunzk.colortest.BaseActivity;
+import com.sunzk.colortest.Constant;
 import com.sunzk.colortest.R;
 import com.sunzk.colortest.Runtime;
-import com.sunzk.colortest.utils.AppUtils;
-import com.sunzk.colortest.utils.DisplayUtil;
+import com.sunzk.colortest.databinding.ActivityModeSelectBinding;
+import com.sunzk.colortest.databinding.ItemModeBinding;
+import com.sunzk.colortest.entity.ModeEntity;
+import com.sunzk.base.utils.AppUtils;
+import com.sunzk.base.utils.DisplayUtil;
+import com.sunzk.base.utils.Logger;
+import com.sunzk.colortest.view.DragSwipeCallback;
+import com.sunzk.colortest.view.IDragSwipe;
 import com.sunzk.colortest.view.SpaceItemDecoration;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,10 +38,8 @@ public class ModeSelectActivity extends BaseActivity {
 
 	private static final String TAG = "ModeSelectActivity";
 	
-	private CheckBox cbBgmSwitch;
-	private TextView tvBgmSwitch;
+	private ActivityModeSelectBinding viewBinding;
 	
-	private RecyclerView rvModeList;
 	private List<ModeEntity> modeEntityList = new ArrayList<>();
 
 	@Override
@@ -47,39 +52,25 @@ public class ModeSelectActivity extends BaseActivity {
 		}
 
 		showVersionUpgradeDialog();
-
-		setContentView(R.layout.activity_mode_select);
-		rvModeList = findViewById(R.id.activity_mode_select_rv_mode_list);
+		viewBinding = ActivityModeSelectBinding.inflate(getLayoutInflater());
+		setContentView(viewBinding.getRoot());
 		initModeList();
-		cbBgmSwitch = findViewById(R.id.activity_mode_select_cb_bgm_switch);
-		tvBgmSwitch = findViewById(R.id.activity_mode_select_tv_bgm_switch);
 
 		resetBgmSwitchState(Runtime.isNeedBGM());
 
-		cbBgmSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+		viewBinding.cbBgmSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
 			resetBgmSwitchState(isChecked);
 			Runtime.setNeedBGM(isChecked);
 		});
 	}
 	
 	private void initModeList() {
-		modeEntityList.add(new ModeEntity("标准模式", new Intent(this, MockColorActivity.class)));
-		Intent hellIntent1 = new Intent(this, GuessColorActivity.class);
-		hellIntent1.putExtra(INTENT_KEY_DIFFICULTY, GuessColorActivity.Difficulty.EASY);
-		modeEntityList.add(new ModeEntity("地狱模式(体验版)", hellIntent1));
-//		Intent hellIntent2 = new Intent(this, GuessColorActivity.class);
-//		hellIntent1.putExtra(INTENT_KEY_DIFFICULTY, GuessColorActivity.Difficulty.MEDIUM);
-//		modeEntityList.add(new ModeEntity("地狱模式(中等)", hellIntent2));
-//		Intent hellIntent3 = new Intent(this, GuessColorActivity.class);
-//		hellIntent1.putExtra(INTENT_KEY_DIFFICULTY, GuessColorActivity.Difficulty.DIFFICULT);
-//		modeEntityList.add(new ModeEntity("地狱模式(困难)", hellIntent3));
-		modeEntityList.add(new ModeEntity("找不同", new Intent(this, FindDiffColorActivity.class)));
-		modeEntityList.add(new ModeEntity("选图片", new Intent(this, SelectPicActivity.class)));
+		modeEntityList.addAll(Runtime.getModeList());
 
-		rvModeList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+		viewBinding.rvModeList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 		int itemDecoration = DisplayUtil.dip2px(this, 6);
-		rvModeList.addItemDecoration(new SpaceItemDecoration(0, itemDecoration, 0, itemDecoration));
-		rvModeList.setAdapter(new RecyclerView.Adapter<ModeViewHolder>() {
+		viewBinding.rvModeList.addItemDecoration(new SpaceItemDecoration(0, itemDecoration, 0, itemDecoration));
+		RecyclerView.Adapter<ModeViewHolder> adapter = new RecyclerView.Adapter<ModeViewHolder>() {
 			@NonNull
 			@Override
 			public ModeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -96,12 +87,52 @@ public class ModeSelectActivity extends BaseActivity {
 			public int getItemCount() {
 				return modeEntityList.size();
 			}
+		};
+		viewBinding.rvModeList.setAdapter(adapter);
+
+		ItemTouchHelper.Callback callback = new DragSwipeCallback(new IDragSwipe() {
+			@Override
+			public void onItemSwapped(int fromPosition, int toPosition) {
+				Logger.d(TAG, "ModeSelectActivity#onItemSwapped- ", fromPosition, toPosition);
+				if (fromPosition < toPosition) {
+					for (int i = fromPosition; i < toPosition; i++) {
+						Collections.swap(modeEntityList, i, i + 1);
+					}
+				} else {
+					for (int i = fromPosition; i > toPosition; i--) {
+						Collections.swap(modeEntityList, i, i - 1);
+					}
+				}
+				
+				adapter.notifyItemMoved(fromPosition, toPosition);
+				refreshModeEntityListInDataStore();
+			}
+
+			@Override
+			public void onItemDeleted(int position) {
+				Logger.d(TAG, "ModeSelectActivity#onItemDeleted- ", position);
+			}
+
+			@Override
+			public void onItemDone(int position) {
+				Logger.d(TAG, "ModeSelectActivity#onItemDone- ", position);
+				modeEntityList.remove(position);
+				adapter.notifyItemRemoved(position);
+				refreshModeEntityListInDataStore();
+			}
+			
+			private void refreshModeEntityListInDataStore() {
+				Runtime.setModeList(modeEntityList);
+				Runtime.writeModeListToDataStore();
+			}
 		});
+		ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+		touchHelper.attachToRecyclerView(viewBinding.rvModeList);
 	}
 	
 	private void resetBgmSwitchState(boolean switchOn) {
-		cbBgmSwitch.setChecked(switchOn);
-		tvBgmSwitch.setText(switchOn ? R.string.bgm_switch_on : R.string.bgm_switch_off);
+		viewBinding.cbBgmSwitch.setChecked(switchOn);
+		viewBinding.tvBgmSwitch.setText(switchOn ? R.string.bgm_switch_on : R.string.bgm_switch_off);
 	}
 
 	private boolean checkAccess() {
@@ -144,30 +175,18 @@ public class ModeSelectActivity extends BaseActivity {
 		sharedPreferences.edit().putInt("lastHintVersionCode", versionCode).apply();
 	}
 	
-	static class ModeEntity {
-		private String title;
-		private Intent intent;
-
-		public ModeEntity(@NonNull String title, @NonNull Intent intent) {
-			this.title = title;
-			this.intent = intent;
-		}
-	}
-	
 	class ModeViewHolder extends RecyclerView.ViewHolder {
 
-		private final TextView textView;
+		private final ItemModeBinding itemViewBinding;
 
 		public ModeViewHolder(@NonNull View itemView) {
 			super(itemView);
-			this.textView = itemView.findViewById(R.id.item_mode_select_tv_title);
+			itemViewBinding = ItemModeBinding.bind(itemView);
 		}
 		
 		public void bindData(ModeEntity modeEntity) {
-			textView.setText(modeEntity.title);
-			itemView.setOnClickListener(v -> {
-				startActivity(modeEntity.intent);
-			});
+			itemViewBinding.tvTitle.setText(modeEntity.getTitle());
+			itemView.setOnClickListener(v -> startActivity(modeEntity.getIntent()));
 		}
 	}
 

@@ -12,23 +12,23 @@
 		android:layout_weight="1">
 	
 		<androidx.cardview.widget.CardView
-			android:id="@+id/activity_mock_color_cv_demo"
+			android:id="@+id/cv_demo"
 			android:layout_width="100dp"
 			android:layout_height="100dp"
 			android:layout_gravity="center_vertical|start">
 			<View
-				android:id="@+id/activity_mock_color_view_demo"
+				android:id="@+id/view_demo"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"/>
 		</androidx.cardview.widget.CardView>
 
 		<androidx.cardview.widget.CardView
-			android:id="@+id/activity_mock_color_cv_result"
+			android:id="@+id/cv_result"
 			android:layout_width="100dp"
 			android:layout_height="100dp"
 			android:layout_gravity="center_vertical|end">
 			<View
-				android:id="@+id/activity_mock_color_view_result"
+				android:id="@+id/view_result"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"/>
 		</androidx.cardview.widget.CardView>
@@ -43,7 +43,7 @@
 		android:paddingEnd="20dp">
 		
 		<TextView
-			android:id="@+id/activity_mock_color_tv_answer"
+			android:id="@+id/tv_answer"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginBottom="20dp"
@@ -58,14 +58,14 @@
 			android:layout_marginBottom="50dp"
 			android:orientation="horizontal">
 			<Button
-				android:id="@+id/activity_mock_color_bt_answer"
+				android:id="@+id/bt_answer"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
 				android:padding="10dp"
 				android:text="看答案"/>
 			<Button
-				android:id="@+id/activity_mock_color_bt_next"
+				android:id="@+id/bt_next"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
@@ -74,12 +74,12 @@
 		</LinearLayout>
 		
 		<com.sunzk.colortest.view.HSBColorSelector
-			android:id="@+id/activity_mock_color_hsb_color_selector"
+			android:id="@+id/hsb_color_selector"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"/>
 			
 		<TextView
-			android:id="@+id/activity_mock_color_tv_score"
+			android:id="@+id/tv_score"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:gravity="center"

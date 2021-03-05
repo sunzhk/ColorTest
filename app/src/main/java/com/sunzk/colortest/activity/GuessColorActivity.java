@@ -5,14 +5,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.sunzk.colortest.BaseActivity;
 import com.sunzk.colortest.R;
-import com.sunzk.colortest.utils.AppUtils;
-import com.sunzk.colortest.utils.ColorUtils;
-import com.sunzk.colortest.utils.DisplayUtil;
-import com.sunzk.colortest.view.HSBColorSelector;
+import com.sunzk.colortest.databinding.ActivityGuessColorBinding;
+import com.sunzk.base.utils.AppUtils;
+import com.sunzk.base.utils.ColorUtils;
+import com.sunzk.base.utils.DisplayUtil;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -20,7 +19,6 @@ import java.util.Random;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
 
 public class GuessColorActivity extends BaseActivity {
 	
@@ -28,12 +26,7 @@ public class GuessColorActivity extends BaseActivity {
 	
 	public static final String INTENT_KEY_DIFFICULTY = "difficulty";
 	
-	private LinearLayout llContent;
-	private CardView cdLeft;
-	private CardView cdCenter;
-	private CardView cdRight;
-	private TextView tvAnswer;
-	private HSBColorSelector hsbColorSelector;
+	private ActivityGuessColorBinding viewBinding;
 	
 	private Difficulty difficulty = Difficulty.EASY;
 
@@ -44,7 +37,8 @@ public class GuessColorActivity extends BaseActivity {
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guess_color);
+		viewBinding = ActivityGuessColorBinding.inflate(getLayoutInflater());
+		setContentView(viewBinding.getRoot());
 
 		Object dif = getIntent().getSerializableExtra(INTENT_KEY_DIFFICULTY);
 		if (dif instanceof Difficulty) {
@@ -53,19 +47,13 @@ public class GuessColorActivity extends BaseActivity {
 
 		Log.d(TAG, "onCreate: " + difficulty.name());
 		
-		llContent = findViewById(R.id.activity_guess_color_fl_content);
-		cdLeft = findViewById(R.id.activity_guess_color_cd_color_left);
-		cdCenter = findViewById(R.id.activity_guess_color_cd_color_center);
-		cdRight = findViewById(R.id.activity_guess_color_cd_color_right);
-		tvAnswer = findViewById(R.id.activity_guess_color_tv_answer);
-		hsbColorSelector = findViewById(R.id.activity_guess_color_hsb_color_selector);
 		
-		hsbColorSelector.setOnColorSelectedListener((h, s, b) -> {
-			cdCenter.setCardBackgroundColor(Color.HSVToColor(new float[]{h, s, b}));
+		viewBinding.hsbColorSelector.setOnColorSelectedListener((h, s, b) -> {
+			viewBinding.cdColorCenter.setCardBackgroundColor(Color.HSVToColor(new float[]{h, s, b}));
 		});
 
-		findViewById(R.id.activity_guess_color_bt_next).setOnClickListener(v -> nextQuestion());
-		findViewById(R.id.activity_guess_color_bt_answer).setOnClickListener(v -> showAnswer());
+		viewBinding.btNext.setOnClickListener(v -> nextQuestion());
+		viewBinding.btAnswer.setOnClickListener(v -> showAnswer());
 		
 		initColorContentView();
 		nextQuestion();
@@ -84,29 +72,29 @@ public class GuessColorActivity extends BaseActivity {
 		if (radius < minRadius) {
 			radius = minRadius;
 		}
-		
-		llContent.setPadding(spacing, 0, spacing, 0);
 
-		cdLeft.setRadius(radius);
-		cdLeft.getLayoutParams().width = sideLength;
-		cdLeft.getLayoutParams().height = sideLength;
+		viewBinding.flContent.setPadding(spacing, 0, spacing, 0);
 
-		cdCenter.setRadius(radius);
-		cdCenter.getLayoutParams().width = sideLength;
-		cdCenter.getLayoutParams().height = sideLength;
-		ViewGroup.LayoutParams layoutParams = cdCenter.getLayoutParams();
+		viewBinding.cdColorLeft.setRadius(radius);
+		viewBinding.cdColorLeft.getLayoutParams().width = sideLength;
+		viewBinding.cdColorLeft.getLayoutParams().height = sideLength;
+
+		viewBinding.cdColorCenter.setRadius(radius);
+		viewBinding.cdColorCenter.getLayoutParams().width = sideLength;
+		viewBinding.cdColorCenter.getLayoutParams().height = sideLength;
+		ViewGroup.LayoutParams layoutParams = viewBinding.cdColorCenter.getLayoutParams();
 		if (layoutParams instanceof LinearLayout.LayoutParams) {
 			((LinearLayout.LayoutParams) layoutParams).leftMargin = spacing;
 			((LinearLayout.LayoutParams) layoutParams).rightMargin = spacing;
 		}
 
-		cdRight.setRadius(radius);
-		cdRight.getLayoutParams().width = sideLength;
-		cdRight.getLayoutParams().height = sideLength;
+		viewBinding.cdColorRight.setRadius(radius);
+		viewBinding.cdColorRight.getLayoutParams().width = sideLength;
+		viewBinding.cdColorRight.getLayoutParams().height = sideLength;
 	}
 
 	private void nextQuestion() {
-		tvAnswer.setText(null);
+		viewBinding.tvAnswer.setText(null);
 		
 		float[] color = ColorUtils.randomHSBColor(0, difficulty.minSBPercent / 100f, difficulty.minSBPercent / 100f);
 
@@ -164,11 +152,11 @@ public class GuessColorActivity extends BaseActivity {
 		Log.d(TAG, "nextQuestion-center: " + Arrays.toString(centerColor));
 		Log.d(TAG, "nextQuestion-next: " + Arrays.toString(rightColor));
 
-		cdLeft.setCardBackgroundColor(Color.HSVToColor(leftColor));
-//		cdCenter.setCardBackgroundColor(Color.HSVToColor(centerColor));
-		hsbColorSelector.setEnabled(true);
-		hsbColorSelector.reset(50);
-		cdRight.setCardBackgroundColor(Color.HSVToColor(rightColor));
+		viewBinding.cdColorLeft.setCardBackgroundColor(Color.HSVToColor(leftColor));
+//		viewBinding.cdColorCenter.setCardBackgroundColor(Color.HSVToColor(centerColor));
+		viewBinding.hsbColorSelector.setEnabled(true);
+		viewBinding.hsbColorSelector.reset(50);
+		viewBinding.cdColorRight.setCardBackgroundColor(Color.HSVToColor(rightColor));
 	}
 
 	private void showAnswer() {
@@ -183,17 +171,17 @@ public class GuessColorActivity extends BaseActivity {
 		int showHRight = (int) rightColor[0];
 		int showSRight = (int) (rightColor[1] * 100);
 		int showBRight = (int) (rightColor[2] * 100);
-		hsbColorSelector.setEnabled(false);
-		tvAnswer.setText(String.format(Locale.getDefault(), "左侧: H: %d度  S: %d%%  B: %d%%\n中间: H: %d度  S: %d%%  B: %d%%\n右侧: H: %d度  S: %d%%  B: %d%%\n", 
+		viewBinding.hsbColorSelector.setEnabled(false);
+		viewBinding.tvAnswer.setText(String.format(Locale.getDefault(), "左侧: H: %d度  S: %d%%  B: %d%%\n中间: H: %d度  S: %d%%  B: %d%%\n右侧: H: %d度  S: %d%%  B: %d%%\n", 
 				showHLeft, showSLeft, showBLeft,
 				showHCenter, showSCenter, showBCenter,
 				showHRight, showSRight, showBRight));
 //		TestResultDataBase.getInstance(this).recordScore(showH, showS, showB, hsbColorSelector.getProgressH(), hsbColorSelector.getProgressS(), hsbColorSelector.getProgressB());
 //		showScore(Runtime.testResultNumber);
 //		checkAnswer();
-		float difH = Math.abs(hsbColorSelector.getColorH() - centerColor[0]) * 100f / 360f;
-		float difS = Math.abs(hsbColorSelector.getColorS() - centerColor[1]) * 100f;
-		float difB = Math.abs(hsbColorSelector.getColorB() - centerColor[2]) * 100f;
+		float difH = Math.abs(viewBinding.hsbColorSelector.getColorH() - centerColor[0]) * 100f / 360f;
+		float difS = Math.abs(viewBinding.hsbColorSelector.getColorS() - centerColor[1]) * 100f;
+		float difB = Math.abs(viewBinding.hsbColorSelector.getColorB() - centerColor[2]) * 100f;
 		if (difH > difficulty.allowDeviation || difS > difficulty.allowDeviation || difB > difficulty.allowDeviation) {
 			new AlertDialog.Builder(this)
 					.setTitle("就这？")

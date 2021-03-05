@@ -20,7 +20,7 @@
 			android:textSize="@dimen/view_hsb_color_selector_seek_bar_text_size"
 			android:text="H"/>
 		<SeekBar
-			android:id="@+id/activity_mock_color_sb_h"
+			android:id="@+id/sb_h"
 			android:layout_width="0dp"
 			android:layout_height="@dimen/view_hsb_color_selector_seek_bar_height"
 			android:layout_weight="1"
@@ -37,7 +37,7 @@
 		android:gravity="center_vertical"
 		android:layout_marginBottom="10dp">
 		<ImageView
-			android:id="@+id/activity_mock_color_iv_h_fine_tuning_left"
+			android:id="@+id/iv_h_fine_tuning_left"
 			android:layout_width="@dimen/view_hsb_color_selector_seek_bar_size"
 			android:layout_height="@dimen/view_hsb_color_selector_seek_bar_size"
 			android:layout_marginEnd="@dimen/view_hsb_color_selector_seek_bar_fine_tuning_margin"
@@ -45,7 +45,7 @@
 			android:focusable="true"
 			android:src="@drawable/seek_fine_tuning_left"/>
 		<EditText
-			android:id="@+id/activity_mock_color_tv_h"
+			android:id="@+id/tv_h"
 			android:layout_width="@dimen/view_hsb_color_selector_seek_bar_input_width"
 			android:layout_height="wrap_content"
 			android:textSize="@dimen/view_hsb_color_selector_seek_bar_text_size"
@@ -59,7 +59,7 @@
 			android:textSize="@dimen/view_hsb_color_selector_seek_bar_text_size"
 			android:text="度"/>
 		<ImageView
-			android:id="@+id/activity_mock_color_iv_h_fine_tuning_right"
+			android:id="@+id/iv_h_fine_tuning_right"
 			android:layout_width="@dimen/view_hsb_color_selector_seek_bar_size"
 			android:layout_height="@dimen/view_hsb_color_selector_seek_bar_size"
 			android:layout_marginStart="@dimen/view_hsb_color_selector_seek_bar_fine_tuning_margin"
@@ -83,7 +83,7 @@
 			android:textSize="@dimen/view_hsb_color_selector_seek_bar_text_size"
 			android:text="S"/>
 		<SeekBar
-			android:id="@+id/activity_mock_color_sb_s"
+			android:id="@+id/sb_s"
 			android:layout_width="0dp"
 			android:layout_height="@dimen/view_hsb_color_selector_seek_bar_height"
 			android:layout_weight="1"
@@ -100,7 +100,7 @@
 		android:gravity="center_vertical"
 		android:layout_marginBottom="10dp">
 		<ImageView
-			android:id="@+id/activity_mock_color_iv_s_fine_tuning_left"
+			android:id="@+id/iv_s_fine_tuning_left"
 			android:layout_width="@dimen/view_hsb_color_selector_seek_bar_size"
 			android:layout_height="@dimen/view_hsb_color_selector_seek_bar_size"
 			android:layout_marginEnd="@dimen/view_hsb_color_selector_seek_bar_fine_tuning_margin"
@@ -108,7 +108,7 @@
 			android:focusable="true"
 			android:src="@drawable/seek_fine_tuning_left"/>
 		<EditText
-			android:id="@+id/activity_mock_color_tv_s"
+			android:id="@+id/tv_s"
 			android:layout_width="@dimen/view_hsb_color_selector_seek_bar_input_width"
 			android:layout_height="wrap_content"
 			android:textSize="@dimen/view_hsb_color_selector_seek_bar_text_size"
@@ -122,7 +122,7 @@
 			android:textSize="@dimen/view_hsb_color_selector_seek_bar_text_size"
 			android:text="%"/>
 		<ImageView
-			android:id="@+id/activity_mock_color_iv_s_fine_tuning_right"
+			android:id="@+id/iv_s_fine_tuning_right"
 			android:layout_width="@dimen/view_hsb_color_selector_seek_bar_size"
 			android:layout_height="@dimen/view_hsb_color_selector_seek_bar_size"
 			android:layout_marginStart="@dimen/view_hsb_color_selector_seek_bar_fine_tuning_margin"
@@ -146,7 +146,7 @@
 			android:textSize="@dimen/view_hsb_color_selector_seek_bar_text_size"
 			android:text="B"/>
 		<SeekBar
-			android:id="@+id/activity_mock_color_sb_b"
+			android:id="@+id/sb_b"
 			android:layout_width="0dp"
 			android:layout_height="@dimen/view_hsb_color_selector_seek_bar_height"
 			android:layout_weight="1"
@@ -163,7 +163,7 @@
 		android:gravity="center_vertical"
 		android:layout_marginBottom="20dp">
 		<ImageView
-			android:id="@+id/activity_mock_color_iv_b_fine_tuning_left"
+			android:id="@+id/iv_b_fine_tuning_left"
 			android:layout_width="@dimen/view_hsb_color_selector_seek_bar_size"
 			android:layout_height="@dimen/view_hsb_color_selector_seek_bar_size"
 			android:layout_marginEnd="@dimen/view_hsb_color_selector_seek_bar_fine_tuning_margin"
@@ -171,7 +171,7 @@
 			android:focusable="true"
 			android:src="@drawable/seek_fine_tuning_left"/>
 		<EditText
-			android:id="@+id/activity_mock_color_tv_b"
+			android:id="@+id/tv_b"
 			android:layout_width="@dimen/view_hsb_color_selector_seek_bar_input_width"
 			android:layout_height="wrap_content"
 			android:gravity="center"
@@ -185,7 +185,7 @@
 			android:textSize="@dimen/view_hsb_color_selector_seek_bar_text_size"
 			android:text="%"/>
 		<ImageView
-			android:id="@+id/activity_mock_color_iv_b_fine_tuning_right"
+			android:id="@+id/iv_b_fine_tuning_right"
 			android:layout_width="@dimen/view_hsb_color_selector_seek_bar_size"
 			android:layout_height="@dimen/view_hsb_color_selector_seek_bar_size"
 			android:layout_marginStart="@dimen/view_hsb_color_selector_seek_bar_fine_tuning_margin"
