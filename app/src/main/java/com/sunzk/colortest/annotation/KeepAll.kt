@@ -1,9 +1,7 @@
-package com.sunzk.colortest.annotation;
+package com.sunzk.colortest.annotation
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.Retention
+import java.lang.annotation.RetentionPolicy
 
 /**
  * 在混淆时过滤掉带有该注解的整个类。
@@ -14,10 +12,17 @@ import java.lang.annotation.Target;
  * -keep,allowobfuscation @interface com.chances.base.annotation.Keep
  * -keep,allowobfuscation @interface com.chances.base.annotation.KeepAll
  * -keepclassmembers class * {
- *     @com.chances.base.annotation.Keep *;
+ * @com.chances.base.annotation.Keep *;
  * }
  */
 @Retention(RetentionPolicy.CLASS)
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD})
-public @interface KeepAll {
-}
+@Target(
+    AnnotationTarget.ANNOTATION_CLASS,
+    AnnotationTarget.CLASS,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.PROPERTY_GETTER,
+    AnnotationTarget.PROPERTY_SETTER,
+    AnnotationTarget.CONSTRUCTOR,
+    AnnotationTarget.FIELD
+)
+annotation class KeepAll 
