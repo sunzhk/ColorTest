@@ -2,6 +2,7 @@ package com.sunzk.colortest
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -28,6 +29,7 @@ class MyApplication : Application() {
     }
 
     private fun initModeListData() {
+        Log.d(TAG, "initModeListData: ${Gson().toJson(Constant.MODE_ENTITY_LIST)}")
         val dataStore =
             RxPreferenceDataStoreBuilder(
                 applicationContext,

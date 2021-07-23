@@ -1,6 +1,5 @@
 package com.sunzk.colortest
 
-import android.content.Context
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder

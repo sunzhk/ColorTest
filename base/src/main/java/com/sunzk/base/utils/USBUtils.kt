@@ -47,43 +47,35 @@ object USBUtils {
                 val runtime = Runtime.getRuntime()
                 val proc = runtime.exec("mount")
                 isr = InputStreamReader(proc.inputStream)
-                var line: String
-                val br = BufferedReader(isr)
-                while (br.readLine().also { line = it } != null) {
-                    // 将常见的linux分区过滤掉
-                    if (line.contains("proc") || line.contains("tmpfs") || line.contains("media") || line.contains(
-                            "asec"
-                        ) || line.contains("secure") || line.contains("system") || line.contains("cache")
-                        || line.contains("sys") || line.contains("data") || line.contains("shell") || line.contains(
-                            "root"
-                        ) || line.contains("acct") || line.contains("misc") || line.contains("obb")
-                    ) {
-                        continue
-                    }
+                isr.useLines { lines -> 
+                    lines.forEach { line ->
+                        // 将常见的linux分区过滤掉
+                        if (line.contains("proc") || line.contains("tmpfs") || line.contains("media") || line.contains(
+                                "asec"
+                            ) || line.contains("secure") || line.contains("system") || line.contains("cache")
+                            || line.contains("sys") || line.contains("data") || line.contains("shell") || line.contains(
+                                "root"
+                            ) || line.contains("acct") || line.contains("misc") || line.contains("obb")
+                        ) {
+                            return@forEach
+                        }
 
-                    // 下面这些分区是我们需要的
-                    if (line.contains("fat") || line.contains("fuse") || line.contains("ntfs")) {
-                        // 将mount命令获取的列表分割，items[0]为设备名，items[1]为挂载路径
-                        val items = line.split(" ").toTypedArray()
-                        if (items != null && items.size > 1) {
-                            val path = items[1].toLowerCase(Locale.getDefault())
-                            // 添加一些判断，确保是sd卡，如果是otg等挂载方式，可以具体分析并添加判断条件
-                            if (path != null && !pathList.contains(path) && path.contains("sd")) pathList.add(
-                                items[1]
-                            )
+                        // 下面这些分区是我们需要的
+                        if (line.contains("fat") || line.contains("fuse") || line.contains("ntfs")) {
+                            // 将mount命令获取的列表分割，items[0]为设备名，items[1]为挂载路径
+                            val items = line.split(" ").toTypedArray()
+                            if (items != null && items.size > 1) {
+                                val path = items[1].toLowerCase(Locale.getDefault())
+                                // 添加一些判断，确保是sd卡，如果是otg等挂载方式，可以具体分析并添加判断条件
+                                if (path != null && !pathList.contains(path) && path.contains("sd")) pathList.add(
+                                    items[1]
+                                )
+                            }
                         }
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-            } finally {
-                if (isr != null) {
-                    try {
-                        isr.close()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
             }
             return pathList
         }
