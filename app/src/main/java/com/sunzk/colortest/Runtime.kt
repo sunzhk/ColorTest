@@ -56,11 +56,9 @@ object Runtime {
             )
                 .subscribeOn(Schedulers.io())
                 .subscribe { preferences: Preferences?, throwable: Throwable? ->
-                    Logger.w(
-                        TAG,
-                        "Runtime#writeModeListToDataStore- ",
-                        throwable
-                    )
+                    throwable?.let {
+                        Logger.w(TAG, "Runtime#writeModeListToDataStore- ", throwable)
+                    }
                 }
     }
 }

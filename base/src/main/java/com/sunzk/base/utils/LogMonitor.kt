@@ -1,53 +1,45 @@
-package com.sunzk.base.utils;
+package com.sunzk.base.utils
 
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Looper
+import com.sunzk.base.utils.Logger.w
 
 /**
  * @author yongjie created on 2020/3/11.
  */
-public final class LogMonitor {
-	private static final String TAG = "LogMonitor";
-	private static LogMonitor sInstance = new LogMonitor();
-	private Handler mIoHandler;
+object LogMonitor {
 
-	private LogMonitor() {
-		HandlerThread logThread = new HandlerThread("log");
-		logThread.start();
-		mIoHandler = new Handler(logThread.getLooper());
-	}
+    private const val TAG = "LogMonitor"
+    private val mLogRunnable = Runnable { //打印出执行的耗时方法的栈消息
+        val sb = StringBuilder()
+        val stackTrace = Looper.getMainLooper().thread.stackTrace
+        for (s in stackTrace) {
+            sb.append(s.toString())
+            sb.append("\n")
+        }
+        w(TAG, sb.toString())
+    }
 
-	private static Runnable mLogRunnable = new Runnable() {
-		@Override
-		public void run() {
-			//打印出执行的耗时方法的栈消息
-			StringBuilder sb = new StringBuilder();
-			StackTraceElement[] stackTrace = Looper.getMainLooper().getThread().getStackTrace();
-			for (StackTraceElement s : stackTrace) {
-				sb.append(s.toString());
-				sb.append("\n");
-			}
-			Logger.w(TAG, sb.toString());
-		}
-	};
+    private val mIoHandler: Handler
 
-	public static LogMonitor getInstance() {
-		return sInstance;
-	}
+    /**
+     * 开始计时
+     */
+    fun startMonitor(timeBlock: Long) {
+        mIoHandler.postDelayed(mLogRunnable, timeBlock)
+    }
 
-	/**
-	 * 开始计时
-	 */
-	public void startMonitor(long timeBlock) {
-		mIoHandler.postDelayed(mLogRunnable, timeBlock);
-	}
+    /**
+     * 停止计时
+     */
+    fun removeMonitor() {
+        mIoHandler.removeCallbacks(mLogRunnable)
+    }
 
-	/**
-	 * 停止计时
-	 */
-	public void removeMonitor() {
-		mIoHandler.removeCallbacks(mLogRunnable);
-	}
-
+    init {
+        val logThread = HandlerThread("log")
+        logThread.start()
+        mIoHandler = Handler(logThread.looper)
+    }
 }

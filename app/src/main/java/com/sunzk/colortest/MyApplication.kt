@@ -33,7 +33,6 @@ class MyApplication : Application() {
                 applicationContext,
                 Constant.MODE_SELECT_DATA_NAME
             ).build()
-
         dataStore.data()
             .map { preferences: Preferences ->
                 preferences[stringPreferencesKey(Constant.MODE_SELECT_DATA_KEY)]
@@ -77,7 +76,7 @@ class MyApplication : Application() {
             }
             .subscribe { obj: List<ModeEntity>? -> Runtime.modeList = obj!! }
     }
-
+    
     companion object {
         private const val TAG = "MyApplication"
         var instance: MyApplication? = null

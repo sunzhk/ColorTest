@@ -1,75 +1,66 @@
-package com.sunzk.base.utils;
+package com.sunzk.base.utils
 
-import android.content.Context;
+import android.content.Context
+import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder
+import androidx.datastore.rxjava3.RxDataStore
+import com.sunzk.base.utils.Logger.w
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.functions.Function
+import java.util.*
 
-import java.util.HashMap;
-import java.util.Map;
+class DataStoreHelper(context: Context?, name: String?) {
+    private val dataStore: RxDataStore<Preferences>
+    val data: Flowable<Preferences>
+        get() = dataStore.data()
 
-import androidx.datastore.preferences.core.MutablePreferences;
-import androidx.datastore.preferences.core.Preferences;
-import androidx.datastore.preferences.core.PreferencesKeys;
-import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder;
-import androidx.datastore.rxjava3.RxDataStore;
-import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.functions.Function;
+    fun saveData(data: HashMap<String, Any>) {
+        val preferencesSingle = dataStore.updateDataAsync(Function { preferences ->
+            val mutablePreferences = preferences.toMutablePreferences()
+            var value: Any
+            for ((key, value1) in data) {
+                try {
+                    addKeyValue(key, value1, mutablePreferences)
+                } catch (throwable: Throwable) {
+                    Logger.w(TAG, "DataStoreHelper#apply- ", throwable)
+                }
+            }
+            Single.just(mutablePreferences)
+        })
+        preferencesSingle.subscribe()
+    }
 
-public class DataStoreHelper {
-	
-	private static final String TAG = "DataStoreHelper";
+    private fun addKeyValue(keyName: String, value: Any, mutablePreferences: MutablePreferences) {
+        if (value is Int) {
+            val key: Preferences.Key<Int> = intPreferencesKey(keyName)
+            mutablePreferences.set(key, value)
+        } else if (value is Long) {
+            val key: Preferences.Key<Long> = longPreferencesKey(keyName)
+            mutablePreferences.set(key, value)
+        } else if (value is Float) {
+            val key: Preferences.Key<Float> = floatPreferencesKey(keyName)
+            mutablePreferences.set(key, value)
+        } else if (value is Double) {
+            val key: Preferences.Key<Double> = doublePreferencesKey(keyName)
+            mutablePreferences.set(key, value)
+        } else if (value is Boolean) {
+            val key: Preferences.Key<Boolean> = booleanPreferencesKey(keyName)
+            mutablePreferences.set(key, value)
+        } else if (value is String) {
+            val key: Preferences.Key<String> = stringPreferencesKey(keyName)
+            mutablePreferences.set(key, value)
+        } else {
+            val key: Preferences.Key<String> = stringPreferencesKey(keyName)
+            mutablePreferences.set(key, value.toString())
+        }
+    }
 
-	private RxDataStore<Preferences> dataStore;
+    companion object {
+        private const val TAG = "DataStoreHelper"
+    }
 
-	public DataStoreHelper(Context context, String name) {
-		dataStore = new RxPreferenceDataStoreBuilder(context, name).build();
-	}
-
-	public Flowable<Preferences> getData() {
-		return dataStore.data();
-	}
-
-	public void saveData(HashMap<String, Object> data) {
-		Single<Preferences> preferencesSingle = dataStore.updateDataAsync(new Function<Preferences, Single<Preferences>>() {
-			@Override
-			public Single<Preferences> apply(Preferences preferences) throws Throwable {
-				MutablePreferences mutablePreferences = preferences.toMutablePreferences();
-				Object value;
-				for (Map.Entry<String, Object> entry : data.entrySet()) {
-					try {
-						addKeyValue(entry.getKey(), entry.getValue(), mutablePreferences);
-					} catch (Throwable throwable) {
-						Logger.w(TAG, "DataStoreHelper#apply- ", throwable);
-					}
-				}
-				return Single.just(mutablePreferences);
-			}
-		});
-		preferencesSingle.subscribe();
-	}
-	
-	private void addKeyValue(String keyName, Object value, MutablePreferences mutablePreferences) {
-		if (value instanceof Integer) {
-			Preferences.Key<Integer> key = PreferencesKeys.intKey(keyName);
-			mutablePreferences.set(key, (Integer) value);
-		} else if (value instanceof Long) {
-			Preferences.Key<Long> key = PreferencesKeys.longKey(keyName);
-			mutablePreferences.set(key, (Long) value);
-		} else if (value instanceof Float) {
-			Preferences.Key<Float> key = PreferencesKeys.floatKey(keyName);
-			mutablePreferences.set(key, (Float) value);
-		} else if (value instanceof Double) {
-			Preferences.Key<Double> key = PreferencesKeys.doubleKey(keyName);
-			mutablePreferences.set(key, (Double) value);
-		} else if (value instanceof Boolean) {
-			Preferences.Key<Boolean> key = PreferencesKeys.booleanKey(keyName);
-			mutablePreferences.set(key, (Boolean) value);
-		} else if (value instanceof String) {
-			Preferences.Key<String> key = PreferencesKeys.stringKey(keyName);
-			mutablePreferences.set(key, (String) value);
-		} else {
-			Preferences.Key<String> key = PreferencesKeys.stringKey(keyName);
-			mutablePreferences.set(key, value.toString());
-		}
-	}
-
+    init {
+        dataStore = RxPreferenceDataStoreBuilder(context!!, name!!).build()
+    }
 }

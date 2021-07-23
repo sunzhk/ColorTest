@@ -1,5 +1,6 @@
 package com.sunzk.colortest.activity
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class FindDiffColorViewModel: ViewModel() {
@@ -10,7 +11,8 @@ class FindDiffColorViewModel: ViewModel() {
         const val MAX_LEVEL = 10
     }
     
-    var currentLevel = DEFAULT_LEVEL
+    val currentLevel = MutableLiveData<Int>(DEFAULT_LEVEL)
+    
     var isLight = true
     
 }
