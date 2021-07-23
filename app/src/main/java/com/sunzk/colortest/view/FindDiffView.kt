@@ -25,7 +25,8 @@ class FindDiffView : FrameLayout {
     private var tempBaseColor: HSB? = null
     private var tempDiffColor: HSB? = null
     private var resultStrokeColor = 0
-    private var isShowingResult = false
+    var isShowingResult = false
+        private set
 
     constructor(context: Context) : super(context) {
         init()

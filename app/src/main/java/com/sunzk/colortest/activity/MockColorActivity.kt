@@ -25,14 +25,13 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class MockColorActivity : BaseActivity() {
-    private var viewBinding: ActivityMockColorBinding? = null
+    private lateinit var viewBinding: ActivityMockColorBinding
     private lateinit var currentHSB: FloatArray
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        viewBinding =
-            ActivityMockColorBinding.inflate(layoutInflater)
-        setContentView(viewBinding!!.root)
+        viewBinding = ActivityMockColorBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
         Observable.create(
             ObservableOnSubscribe { emitter: ObservableEmitter<List<TestResult>?> ->
                 try {

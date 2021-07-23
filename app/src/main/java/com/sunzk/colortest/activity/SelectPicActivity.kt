@@ -27,13 +27,12 @@ import com.wildma.pictureselector.PictureBean
 import com.wildma.pictureselector.PictureSelector
 
 class SelectPicActivity : BaseActivity() {
-    private var viewBinding: ActivitySelectPicBinding? = null
+    private lateinit var viewBinding: ActivitySelectPicBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewBinding =
-            ActivitySelectPicBinding.inflate(layoutInflater)
-        setContentView(viewBinding!!.root)
-        viewBinding!!.livMain.setOnTouchListener { v: View, event: MotionEvent ->
+        viewBinding = ActivitySelectPicBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
+        viewBinding.livMain.setOnTouchListener { v: View, event: MotionEvent ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> showColor(v, event)
                 MotionEvent.ACTION_UP -> viewBinding!!.livMain.performClick()

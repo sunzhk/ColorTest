@@ -1,6 +1,5 @@
 package com.sunzk.colortest
 
-import android.content.Intent
 import com.sunzk.colortest.activity.FindDiffColorActivity
 import com.sunzk.colortest.activity.GuessColorActivity
 import com.sunzk.colortest.activity.GuessColorActivity.Difficulty
@@ -14,35 +13,16 @@ object Constant {
     const val MODE_SELECT_DATA_KEY = "modeList"
 
     init {
-        val context: MyApplication = MyApplication.instance!!
-        val hellIntent1 =
-            Intent(context, GuessColorActivity::class.java)
-        hellIntent1.putExtra(
-            GuessColorActivity.INTENT_KEY_DIFFICULTY,
-            Difficulty.EASY
-        )
-        val hellIntent2 =
-            Intent(context, GuessColorActivity::class.java)
-        hellIntent2.putExtra(
-            GuessColorActivity.INTENT_KEY_DIFFICULTY,
-            Difficulty.MEDIUM
-        )
-        val hellIntent3 =
-            Intent(context, GuessColorActivity::class.java)
-        hellIntent3.putExtra(
-            GuessColorActivity.INTENT_KEY_DIFFICULTY,
-            Difficulty.DIFFICULT
-        )
+        val bundle1 = mapOf(Pair(GuessColorActivity.INTENT_KEY_DIFFICULTY, Difficulty.EASY.name))
+        val bundle2 = mapOf(Pair(GuessColorActivity.INTENT_KEY_DIFFICULTY, Difficulty.MEDIUM.name))
+        val bundle3 = mapOf(Pair(GuessColorActivity.INTENT_KEY_DIFFICULTY, Difficulty.DIFFICULT.name))
         MODE_ENTITY_LIST = arrayOf(
-            ModeEntity("标准模式", Intent(context, MockColorActivity::class.java)),
-            ModeEntity("地狱模式(体验版)", hellIntent1),
-            ModeEntity("地狱模式(中等)", hellIntent2),
-            ModeEntity("地狱模式(困难)", hellIntent3),
-            ModeEntity(
-                "找不同",
-                Intent(context, FindDiffColorActivity::class.java)
-            ),
-            ModeEntity("选图片", Intent(context, SelectPicActivity::class.java))
+            ModeEntity("标准模式", MockColorActivity::class.java.name),
+            ModeEntity("地狱模式(体验版)", GuessColorActivity::class.java.name, bundle1),
+            ModeEntity("地狱模式(中等)", GuessColorActivity::class.java.name, bundle2),
+            ModeEntity("地狱模式(困难)", GuessColorActivity::class.java.name, bundle3),
+            ModeEntity("找不同", FindDiffColorActivity::class.java.name),
+            ModeEntity("选图片", SelectPicActivity::class.java.name)
         )
     }
 }

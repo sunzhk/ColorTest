@@ -2,6 +2,7 @@ package com.sunzk.colortest.activity
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -187,19 +188,25 @@ class ModeSelectActivity : BaseActivity() {
 
     internal inner class ModeViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        private val itemViewBinding: ItemModeBinding
+        private val itemViewBinding: ItemModeBinding = ItemModeBinding.bind(itemView)
         fun bindData(modeEntity: ModeEntity) {
             itemViewBinding.tvTitle.text = modeEntity.title
             itemView.setOnClickListener { v: View? ->
-                startActivity(
-                    modeEntity.intent
+                startActivity(createIntentByMode(modeEntity)
                 )
             }
         }
-
-        init {
-            itemViewBinding = ItemModeBinding.bind(itemView)
+        
+        private fun createIntentByMode(modeEntity: ModeEntity): Intent {
+            val intent = Intent(this@ModeSelectActivity, Class.forName(modeEntity.className))
+            modeEntity.bundle?.let { bundle ->
+                for (key in bundle.keys) {
+                    intent.putExtra(key, bundle[key])
+                }
+            }
+            return intent
         }
+
     }
 
     companion object {

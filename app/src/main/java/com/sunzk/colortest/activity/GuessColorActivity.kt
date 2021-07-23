@@ -25,16 +25,22 @@ class GuessColorActivity : BaseActivity() {
 
     private val TAG: String = "GuessColorActivity"
 
-    private val viewBinding: ActivityGuessColorBinding =
-        ActivityGuessColorBinding.inflate(layoutInflater)
+    private lateinit var viewBinding: ActivityGuessColorBinding
     private val viewModel: GuessColorViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewBinding = ActivityGuessColorBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-        val dif: Any? = intent.getSerializableExtra(INTENT_KEY_DIFFICULTY)
-        if (dif is Difficulty) {
-            viewModel.difficulty = dif
+        try {
+            val dif: Any? = intent.getSerializableExtra(INTENT_KEY_DIFFICULTY)
+            if (dif is Difficulty) {
+                viewModel.difficulty = dif
+            } else if (dif is String) {
+                viewModel.difficulty = Difficulty.valueOf(dif)
+            }
+        } catch (t: Throwable) {
+            viewModel.difficulty = Difficulty.EASY
         }
         Log.d(TAG, "onCreate: $viewModel.difficulty.name")
         viewBinding.hsbColorSelector.setOnColorSelectedListener { h: Float, s: Float, b: Float ->
@@ -43,7 +49,7 @@ class GuessColorActivity : BaseActivity() {
         viewBinding.btNext.setOnClickListener { v: View? -> nextQuestion() }
         viewBinding.btAnswer.setOnClickListener { v: View? -> showAnswer() }
         viewModel.showAnswerFlag.observe(this, androidx.lifecycle.Observer { t ->
-            viewBinding.tvAnswer.visibility = if(t) View.VISIBLE else View.INVISIBLE
+            viewBinding.tvAnswer.visibility = if (t) View.VISIBLE else View.INVISIBLE
         })
         initColorContentView()
         nextQuestion()
@@ -211,6 +217,5 @@ class GuessColorActivity : BaseActivity() {
         val allowDeviation: Int
     ) {
         EASY(40, 35, 35, 60, 15), MEDIUM(30, 30, 30, 40, 10), DIFFICULT(15, 25, 25, 20, 10);
-
     }
 }
