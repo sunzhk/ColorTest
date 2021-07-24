@@ -25,7 +25,7 @@ class MyApplication : Application() {
         instance = this
         super.onCreate()
         AppUtils.setLogEnable(BuildConfig.DEBUG)
-        initModeListData()
+//        initModeListData()
     }
 
     private fun initModeListData() {
