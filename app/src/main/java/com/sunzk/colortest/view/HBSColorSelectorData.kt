@@ -40,7 +40,7 @@ class HBSColorSelectorData {
     }
 
     fun setColorS(@FloatRange(from = COLOR_S_MIN.toDouble(), to = COLOR_S_MAX.toDouble()) s: Float) {
-        Log.d(TAG, "setColorS: $s")
+        Log.d(TAG, "setColorS: $s", Throwable())
         val resultColor =
             if (s < COLOR_S_MIN)
                 COLOR_S_MIN

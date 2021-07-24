@@ -15,6 +15,13 @@ object Constant {
     val MODE_ENTITY_LIST: Array<ModeEntity>
     const val MODE_SELECT_DATA_NAME = "settings"
     const val MODE_SELECT_DATA_KEY = "modeList"
+    
+    enum class ModeAction {
+        activity, 
+        service,
+        broadcastReceiver,
+        dialog
+    }
 
     init {
         val bundle1 = mapOf(Pair(GuessColorActivity.INTENT_KEY_DIFFICULTY, Difficulty.EASY.name))

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 
 class GuessColorViewModel : ViewModel() {
 
-    var difficulty = GuessColorActivity.Difficulty.EASY
+    var difficulty = GuessColorActivity.DifficultyEntity(GuessColorActivity.Difficulty.EASY)
     val leftColor = MutableLiveData<FloatArray>(FloatArray(3))
     val rightColor = MutableLiveData<FloatArray>(FloatArray(3))
     val centerColor = MutableLiveData<FloatArray>(FloatArray(3))

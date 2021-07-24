@@ -120,11 +120,25 @@ class HSBColorSelector : LinearLayout {
                 i: Int,
                 b: Boolean
             ) {
-                onSeekBarDrag()
+                when (seekBar) {
+                    viewBinding.sbH -> {
+                        onSeekBarHDrag()
+                    }
+                    viewBinding.sbS -> {
+                        onSeekBarSDrag()
+                    }
+                    viewBinding.sbB -> {
+                        onSeekBarBDrag()
+                    }
+                    else -> {
+                    }
+                }
+                
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         }
         viewBinding.sbH.setOnSeekBarChangeListener(onSeekBarChangeListener)
         viewBinding.sbS.setOnSeekBarChangeListener(onSeekBarChangeListener)
@@ -173,7 +187,7 @@ class HSBColorSelector : LinearLayout {
         }
     }
     
-    private fun onSeekBarDrag() {
+    private fun onSeekBarHDrag() {
         val h = viewBinding.sbH.progress * 1.0f
         val s = viewBinding.sbS.progress * 1.0f / 100
         val b = viewBinding.sbB.progress * 1.0f / 100
@@ -181,9 +195,28 @@ class HSBColorSelector : LinearLayout {
         Log.d(TAG, "resetResultColor: $h,$s,$b->${Integer.toHexString(color)}")
 
         colorData.setColorH(h.toInt())
+        onColorSelectedListener?.invoke(h, s, b)
+    }
+    private fun onSeekBarSDrag() {
+        val h = viewBinding.sbH.progress * 1.0f
+        val s = viewBinding.sbS.progress * 1.0f / 100
+        val b = viewBinding.sbB.progress * 1.0f / 100
+        val color = Color.HSVToColor(floatArrayOf(h, s, b))
+        Log.d(TAG, "resetResultColor: $h,$s,$b->${Integer.toHexString(color)}")
+
         colorData.setColorS(s)
-        colorData.setColorS(b)
-        
+
+        onColorSelectedListener?.invoke(h, s, b)
+    }
+    private fun onSeekBarBDrag() {
+        val h = viewBinding.sbH.progress * 1.0f
+        val s = viewBinding.sbS.progress * 1.0f / 100
+        val b = viewBinding.sbB.progress * 1.0f / 100
+        val color = Color.HSVToColor(floatArrayOf(h, s, b))
+        Log.d(TAG, "resetResultColor: $h,$s,$b->${Integer.toHexString(color)}")
+
+        colorData.setColorB(b)
+
         onColorSelectedListener?.invoke(h, s, b)
     }
 
@@ -225,13 +258,11 @@ class HSBColorSelector : LinearLayout {
     }
 
     private fun bindDataToView() {
-//        Log.d(TAG, "bindDataToView: bind to ${findViewTreeLifecycleOwner()}")
         findViewTreeLifecycleOwner()?.let { lifecycleOwner ->
             Log.d(TAG, "bindDataToView: bind to live data")
             colorData.colorH.observe(lifecycleOwner, androidx.lifecycle.Observer { t: Int ->
                 viewBinding.sbH.progress = t
                 viewBinding.tvH.setText(String.format("%d", t))
-
                 resetSeekBarProgressBackground()
             })
             colorData.colorS.observe(lifecycleOwner, androidx.lifecycle.Observer { t: Float ->

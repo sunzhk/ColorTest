@@ -1,7 +1,7 @@
 <resources>
 
 
-    <dimen name="view_hsb_color_selector_seek_bar_height">16dp</dimen>
+    <dimen name="view_hsb_color_selector_seek_bar_height">20dp</dimen>
     <dimen name="view_hsb_color_selector_seek_bar_padding">3dp</dimen>
     <dimen name="view_hsb_color_selector_seek_bar_text_size">16sp</dimen>
     <dimen name="view_hsb_color_selector_seek_bar_input_width">45dp</dimen>
