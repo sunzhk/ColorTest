@@ -8,7 +8,6 @@ import com.sunzk.base.utils.invoke
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
 import java.io.InputStreamReader
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
