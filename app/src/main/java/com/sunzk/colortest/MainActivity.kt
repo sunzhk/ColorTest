@@ -7,12 +7,18 @@ import android.view.Window
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.sunzk.colortest.activity.ModeSelectActivity
-import com.sunzk.colortest.entity.ModeEntity
-import com.sunzk.demo.service.BaseService
+import com.sunzk.base.network.ServerSetting
+import com.sunzk.base.network.serverCreator
+import com.sunzk.colortest.network.MainApi
 import kotlinx.coroutines.*
 
 class MainActivity : BaseActivity() {
 	private val TAG: String = "MainActivity"
+	
+	private val mainApi: MainApi by serverCreator(Constant.BASE_URL_MOCK) {
+		ServerSetting(3000)
+	}
+	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -41,16 +47,8 @@ class MainActivity : BaseActivity() {
 	}
 
 	private suspend fun requestModeList() {
-		val url = "${Constant.BASE_URL_MOCK}data/SimpleModeList.json"
-		Log.d(TAG, "requestModeList: 开始 with $url")
-		val response = BaseService().request(url)
-		val modeList = withContext(Dispatchers.IO) {
-			val type = object : TypeToken<ArrayList<ModeEntity>>() {}.type
-			val json = response.body?.string()
-//			Log.d(TAG, "requestModeList: $json")
-			val list: ArrayList<ModeEntity> = Gson().fromJson(json, type)
-			list
-		}
+		Log.d(TAG, "requestModeList: create CoroutineServer")
+		val modeList = withContext(Dispatchers.IO) {mainApi.getModeList()}
 		Runtime.modeList = modeList
 		Log.d(TAG, "requestModeList: 结束，模式数量${Runtime.modeList.size}")
 	}

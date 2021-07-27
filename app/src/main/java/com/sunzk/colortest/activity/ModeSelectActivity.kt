@@ -172,9 +172,8 @@ class ModeSelectActivity : BaseActivity() {
 		val versionCode = AppUtils.getVersionCode(this)
 		val lastHintVersionCode = sharedPreferences.getInt("lastHintVersionCode", -1)
 		//		String upgradeMessage = "    已更新至正式版，可以尽情使用了";
-		val upgradeMessage = """    1. 增加了背景音乐的开关，现在可以一边网抑云一边玩啦
-    2. 颜色选择器增加了微调按钮
-    3. 增加了找一找模式~
+		val upgradeMessage = """    1. 大幅度修改了项目结构，为以后的更新做准备~
+    2. 找中间色功能增加了寂书予定制版
     再次感谢可爱的寂书予~"""
 		if (versionCode > lastHintVersionCode) {
 			AlertDialog.Builder(this)

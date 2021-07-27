@@ -2,6 +2,7 @@ package com.sunzk.colortest.activity
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.sunzk.base.expand.livedata.set
 
 class GuessColorViewModel : ViewModel() {
 

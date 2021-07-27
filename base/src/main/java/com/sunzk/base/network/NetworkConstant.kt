@@ -1,4 +1,4 @@
-package com.sunzk.demo.service
+package com.sunzk.base.network
 
 object NetworkConstant {
 

@@ -1,16 +1,13 @@
-package com.sunzk.demo.service
+package com.sunzk.base.network
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-import java.util.concurrent.TimeUnit
 
-class BaseService(init: ((clientBuilder: OkHttpClient.Builder) -> Unit?)? = null) {
+class BaseServer(init: ((clientBuilder: OkHttpClient.Builder) -> Unit?)? = null) {
 
 	private val clientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
 
@@ -34,7 +31,6 @@ class BaseService(init: ((clientBuilder: OkHttpClient.Builder) -> Unit?)? = null
 		val call = client.newCall(request)
 		call.waitResponse()
 	}
-
 
 //	
 //	/**

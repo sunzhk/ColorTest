@@ -1,4 +1,4 @@
-package com.sunzk.demo.service
+package com.sunzk.base.network
 
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -36,7 +36,8 @@ class RetryInterceptor(
 		fun getRetryInterval(retryCount: Int, changedHost: Boolean): Int
 	}
 
-	class SimpleRetryIntervalEvaluator(val interval: Int = NetworkConstant.DEFAULT_RETRY_INTERVEL) : RetryIntervalEvaluator {
+	class SimpleRetryIntervalEvaluator(val interval: Int = NetworkConstant.DEFAULT_RETRY_INTERVEL) :
+		RetryIntervalEvaluator {
 		override fun getRetryInterval(retryCount: Int, changedHost: Boolean): Int {
 			return interval
 		}

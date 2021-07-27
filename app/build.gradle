@@ -20,17 +20,17 @@ android {
         applicationId "com.sunzk.colortest"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 14
-        versionName "2.4.0"
+        versionCode 15
+        versionName "2.5.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             debuggable false
-            shrinkResources true
+            shrinkResources false
             jniDebuggable true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.keystore

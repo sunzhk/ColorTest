@@ -26,7 +26,7 @@
 			android:layout_weight="1"
 			android:paddingTop="@dimen/view_hsb_color_selector_seek_bar_padding"
 			android:paddingBottom="@dimen/view_hsb_color_selector_seek_bar_padding"
-			android:thumb="@drawable/thumb"
+			android:thumb="@drawable/thumb2"
 			android:splitTrack="false"/>
 	</LinearLayout>
 	<LinearLayout
@@ -89,7 +89,7 @@
 			android:layout_weight="1"
 			android:paddingTop="@dimen/view_hsb_color_selector_seek_bar_padding"
 			android:paddingBottom="@dimen/view_hsb_color_selector_seek_bar_padding"
-			android:thumb="@drawable/thumb"
+			android:thumb="@drawable/thumb2"
 			android:splitTrack="false"/>
 	</LinearLayout>
 	<LinearLayout
@@ -152,7 +152,7 @@
 			android:layout_weight="1"
 			android:paddingTop="@dimen/view_hsb_color_selector_seek_bar_padding"
 			android:paddingBottom="@dimen/view_hsb_color_selector_seek_bar_padding"
-			android:thumb="@drawable/thumb"
+			android:thumb="@drawable/thumb2"
 			android:splitTrack="false"/>
 	</LinearLayout>
 	<LinearLayout

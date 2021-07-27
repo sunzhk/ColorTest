@@ -184,11 +184,11 @@ class GuessColorActivity : BaseActivity() {
 			else -> {
 			}
 		}
-		viewModel.centerColor[0] = (viewModel.leftColor[0] + viewModel.rightColor[0]) / 2
-		viewModel.centerColor[1] = (viewModel.leftColor[1] + viewModel.rightColor[1]) / 2
-		viewModel.centerColor[2] = (viewModel.leftColor[2] + viewModel.rightColor[2]) / 2
+//		viewModel.centerColor[0] = (viewModel.leftColor[0] + viewModel.rightColor[0]) / 2
+//		viewModel.centerColor[1] = (viewModel.leftColor[1] + viewModel.rightColor[1]) / 2
+//		viewModel.centerColor[2] = (viewModel.leftColor[2] + viewModel.rightColor[2]) / 2
 		Log.d(TAG, "nextQuestion-left: ${Arrays.toString(viewModel.leftColor.value)}")
-		Log.d(TAG, "nextQuestion-center: ${Arrays.toString(viewModel.centerColor.value)}")
+//		Log.d(TAG, "nextQuestion-center: ${Arrays.toString(viewModel.centerColor.value)}")
 		Log.d(TAG, "nextQuestion-next: ${Arrays.toString(viewModel.rightColor.value)}")
 
 		//		viewBinding.cdColorCenter.setCardBackgroundColor(Color.HSVToColor(centerColor));
