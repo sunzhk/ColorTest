@@ -7,10 +7,12 @@ import android.view.View
 import android.view.Window
 import android.widget.FrameLayout
 import android.widget.Toast
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.sunzk.base.utils.AppUtils
 import com.sunzk.base.utils.ColorUtils
 import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.colortest.BaseActivity
+import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.Runtime
 import com.sunzk.colortest.databinding.ActivityMockColorBinding
 import com.sunzk.colortest.db.TestResultDataBase
@@ -24,6 +26,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
+@Route(path = RouteInfo.PATH_ACTIVITY_MOCK_COLOR, group = RouteInfo.GROUP_GAME)
 class MockColorActivity : BaseActivity() {
     private lateinit var viewBinding: ActivityMockColorBinding
     private lateinit var currentHSB: FloatArray

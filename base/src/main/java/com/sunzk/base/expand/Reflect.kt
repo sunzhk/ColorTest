@@ -1,11 +1,12 @@
-package com.sunzk.base.utils
+package com.sunzk.base.expand
 
 import android.util.Log
+import java.lang.reflect.Field
 import java.lang.reflect.Method
 
 fun Any.invoke(methodName: String, params: Array<Any?>?, parameterTypes: Array<Class<*>>?): Any? {
 	
-	val TAG: String = "Any.invoke"
+	val TAG = "Any.invoke"
 
 	val method: Method = try {
 		if (parameterTypes == null || parameterTypes.isEmpty()) {
@@ -29,4 +30,24 @@ fun Any.invoke(methodName: String, params: Array<Any?>?, parameterTypes: Array<C
 
 	method.isAccessible = true
 	return if (params == null || params.isEmpty()) method.invoke(this) else method.invoke(this, params)
+}
+
+fun Any.getField(fieldName: String): Any? {
+	return try {
+		val field = this::class.java.getField(fieldName)
+		field.isAccessible = true
+		field.get(this)
+	} catch (ignore: Throwable) {
+		null
+	}
+}
+
+fun Any.setField(fieldName: String, value: Any?) {
+	return try {
+		val field = this::class.java.getField(fieldName)
+		field.isAccessible = true
+		field.set(this, value)
+	} catch (ignore: Throwable) {
+		
+	}
 }

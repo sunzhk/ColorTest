@@ -57,6 +57,10 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     //RxAndroid3的依赖包
     implementation 'io.reactivex.rxjava3:rxjava:3.0.4'
+    
+    // 学习Retrofit的依赖库
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly 'org.codehaus.mojo:animal-sniffer-annotations:1.18'
 
 
     api("com.squareup.okhttp3:okhttp:4.9.0")

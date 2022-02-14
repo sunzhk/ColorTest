@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -24,6 +25,20 @@ android {
         versionName "2.5.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                arguments = [AROUTER_MODULE_NAME: project.getName()]
+//            }
+//        }
+        kapt {
+            arguments {
+                //根据模块名来命名路由根节点
+                arg("AROUTER_MODULE_NAME", project.getName())
+                //生成Json文件
+                arg("AROUTER_GENERATE_DOC", "enable")
+            }
+        }
     }
 
     buildTypes {
@@ -90,6 +105,11 @@ dependencies {
     //RxAndroid3的依赖包
     implementation 'io.reactivex.rxjava3:rxjava:3.0.4'
 
+    //ARouter
+    implementation 'com.alibaba:arouter-api:1.4.1'
+//    annotationProcessor 'com.alibaba:arouter-compiler:1.5.2'
+    kapt 'com.alibaba:arouter-compiler:1.2.2'
+
     // 动态权限申请
     implementation 'com.github.tbruyelle:rxpermissions:0.12'
     // 拍照或从相册选择图片
@@ -101,6 +121,8 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences-rxjava3:1.0.0-alpha07"
     implementation "androidx.datastore:datastore-preferences-core:1.0.0-alpha07"
 
+//    implementation("com.squareup.moshi:moshi:1.13.0")
+//    implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
 //    implementation "androidx.datastore:datastore:1.0.0-alpha07"
 //    implementation "androidx.datastore:datastore-rxjava3:1.0.0-alpha07"
 //    implementation "androidx.datastore:datastore-core:1.0.0-alpha07"
