@@ -2,9 +2,9 @@ package com.sunzk.base.network
 
 import android.util.Log
 import com.google.gson.Gson
+import com.sunzk.base.expand.invoke
 import com.sunzk.base.network.annotations.Get
 import com.sunzk.base.network.annotations.Post
-import com.sunzk.base.utils.invoke
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -61,13 +61,17 @@ class CoroutineServer(private val baseUrl: String) {
 						// 判断是Get请求还是Post请求。其他复杂的东西回头再加
 						val getRequest = method.getAnnotation(Get::class.java)
 						val postRequest = method.getAnnotation(Post::class.java)
+						Log.d(TAG, "invoke: getRequest=$getRequest, postRequest=$postRequest")
 						// 获取该方法真正的返回值类型，以便反序列化数据
 						val returnType = findRealReturnType(method)
+						Log.d(TAG, "invoke: 所以最终的返回值类型为$returnType")
 						result = when {
 							getRequest != null -> {
+								Log.d(TAG, "invoke: do get!")
 								handleAsGetRequest(getRequest, method, returnType, params)
 							}
 							postRequest != null -> {
+								Log.d(TAG, "invoke: do post!")
 								handleAsPostRequest(postRequest, method, params)
 							}
 							else -> {
@@ -92,7 +96,7 @@ class CoroutineServer(private val baseUrl: String) {
 		params: Array<Any>?
 	): Any? {
 		val newCall =
-			client.newCall(Request.Builder().url(spliceUrl(baseUrl, getRequest?.path)).build())
+			client.newCall(Request.Builder().url(spliceUrl(baseUrl, getRequest?.path)?.also { Log.d(TAG, "handleAsGetRequest: url=$it") }).build())
 		val response = newCall.waitResponse()
 		Log.d(TAG, "handleAsGetRequest: return type=$returnType")
 		return Gson().fromJson(InputStreamReader(response.body?.byteStream()), returnType)

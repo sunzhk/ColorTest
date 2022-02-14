@@ -1,0 +1,31 @@
+[
+  {
+    "path": "activityMockColor",
+    "title": "标准模式"
+  },
+  {
+    "bundle": {
+      "difficulty": "EASY"
+    },
+    "path": "activityGuessColor",
+    "title": "地狱模式(体验版)"
+  },
+  {
+    "bundle": {
+      "difficulty": "MEDIUM"
+    },
+    "path": "activityGuessColor",
+    "title": "地狱模式(中等)"
+  },
+  {
+    "bundle": {
+      "difficulty": "DIFFICULT"
+    },
+    "path": "activityGuessColor",
+    "title": "地狱模式(困难)"
+  },
+  {
+    "path": "activityFindDiffColor",
+    "title": "找不同"
+  }
+]

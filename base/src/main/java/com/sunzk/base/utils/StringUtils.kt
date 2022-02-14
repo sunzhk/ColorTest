@@ -4,6 +4,7 @@ import com.sunzk.base.utils.Logger.d
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.io.UnsupportedEncodingException
+import java.util.*
 
 /**
  * 字符串工具类
@@ -182,5 +183,26 @@ object StringUtils {
             }
         }
         return String(c)
+    }
+}
+
+const val stringBuilderPoolSize = 10
+val stringBuilderPool = LinkedList<StringBuilder>()
+
+fun obtainStringBuilder(): StringBuilder{
+    synchronized(stringBuilderPool) {
+        return if (stringBuilderPool.isEmpty()) {
+            StringBuilder()
+        } else {
+            stringBuilderPool.removeFirst()
+        }
+    }
+}
+
+fun StringBuilder.recycle() {
+    synchronized(stringBuilderPool) {
+        if (stringBuilderPool.size < stringBuilderPoolSize) {
+            stringBuilderPool.add(this)
+        }
     }
 }

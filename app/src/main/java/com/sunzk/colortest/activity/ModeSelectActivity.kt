@@ -2,8 +2,8 @@ package com.sunzk.colortest.activity
 
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +12,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
 import com.sunzk.base.utils.AppUtils
 import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.base.utils.Logger
-import com.sunzk.colortest.BaseActivity
-import com.sunzk.colortest.Constant
-import com.sunzk.colortest.R
-import com.sunzk.colortest.Runtime
+import com.sunzk.colortest.*
 import com.sunzk.colortest.databinding.ActivityModeSelectBinding
 import com.sunzk.colortest.databinding.ItemModeBinding
 import com.sunzk.colortest.entity.ModeEntity
@@ -27,6 +26,7 @@ import com.sunzk.colortest.view.IDragSwipe
 import com.sunzk.colortest.view.SpaceItemDecoration
 import java.util.*
 
+@Route(path = RouteInfo.PATH_ACTIVITY_MODE_SELECT)
 class ModeSelectActivity : BaseActivity() {
 	private var viewBinding: ActivityModeSelectBinding? = null
 	private val modeEntityList: ArrayList<ModeEntity> = ArrayList()
@@ -197,27 +197,15 @@ class ModeSelectActivity : BaseActivity() {
 		}
 
 		private fun handleModeByAction(modeEntity: ModeEntity) {
-			when (modeEntity.action) {
-				Constant.ModeAction.activity.name -> {
-					startActivity(createIntentByMode(modeEntity))
-				}
-				Constant.ModeAction.service.name -> {
-					startService(createIntentByMode(modeEntity))
-				}
-				else -> {
-					startActivity(createIntentByMode(modeEntity))
-				}
+			val route = RouteInfo.RouteMap.valueOf(modeEntity.path)
+			Log.d(TAG, "handleModeByAction: route=$route, path=${route.path}")
+			var postcard = ARouter.getInstance().build(route.path)
+			postcard.group = route.group
+			modeEntity.bundle?.forEach { entry: Map.Entry<String, String> ->
+				postcard = postcard.withString(entry.key, entry.value)
 			}
-		}
 
-		private fun createIntentByMode(modeEntity: ModeEntity): Intent {
-			val intent = Intent(this@ModeSelectActivity, Class.forName(modeEntity.className))
-			modeEntity.bundle?.let { bundle ->
-				for (key in bundle.keys) {
-					intent.putExtra(key, bundle[key])
-				}
-			}
-			return intent
+			postcard.navigation(this@ModeSelectActivity)
 		}
 
 	}

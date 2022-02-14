@@ -8,15 +8,18 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.sunzk.base.expand.livedata.get
 import com.sunzk.base.expand.livedata.set
 import com.sunzk.base.utils.AppUtils
 import com.sunzk.base.utils.ColorUtils
 import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.colortest.BaseActivity
+import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.databinding.ActivityGuessColorBinding
 import java.util.*
 
+@Route(path = RouteInfo.PATH_ACTIVITY_GUESS_COLOR)
 class GuessColorActivity : BaseActivity() {
 
 	companion object {
