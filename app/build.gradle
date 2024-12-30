@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace 'com.sunzk.colortest'
+
     signingConfigs {
         keystore {
             keyAlias 'sunzk'
@@ -14,13 +16,13 @@ android {
         }
     }
 
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion = 34
+    buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId "com.sunzk.colortest"
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion 23
+        targetSdkVersion 34
         versionCode 16
         versionName "2.5.1"
 
@@ -40,7 +42,26 @@ android {
             }
         }
     }
-
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.10"
+    }
+    buildFeatures {
+        buildConfig true
+        compose true
+    }
+    
+    flavorDimensions("colorTest")
+    productFlavors {
+        local {
+            dimension "colorTest"
+            buildConfigField "boolean", "useLocalData", "true"
+        }
+        network {
+            dimension "colorTest"
+            buildConfigField "boolean", "useLocalData", "false"
+        }
+    }
+    
     buildTypes {
         release {
             minifyEnabled false
@@ -126,4 +147,20 @@ dependencies {
 //    implementation "androidx.datastore:datastore:1.0.0-alpha07"
 //    implementation "androidx.datastore:datastore-rxjava3:1.0.0-alpha07"
 //    implementation "androidx.datastore:datastore-core:1.0.0-alpha07"
+
+
+    implementation(platform(libs.androidx.compose.bom))
+//    androidTestImplementation(composeBom)
+    implementation(libs.compose.material3)
+//    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.bundles.compose)
+//    debugImplementation(libs.compose.ui.tooling)
+//    // Optional - Integration with activities
+    implementation(libs.androidx.activity.compose)
+//    // Optional - Integration with ViewModels
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Android Studio Preview support
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
 }

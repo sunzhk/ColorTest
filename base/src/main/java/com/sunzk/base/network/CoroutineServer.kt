@@ -96,7 +96,7 @@ class CoroutineServer(private val baseUrl: String) {
 		params: Array<Any>?
 	): Any? {
 		val newCall =
-			client.newCall(Request.Builder().url(spliceUrl(baseUrl, getRequest?.path)?.also { Log.d(TAG, "handleAsGetRequest: url=$it") }).build())
+			client.newCall(Request.Builder().url(spliceUrl(baseUrl, getRequest?.path).also { Log.d(TAG, "handleAsGetRequest: url=$it") }).build())
 		val response = newCall.waitResponse()
 		Log.d(TAG, "handleAsGetRequest: return type=$returnType")
 		return Gson().fromJson(InputStreamReader(response.body?.byteStream()), returnType)

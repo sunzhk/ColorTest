@@ -13,4 +13,18 @@
 		<item name="background">@color/default_activity_background</item>
 	</style>
 
+
+	<style name="ModeItem">
+		<item name="android:background">@drawable/bg_common_bt</item>
+		<item name="android:textColor">#FF404040</item>
+		<item name="android:textSize">21sp</item>
+		<item name="android:gravity">center</item>
+		<item name="android:padding">10dp</item>
+	</style>
+
+	<style name="CommonButton">
+		<item name="android:background">@drawable/bg_common_bt</item>
+		<item name="android:textColor">#FF101010</item>
+		<item name="android:textSize">14sp</item>
+	</style>
 </resources>
