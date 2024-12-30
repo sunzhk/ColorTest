@@ -1,0 +1,76 @@
+[versions]
+activityCompose = "1.8.2"
+app_lifecycle_version = "2.4.1"
+brv-fork = "1.0.0.1"
+coroutines_android_version = "1.6.4"
+ability_version = "1.0.0.27"
+gradle_version = "7.4.2"
+gson_version = "2.8.1"
+#hilt_version = "2.44"
+androidxComposeBom = "2024.10.01"
+lifecycleViewmodelCompose = "2.6.1"
+
+[libraries]
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle_version" }
+
+lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "app_lifecycle_version" }
+lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "app_lifecycle_version" }
+lifecycle-runtime-ktx-json = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "app_lifecycle_version" }
+lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "app_lifecycle_version" }
+
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines_android_version" }
+
+androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.7.0" }
+androidx_activity = { module = "androidx.activity:activity-ktx", version = "1.5.1" }
+androidx_fragment = { module = "androidx.fragment:fragment-ktx", version = "1.4.1" }
+androidx_appcompat = { module = "androidx.appcompat:appcompat", version = "1.4.2" }
+
+androidx_viewpager2 = { module = "androidx.viewpager2:viewpager2", version = "1.0.0" }
+androidx_cardview = { module = "androidx.cardview:cardview", version = "1.0.0" }
+androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
+
+material = { module = "com.google.android.material:material", version = "1.5.0" }
+
+recyclerView = { module = "androidx.recyclerview:recyclerview", version = "1.2.1" }
+
+ability-annotation = { module = "com.closeli.widget:ability-annotation", version.ref = "ability_version" }
+ability-base = { module = "com.closeli.widget:ability-base", version.ref = "ability_version" }
+ability-ksp = { module = "com.closeli.widget:ability-ksp", version.ref = "ability_version" }
+
+gson = { module = "com.google.code.gson:gson", version.ref = "gson_version" }
+
+mmkv = { module = "com.tencent:mmkv", version = "1.3.0" }
+
+jiguang-jpush = { module = "cn.jiguang.sdk:jpush", version = "4.8.5"}
+jiguang-jcore = { module = "cn.jiguang.sdk:jcore", version = "4.0.0"}
+jiguang-plugin-vivo = { module = "cn.jiguang.sdk.plugin:vivo", version = "4.8.5"}
+jiguang-plugin-oppo = { module = "cn.jiguang.sdk.plugin:oppo", version = "4.8.5"}
+jiguang-plugin-xiaomi = { module = "cn.jiguang.sdk.plugin:xiaomi", version = "4.8.5"}
+
+closeli-components-brv-fork = { module = "com.closeli.widget:brv-fork", version.ref = "brv-fork" }
+closeli-components-FlyBanner = { module = "com.closeli.widget:FlyBanner", version = "2.2" }
+closeli-components-CircleMenu = { module = "com.closeli.widget:CircleMenu", version = "1.6" }
+closeli-components-BatteryView = { module = "com.closeli.widget:BatteryView", version = "1.5.1" }
+closeli-components-DoubleDragView = { module = "com.closeli.widget:DoubleDragView", version = "3.3" }
+closeli-components-CLJSBridge = { module = "com.closeli.components:CLJSBridge", version = "1.1" }
+
+#hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt_version"}
+#hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt_version"}
+
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
+
+[bundles]
+"lifecycle" = ["lifecycle-livedata-ktx", "lifecycle-viewmodel-ktx", "lifecycle-runtime-ktx-json", "lifecycle-service"]
+"coroutines" = ["coroutines-android"]
+"androidx" = ["androidx-core-ktx", "androidx_activity", "androidx_fragment", "androidx_appcompat"]
+"androidx_widget" = ["androidx_viewpager2", "androidx_cardview", "androidx_constraintlayout"]
+"jiguang" = ["jiguang-jpush", "jiguang-jcore", "jiguang-plugin-vivo", "jiguang-plugin-oppo", "jiguang-plugin-xiaomi"]
+"closeli-components" = ["closeli-components-brv-fork", "closeli-components-FlyBanner", "closeli-components-CircleMenu", "closeli-components-BatteryView", "closeli-components-DoubleDragView", "closeli-components-CLJSBridge"]
+"compose" = ["androidx-compose-bom", "androidx-compose-foundation", "compose-material3", "compose-ui-tooling-preview"]
+[plugins]

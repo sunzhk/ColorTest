@@ -1,10 +1,12 @@
 package com.sunzk.colortest
 
 import android.media.MediaPlayer
+import androidx.activity.ComponentActivity
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : FragmentActivity() {
     private var mediaPlayer: MediaPlayer? = null
     override fun onResume() {
         super.onResume()

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
+import com.sunzk.base.expand.bindView
 import com.sunzk.base.utils.AppUtils
 import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.base.utils.Logger
@@ -28,7 +29,7 @@ import java.util.*
 
 @Route(path = RouteInfo.PATH_ACTIVITY_MODE_SELECT)
 class ModeSelectActivity : BaseActivity() {
-	private var viewBinding: ActivityModeSelectBinding? = null
+	private val viewBinding by bindView<ActivityModeSelectBinding>()
 	private val modeEntityList: ArrayList<ModeEntity> = ArrayList()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,12 +39,9 @@ class ModeSelectActivity : BaseActivity() {
 			return
 		}
 		showVersionUpgradeDialog()
-		viewBinding =
-			ActivityModeSelectBinding.inflate(layoutInflater)
-		setContentView(viewBinding!!.root)
 		initModeList()
 		resetBgmSwitchState(Runtime.isNeedBGM)
-		viewBinding!!.cbBgmSwitch.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
+		viewBinding.cbBgmSwitch.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
 			resetBgmSwitchState(isChecked)
 			Runtime.isNeedBGM = isChecked
 		}
@@ -51,13 +49,13 @@ class ModeSelectActivity : BaseActivity() {
 
 	private fun initModeList() {
 		modeEntityList.addAll(Runtime.modeList)
-		viewBinding!!.rvModeList.layoutManager = LinearLayoutManager(
+		viewBinding.rvModeList.layoutManager = LinearLayoutManager(
 			this,
 			LinearLayoutManager.VERTICAL,
 			false
 		)
 		val itemDecoration = DisplayUtil.dip2px(this, 6f)
-		viewBinding!!.rvModeList.addItemDecoration(
+		viewBinding.rvModeList.addItemDecoration(
 			SpaceItemDecoration(
 				0,
 				itemDecoration,
@@ -87,7 +85,7 @@ class ModeSelectActivity : BaseActivity() {
 					return modeEntityList.size
 				}
 			}
-		viewBinding!!.rvModeList.adapter = adapter
+		viewBinding.rvModeList.adapter = adapter
 		val callback: ItemTouchHelper.Callback = DragSwipeCallback(object : IDragSwipe {
 			override fun onItemSwapped(fromPosition: Int, toPosition: Int) {
 				Logger.d(
@@ -134,12 +132,12 @@ class ModeSelectActivity : BaseActivity() {
 			}
 		})
 		val touchHelper = ItemTouchHelper(callback)
-		touchHelper.attachToRecyclerView(viewBinding!!.rvModeList)
+		touchHelper.attachToRecyclerView(viewBinding.rvModeList)
 	}
 
 	private fun resetBgmSwitchState(switchOn: Boolean) {
-		viewBinding!!.cbBgmSwitch.isChecked = switchOn
-		viewBinding!!.tvBgmSwitch.setText(if (switchOn) R.string.bgm_switch_on else R.string.bgm_switch_off)
+		viewBinding.cbBgmSwitch.isChecked = switchOn
+		viewBinding.tvBgmSwitch.setText(if (switchOn) R.string.bgm_switch_on else R.string.bgm_switch_off)
 	}
 
 	private fun checkAccess(): Boolean {
@@ -172,8 +170,10 @@ class ModeSelectActivity : BaseActivity() {
 		val versionCode = AppUtils.getVersionCode(this)
 		val lastHintVersionCode = sharedPreferences.getInt("lastHintVersionCode", -1)
 		//		String upgradeMessage = "    已更新至正式版，可以尽情使用了";
-		val upgradeMessage = """    1. 大幅度修改了项目结构，为以后的更新做准备~
-    2. 找中间色功能增加了寂书予定制版
+//		val upgradeMessage = """    1. 大幅度修改了项目结构，为以后的更新做准备~
+//    2. 找中间色功能增加了寂书予定制版
+//    再次感谢可爱的寂书予~"""
+		val upgradeMessage = """    1. 增加了历史记录功能~
     再次感谢可爱的寂书予~"""
 		if (versionCode > lastHintVersionCode) {
 			AlertDialog.Builder(this)
