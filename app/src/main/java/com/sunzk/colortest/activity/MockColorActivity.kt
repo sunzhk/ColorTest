@@ -2,28 +2,40 @@ package com.sunzk.colortest.activity
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.arcsoft.closeli.utils.takeIfIs
 import com.sunzk.base.expand.bindView
+import com.sunzk.base.expand.collect
 import com.sunzk.base.utils.AppUtils
 import com.sunzk.base.utils.ColorUtils
 import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.colortest.BaseActivity
+import com.sunzk.colortest.R
 import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.Runtime
 import com.sunzk.colortest.activity.history.MockColorHistoryActivity
 import com.sunzk.colortest.databinding.ActivityMockColorBinding
 import com.sunzk.colortest.db.MockColorResultTable
 import com.sunzk.colortest.db.bean.MockColorResult
-import com.sunzk.demo.tools.coroutine.GlobalDispatchers
+import com.sunzk.base.expand.coroutines.GlobalDispatchers
+import com.sunzk.base.expand.emitBy
+import com.sunzk.colortest.mockcolor.MockColorSettlementDialog
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
+
 
 @Route(path = RouteInfo.PATH_ACTIVITY_MOCK_COLOR, group = RouteInfo.GROUP_GAME)
 class MockColorActivity : BaseActivity() {
@@ -35,6 +47,11 @@ class MockColorActivity : BaseActivity() {
 
 	private val viewBinding by bindView<ActivityMockColorBinding>()
 	private lateinit var currentHSB: FloatArray
+
+	/**
+	 * 难度
+	 */
+	private var currentDifficulty = MutableStateFlow(MockColorResult.Difficulty.Normal)
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -49,11 +66,23 @@ class MockColorActivity : BaseActivity() {
 			}
 		}
 		initView()
+		bindData()
 		initColorArea()
 		nextProblem()
 	}
 	
 	private fun initView() = with(viewBinding) {
+		btDifficulty.adapter = ArrayAdapter(this@MockColorActivity, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, MockColorResult.Difficulty.entries.map { it.text })
+		btDifficulty.setSelection(MockColorResult.Difficulty.entries.indexOf(currentDifficulty.value))
+		btDifficulty.onItemSelectedListener = object : OnItemSelectedListener {
+			override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+				currentDifficulty.emitBy(MockColorResult.Difficulty.entries[position])
+			}
+
+			override fun onNothingSelected(parent: AdapterView<*>?) {
+			}
+
+		}
 		btHistory.setOnClickListener { startActivity(Intent(this@MockColorActivity, MockColorHistoryActivity::class.java)) }
 		btNext.setOnClickListener { v: View? -> nextProblem() }
 		btAnswer.setOnClickListener { v: View? ->
@@ -62,6 +91,23 @@ class MockColorActivity : BaseActivity() {
 		hsbColorSelector.setOnColorSelectedListener { h: Float, s: Float, b: Float ->
 			val color = Color.HSVToColor(floatArrayOf(h, s, b))
 			viewResult.setBackgroundColor(color)
+		}
+	}
+
+	private fun bindData() {
+		currentDifficulty.collect(lifecycleScope) {
+			val color = when (it) {
+				MockColorResult.Difficulty.Hard -> R.color.difficulty_hard
+				MockColorResult.Difficulty.Normal -> R.color.difficulty_normal
+				MockColorResult.Difficulty.Easy -> R.color.difficulty_easy
+			}
+			ResourcesCompat.getDrawable(resources, R.drawable.bg_common_bt, null)
+				?.mutate()
+				?.takeIfIs<GradientDrawable>()
+				?.let { drawable ->
+					drawable.setColor(resources.getColor(color, null))
+					viewBinding.btDifficulty.background = drawable
+				}
 		}
 	}
 
@@ -122,25 +168,42 @@ class MockColorActivity : BaseActivity() {
 	}
 
 	private fun showAnswer(v: View?) {
-		val showH = currentHSB[0].toInt()
-		val showS = (currentHSB[1] * 100).toInt()
-		val showB = (currentHSB[2] * 100).toInt()
-		viewBinding.tvAnswer.text = String.format(
-			Locale.getDefault(),
-			"H: %d度  S: %d%%  B: %d%%",
-			showH,
-			showS,
-			showB
-		)
+		val showH = currentHSB[0].toInt().toFloat()
+		val showS = (currentHSB[1] * 100).toInt().toFloat()
+		val showB = (currentHSB[2] * 100).toInt().toFloat()
+		val answerH = viewBinding.hsbColorSelector.progressH.toFloat()
+		val answerS = viewBinding.hsbColorSelector.progressS.toFloat()
+		val answerB = viewBinding.hsbColorSelector.progressB.toFloat()
+
 		lifecycleScope.launch {
-			saveResult(showH, showS, showB)
+			saveResult(showH.toInt(), showS.toInt(), showB.toInt())
 			showScore(Runtime.testResultNumber)
 		}
-		checkAnswer()
+		
+		val dialog = MockColorSettlementDialog(this,
+			floatArrayOf(showH, showS, showB),
+			floatArrayOf(answerH, answerS, answerB),
+			currentDifficulty.value)
+		dialog.onCancelClickListener = {
+			finish()
+		}
+		dialog.onConfirmClickListener = {
+			nextProblem()
+		}
+		dialog.show()
+//		viewBinding.tvAnswer.text = String.format(
+//			Locale.getDefault(),
+//			"H: %d度  S: %d%%  B: %d%%",
+//			showH,
+//			showS,
+//			showB
+//		)
+//		checkAnswer()
 	}
 
 	private suspend fun saveResult(showH: Int, showS: Int, showB: Int) = withContext(GlobalDispatchers.IO) {
 		val result = MockColorResultTable.add(MockColorResult(
+			difficulty = currentDifficulty.value,
 			questionH = showH.toFloat(),
 			questionS = showS.toFloat(),
 			questionB = showB.toFloat(),

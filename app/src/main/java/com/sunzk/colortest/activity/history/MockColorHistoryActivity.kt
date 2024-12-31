@@ -7,6 +7,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,22 +22,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.RoundRect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathOperation
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -45,8 +44,8 @@ import com.sunzk.colortest.BaseActivity
 import com.sunzk.colortest.R
 import com.sunzk.colortest.db.MockColorResultTable
 import com.sunzk.colortest.db.bean.MockColorResult
-import com.sunzk.demo.tools.coroutine.GlobalDispatchers
-import com.sunzk.demo.tools.ext.emitBy
+import com.sunzk.base.expand.coroutines.GlobalDispatchers
+import com.sunzk.base.expand.emitBy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -78,11 +77,12 @@ class MockColorHistoryActivity: BaseActivity() {
 		Column(modifier = Modifier
 			.fillMaxWidth()
 			.fillMaxHeight()
-			.background(Color.White)) {
+			.background(colorResource(R.color.gray_dd))) {
 			Box(modifier = Modifier
 				.fillMaxWidth()
+				.padding(top = 5.dp)
 				.height(44.dp)
-				.border(2.dp, colorResource(R.color.theme_txt_disable))) {
+			) {
 				Text(text = "答题记录",
 					fontSize = 22.sp,
 					color = colorResource(R.color.theme_txt_standard),
@@ -106,26 +106,72 @@ class MockColorHistoryActivity: BaseActivity() {
 	
 	@Composable
 	fun HistoryItem(history: MockColorResult) {
-		Column(Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
-			.border(1.5.dp, colorResource(R.color.theme_txt_disable), shape = RoundedCornerShape(10.dp))
-			.padding(8.dp)) {
-			Row(modifier = Modifier.fillMaxWidth()) {
-				Text(text = "${history.id}", fontSize = 16.sp, color = colorResource(R.color.theme_txt_standard), modifier = Modifier.weight(1f))
-				Text(text = history.date ?: "", fontSize = 14.sp, color = colorResource(R.color.theme_txt_standard_dis))
-			}
-			Row(modifier = Modifier.padding(top = 5.dp).height(35.dp)) {
-				Canvas(modifier = Modifier.fillMaxHeight().weight(1f)) {
+		val expanded = remember { mutableStateOf(false) }
+		val itemShape = RoundedCornerShape(10.dp)
+		Column(Modifier
+			.padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
+			.border(1.5.dp, colorResource(R.color.theme_txt_disable), shape = itemShape)
+			.background(Color.White, shape = itemShape)
+			.padding(8.dp)
+			.clickable { expanded.value = expanded.value.not() }) {
+			HistoryItemTitle(history)
+			Row(modifier = Modifier
+				.padding(top = 5.dp)
+				.height(35.dp)) {
+				Canvas(modifier = Modifier
+					.fillMaxHeight()
+					.weight(1f)) {
 					drawQuestion(history.question)
 					drawAnswer(history.answer)
 				}
 				Image(painter = painterResource(if (history.isRight()) R.mipmap.icon_result_right else R.mipmap.icon_result_wrong),
 					contentDescription = null, 
-					modifier = Modifier.padding(start = 10.dp, end = 8.dp).size(30.dp, 30.dp).align(Alignment.CenterVertically))
+					modifier = Modifier
+						.padding(start = 10.dp, end = 8.dp)
+						.size(30.dp, 30.dp)
+						.align(Alignment.CenterVertically))
+			}
+			if (expanded.value) {
+				HistoryValue(history)
+				
 			}
 		}
 		
 	}
-	
+
+	@Composable
+	private fun HistoryItemTitle(history: MockColorResult) {
+		Row(modifier = Modifier.fillMaxWidth()) {
+//			Text(text = "${history.id}.", fontSize = 15.sp, color = colorResource(R.color.theme_txt_standard), modifier = Modifier)
+			Text(text = history.date ?: "",
+				fontSize = 15.sp,
+				color = colorResource(R.color.theme_txt_standard),
+				modifier = Modifier
+					.align(Alignment.CenterVertically)
+					.weight(1f))
+			Text(text = "难度：${history.difficulty.text}",
+				fontSize = 15.sp,
+				color = colorResource(R.color.theme_txt_standard),
+				modifier = Modifier
+					.align(Alignment.CenterVertically))
+		}
+	}
+
+	@Composable
+	private fun HistoryValue(history: MockColorResult) {
+		Row(modifier = Modifier
+			.padding(top = 5.dp)) {
+			Text(fontSize = 15.sp,
+				text = "示例颜色：\nH: ${history.questionH.toInt()}, S: ${history.questionS.toInt()}%, B: ${history.questionB.toInt()}%",
+				textAlign = TextAlign.Start,
+				modifier = Modifier.weight(1f))
+			Text(fontSize = 15.sp,
+				text = "你的答案：\nH:${history.answerH.toInt()}, S: ${history.answerS.toInt()}%, B: ${history.answerB.toInt()}%",
+				textAlign = TextAlign.Start,
+				modifier = Modifier.weight(1f))
+		}
+	}
+
 	// <editor-fold desc="颜色对比绘制">
 	
 	private var trapezoidDivider = 2.dp

@@ -9,6 +9,7 @@ import kotlin.math.abs
 data class MockColorResult(
     val id: Int = 0,
     val date: String? = null,
+    val difficulty: Difficulty,
     val questionH: Float = 0f,
     val questionS: Float = 0f,
     val questionB: Float = 0f,
@@ -27,9 +28,19 @@ data class MockColorResult(
         get() = floatArrayOf(answerH, answerS / 100f, answerB / 100f)
 
     fun isRight(): Boolean {
-        val result = (abs(questionH - answerH) < 5f || abs(360 - questionH - answerH) < 5f) 
-                && abs(questionS - answerS) < 5f && abs(questionB - answerB) < 5f
-        Log.d(TAG, "MockColorResult#isRight- id: $id, question: $questionH, $questionS, $questionB, answer: $answerH, $answerS, $answerB, result: $result")
-        return result
+        return difficulty.isRight(floatArrayOf(questionH, questionS, questionB), floatArrayOf(answerH, answerS, answerB))
+    }
+    
+    enum class Difficulty(val text: String, val hOffset: Float, val sOffset: Float, val bOffset: Float) {
+        Easy("入门", 15f, 15f, 15f),
+        Normal("熟练", 9f, 9f, 9f),
+        Hard("精通", 5f, 5f, 5f);
+        
+        fun isRight(question: FloatArray, answer: FloatArray): Boolean {
+            val result = (abs(question[0] - answer[0]) < hOffset || abs(360 - question[0] - answer[0]) < hOffset) 
+                    && abs(question[1] - answer[1]) < sOffset && abs(question[2] - answer[2]) < bOffset
+            Log.d(TAG, "MockColorResult.Difficulty#isRight- $this, question: ${question[0]}, ${question[1]}, ${question[2]}, answer: ${answer[0]}, ${answer[1]}, ${answer[2]}, result: $result")
+            return result
+        }
     }
 }

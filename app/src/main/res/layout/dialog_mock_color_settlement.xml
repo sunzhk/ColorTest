@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    tools:background="@color/black_2e">
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:translationZ="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:src="@mipmap/icon_answer_success"/>
+    
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp">
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/theme_txt_standard"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="答对了，可喜可贺"/>
+            
+            <TextView
+                android:id="@+id/tv_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="可以通过查看历史记录，了解更多信息"
+                android:textColor="@color/theme_txt_disable"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/bt_cancel"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:text="累了，下次再来"
+                android:textColor="@color/theme_txt_standard"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bt_confirm"
+                app:layout_constraintTop_toTopOf="@+id/bt_confirm"
+                app:layout_constraintBottom_toBottomOf="@+id/bt_confirm"/>
+
+            <TextView
+                android:id="@+id/bt_confirm"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="下一题"
+                android:textColor="@color/theme_txt_standard"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/bt_cancel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_hint"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+            <View
+                android:id="@+id/line_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/theme_txt_disable"
+                app:layout_constraintBottom_toTopOf="@+id/bt_confirm"/>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/theme_txt_disable"
+                app:layout_constraintTop_toBottomOf="@+id/line_divider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bt_cancel"
+                app:layout_constraintEnd_toStartOf="@+id/bt_confirm"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

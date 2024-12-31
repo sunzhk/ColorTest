@@ -18,6 +18,7 @@ object MockColorResultTable: ITable<MockColorResult> {
 	private const val TABLE_NAME = "MOCK_COLOR_TEST_RESULT"
 	private const val COLUMN_NAME_ID = "_id"
 	private const val COLUMN_NAME_DATE = "DATE"
+	private const val COLUMN_NAME_DIFFICULTY = "DIFFICULTY"
 	private const val COLUMN_NAME_QUESTION_H = "questionH"
 	private const val COLUMN_NAME_QUESTION_S = "questionS"
 	private const val COLUMN_NAME_QUESTION_B = "questionB"
@@ -26,20 +27,28 @@ object MockColorResultTable: ITable<MockColorResult> {
 	private const val COLUMN_NAME_ANSWER_B = "answerB"
 
 	override fun onCreate(db: SQLiteDatabase) {
-		var sql =
-			"create table IF NOT EXISTS $TABLE_NAME( %s INTEGER PRIMARY KEY AUTOINCREMENT, %s TIME_STAMP NOT NULL DEFAULT (datetime('now','localtime')), %s FLOAT, %s FLOAT, %s FLOAT, %s FLOAT, %s FLOAT, %s FLOAT);"
-		sql = String.format(
-			Locale.US,
-			sql,
-			COLUMN_NAME_ID,
-			COLUMN_NAME_DATE,
-			COLUMN_NAME_QUESTION_H,
-			COLUMN_NAME_QUESTION_S,
-			COLUMN_NAME_QUESTION_B,
-			COLUMN_NAME_ANSWER_H,
-			COLUMN_NAME_ANSWER_S,
-			COLUMN_NAME_ANSWER_B
-		)
+//		var sql = "create table IF NOT EXISTS $TABLE_NAME( %s INTEGER PRIMARY KEY AUTOINCREMENT, %s TIME_STAMP NOT NULL DEFAULT (datetime('now','localtime')), %s TEXT, %s FLOAT, %s FLOAT, %s FLOAT, %s FLOAT, %s FLOAT, %s FLOAT);"
+//		sql = String.format(
+//			Locale.US,
+//			sql,
+//			COLUMN_NAME_ID,
+//			COLUMN_NAME_DATE,
+//			COLUMN_NAME_QUESTION_H,
+//			COLUMN_NAME_QUESTION_S,
+//			COLUMN_NAME_QUESTION_B,
+//			COLUMN_NAME_ANSWER_H,
+//			COLUMN_NAME_ANSWER_S,
+//			COLUMN_NAME_ANSWER_B
+//		)
+		var sql = "create table IF NOT EXISTS $TABLE_NAME( $COLUMN_NAME_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"$COLUMN_NAME_DATE TIME_STAMP NOT NULL DEFAULT (datetime('now','localtime')), " +
+				"$COLUMN_NAME_DIFFICULTY TEXT, " +
+				"$COLUMN_NAME_QUESTION_H FLOAT, " +
+				"$COLUMN_NAME_QUESTION_S FLOAT, " +
+				"$COLUMN_NAME_QUESTION_B FLOAT, " +
+				"$COLUMN_NAME_ANSWER_H FLOAT, " +
+				"$COLUMN_NAME_ANSWER_S FLOAT, " +
+				"$COLUMN_NAME_ANSWER_B FLOAT);"
 		db.execSQL(sql)
 	}
 
@@ -61,19 +70,18 @@ object MockColorResultTable: ITable<MockColorResult> {
 					null,
 					null
 				)
-				var testResult: MockColorResult
 				while (query.moveToNext()) {
-					testResult = MockColorResult(
+					testResults.add(MockColorResult(
 						query.getInt(0),
 						query.getString(1),
-						query.getFloat(2),
+						MockColorResult.Difficulty.entries.find { it.text == query.getString(2) } ?: MockColorResult.Difficulty.Normal,
 						query.getFloat(3),
 						query.getFloat(4),
 						query.getFloat(5),
 						query.getFloat(6),
-						query.getFloat(7)
-					)
-					testResults.add(testResult)
+						query.getFloat(7),
+						query.getFloat(8)
+					))
 				}
 				query.close()
 				database.setTransactionSuccessful()
@@ -97,6 +105,7 @@ object MockColorResultTable: ITable<MockColorResult> {
 				database.beginTransaction()
 				val values: ContentValues
 				values = ContentValues()
+				values.put(COLUMN_NAME_DIFFICULTY, bean.difficulty.name)
 				values.put(COLUMN_NAME_QUESTION_H, bean.questionH)
 				values.put(COLUMN_NAME_QUESTION_S, bean.questionS)
 				values.put(COLUMN_NAME_QUESTION_B, bean.questionB)
