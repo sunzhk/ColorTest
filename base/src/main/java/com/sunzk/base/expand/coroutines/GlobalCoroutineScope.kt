@@ -1,4 +1,4 @@
-package com.sunzk.demo.tools.coroutine
+package com.sunzk.base.expand.coroutines
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

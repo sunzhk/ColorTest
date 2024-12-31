@@ -1,6 +1,6 @@
-package com.sunzk.demo.tools.ext
+package com.sunzk.base.expand
 
-import com.sunzk.demo.tools.coroutine.GlobalCoroutineExceptionHandler
+import com.sunzk.base.expand.coroutines.GlobalCoroutineExceptionHandler
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.CoroutineContext
@@ -44,7 +44,7 @@ const val ADD_DEVICE_CHECK_TIMEOUT = 180000L
 fun countDownByFlow(
 	max: Int,
 	scope: CoroutineScope,
-	onTick: (Int) -> Unit,
+	onTick: ((Int) -> Unit)? = null,
 	onFinish: (() -> Unit)? = null,
 ): Job {
 	return flow {
@@ -53,7 +53,7 @@ fun countDownByFlow(
 			if (num != 0) delay(1000)
 		}
 	}.flowOn(Dispatchers.Main)
-		.onEach { onTick.invoke(it) }
+		.onEach { onTick?.invoke(it) }
 		.onCompletion { cause -> if (cause == null) onFinish?.invoke() }
 		.launchIn(scope) //保证在一个协程中执行
 }

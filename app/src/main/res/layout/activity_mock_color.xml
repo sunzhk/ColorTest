@@ -9,6 +9,20 @@
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
+		
+		<Spinner
+			android:id="@+id/bt_difficulty"
+			android:layout_width="wrap_content"
+			android:layout_height="39dp"
+			android:layout_margin="10dp"
+			style="@style/CommonButton"
+			android:padding="5dp"
+			android:overlapAnchor="false"
+			android:spinnerMode="dropdown"
+			android:text="难度："
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"/>
+		
 		<Button
 			android:id="@+id/bt_history"
 			android:layout_width="81dp"
@@ -73,22 +87,22 @@
 			android:layout_marginBottom="50dp"
 			android:orientation="horizontal">
 			<Button
+				android:id="@+id/bt_next"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				style="@style/CommonButton"
+				android:layout_weight="1"
+				android:padding="10dp"
+				android:text="太难了，换一题"/>
+			<Button
 				android:id="@+id/bt_answer"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
-				style="@style/CommonButton"
-				android:padding="10dp"
-				android:text="提交结果"/>
-			<Button
-				android:id="@+id/bt_next"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
 				android:layout_marginStart="10dp"
 				style="@style/CommonButton"
-				android:layout_weight="1"
 				android:padding="10dp"
-				android:text="下一题"/>
+				android:text="就是这个颜色了"/>
 		</LinearLayout>
 		
 		<com.sunzk.colortest.view.HSBColorSelector
