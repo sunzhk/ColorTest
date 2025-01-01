@@ -29,6 +29,11 @@ import java.util.*
 
 @Route(path = RouteInfo.PATH_ACTIVITY_MODE_SELECT)
 class ModeSelectActivity : BaseActivity() {
+
+	companion object {
+		private const val TAG = "ModeSelectActivity"
+	}
+
 	private val viewBinding by bindView<ActivityModeSelectBinding>()
 	private val modeEntityList: ArrayList<ModeEntity> = ArrayList()
 
@@ -208,9 +213,5 @@ class ModeSelectActivity : BaseActivity() {
 			postcard.navigation(this@ModeSelectActivity)
 		}
 
-	}
-
-	companion object {
-		private const val TAG = "ModeSelectActivity"
 	}
 }

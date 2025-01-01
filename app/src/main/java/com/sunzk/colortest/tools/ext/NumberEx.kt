@@ -8,6 +8,9 @@ import com.blankj.utilcode.util.ConvertUtils
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
+fun Float.toLimitedString(numberOfDigits: Int): String {
+	return String.format("%.${numberOfDigits}f", this)
+}
 
 fun Long.toHexInt(): Int {
 	return if (this > Int.MAX_VALUE) {

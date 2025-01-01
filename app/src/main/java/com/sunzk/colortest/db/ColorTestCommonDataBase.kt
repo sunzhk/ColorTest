@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.sunzk.colortest.MyApplication
 
-private const val DBName = "test_result.db"
+private const val DBName = "color_test_result.db"
 private const val DB_VERSION = 1
 object ColorTestCommonDataBase : SQLiteOpenHelper(
 	MyApplication.instance,

@@ -24,14 +24,14 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".activity.MockColorActivity"
+		<activity android:name=".mockColor.MockColorActivity"
 			android:exported="false"
 			android:windowSoftInputMode="adjustPan"/>
-		<activity android:name=".activity.GuessColorActivity" />
+		<activity android:name=".intermediateColor.IntermediateColorActivity" />
 		<activity android:name=".activity.ModeSelectActivity" />
 		<activity android:name=".activity.FindDiffColorActivity" />
 		<activity android:name=".activity.SelectPicActivity" />
-        <activity android:name=".activity.history.MockColorHistoryActivity" />
+        <activity android:name=".mockColor.MockColorHistoryActivity" />
 
         <!--	注册辅助功能服务	-->
 		<service android:name=".service.AccessibilityControlService"
