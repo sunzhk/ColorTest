@@ -5,6 +5,35 @@
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<Spinner
+			android:id="@+id/bt_difficulty"
+			android:layout_width="wrap_content"
+			android:layout_height="39dp"
+			android:layout_margin="10dp"
+			style="@style/CommonButton"
+			android:padding="5dp"
+			android:overlapAnchor="false"
+			android:spinnerMode="dropdown"
+			android:text="难度："
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"/>
+
+		<Button
+			android:id="@+id/bt_history"
+			android:layout_width="81dp"
+			android:layout_height="39dp"
+			android:layout_margin="10dp"
+			style="@style/CommonButton"
+			android:padding="5dp"
+			android:text="查看历史"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"/>
+	</androidx.constraintlayout.widget.ConstraintLayout>
 	
 	<TextView
 		android:layout_width="match_parent"
@@ -48,35 +77,28 @@
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"/>
-	<TextView
-		android:id="@+id/tv_answer"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginBottom="20dp"
-		android:textSize="20sp"
-		android:textColor="#FF000000"
-		android:gravity="center"
-		android:lines="3"
-		tools:text="这是答案"/>
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="50dp"
 		android:orientation="horizontal">
 		<Button
+			android:id="@+id/bt_next"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			style="@style/CommonButton"
+			android:layout_weight="1"
+			android:padding="10dp"
+			android:text="太难了，换一题"/>
+		<Button
 			android:id="@+id/bt_answer"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:layout_marginStart="10dp"
+			style="@style/CommonButton"
 			android:padding="10dp"
-			android:text="看答案"/>
-		<Button
-			android:id="@+id/bt_next"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="10dp"
-			android:text="下一题"/>
+			android:text="就是这个颜色了"/>
 	</LinearLayout>
 	<com.sunzk.colortest.view.HSBColorSelector
 		android:id="@+id/hsb_color_selector"

@@ -108,12 +108,14 @@
 		<com.sunzk.colortest.view.HSBColorSelector
 			android:id="@+id/hsb_color_selector"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"/>
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="15dp"/>
 			
 		<TextView
 			android:id="@+id/tv_score"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:layout_marginBottom="15dp"
 			android:gravity="center"
 			android:textSize="13sp"/>
 		

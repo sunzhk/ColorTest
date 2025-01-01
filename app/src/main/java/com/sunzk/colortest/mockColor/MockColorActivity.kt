@@ -1,4 +1,4 @@
-package com.sunzk.colortest.activity
+package com.sunzk.colortest.mockColor
 
 import android.content.Intent
 import android.graphics.Color
@@ -25,13 +25,12 @@ import com.sunzk.colortest.BaseActivity
 import com.sunzk.colortest.R
 import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.Runtime
-import com.sunzk.colortest.activity.history.MockColorHistoryActivity
 import com.sunzk.colortest.databinding.ActivityMockColorBinding
 import com.sunzk.colortest.db.MockColorResultTable
 import com.sunzk.colortest.db.bean.MockColorResult
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.base.expand.emitBy
-import com.sunzk.colortest.mockcolor.MockColorSettlementDialog
+import com.sunzk.colortest.dialog.CommonSettlementDialog
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
@@ -68,10 +67,23 @@ class MockColorActivity : BaseActivity() {
 		initView()
 		bindData()
 		initColorArea()
-		nextProblem()
+		nextQuestion()
 	}
 	
 	private fun initView() = with(viewBinding) {
+		initDifficulty()
+		btHistory.setOnClickListener { startActivity(Intent(this@MockColorActivity, MockColorHistoryActivity::class.java)) }
+		btNext.setOnClickListener { v: View? -> nextQuestion() }
+		btAnswer.setOnClickListener { v: View? ->
+			showAnswer(v)
+		}
+		hsbColorSelector.setOnColorSelectedListener { h: Float, s: Float, b: Float ->
+			val color = Color.HSVToColor(floatArrayOf(h, s, b))
+			viewResult.setBackgroundColor(color)
+		}
+	}
+
+	private fun initDifficulty() = with(viewBinding) {
 		btDifficulty.adapter = ArrayAdapter(this@MockColorActivity, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, MockColorResult.Difficulty.entries.map { it.text })
 		btDifficulty.setSelection(MockColorResult.Difficulty.entries.indexOf(currentDifficulty.value))
 		btDifficulty.onItemSelectedListener = object : OnItemSelectedListener {
@@ -82,15 +94,6 @@ class MockColorActivity : BaseActivity() {
 			override fun onNothingSelected(parent: AdapterView<*>?) {
 			}
 
-		}
-		btHistory.setOnClickListener { startActivity(Intent(this@MockColorActivity, MockColorHistoryActivity::class.java)) }
-		btNext.setOnClickListener { v: View? -> nextProblem() }
-		btAnswer.setOnClickListener { v: View? ->
-			showAnswer(v)
-		}
-		hsbColorSelector.setOnColorSelectedListener { h: Float, s: Float, b: Float ->
-			val color = Color.HSVToColor(floatArrayOf(h, s, b))
-			viewResult.setBackgroundColor(color)
 		}
 	}
 
@@ -179,26 +182,16 @@ class MockColorActivity : BaseActivity() {
 			saveResult(showH.toInt(), showS.toInt(), showB.toInt())
 			showScore(Runtime.testResultNumber)
 		}
-		
-		val dialog = MockColorSettlementDialog(this,
-			floatArrayOf(showH, showS, showB),
-			floatArrayOf(answerH, answerS, answerB),
-			currentDifficulty.value)
+
+		val isRight = currentDifficulty.value.isRight(floatArrayOf(showH, showS, showB), floatArrayOf(answerH, answerS, answerB))
+		val dialog = CommonSettlementDialog(this, isRight)
 		dialog.onCancelClickListener = {
 			finish()
 		}
 		dialog.onConfirmClickListener = {
-			nextProblem()
+			nextQuestion()
 		}
 		dialog.show()
-//		viewBinding.tvAnswer.text = String.format(
-//			Locale.getDefault(),
-//			"H: %d度  S: %d%%  B: %d%%",
-//			showH,
-//			showS,
-//			showB
-//		)
-//		checkAnswer()
 	}
 
 	private suspend fun saveResult(showH: Int, showS: Int, showB: Int) = withContext(GlobalDispatchers.IO) {
@@ -214,7 +207,7 @@ class MockColorActivity : BaseActivity() {
 		Log.d(TAG, "MockColorActivity#saveResult- $result")
 	}
 
-	private fun nextProblem() {
+	private fun nextQuestion() {
 		currentHSB = ColorUtils.randomHSBColor(0f, 0.2f, 0.2f)
 		val color = Color.HSVToColor(currentHSB)
 		Log.d(

@@ -1,9 +1,8 @@
-package com.sunzk.colortest.mockcolor
+package com.sunzk.colortest.dialog
 
 import android.content.Context
 import android.os.Bundle
 import android.view.ViewGroup
-import androidx.lifecycle.Lifecycle
 import com.blankj.utilcode.util.ScreenUtils
 import com.sunzk.base.LifecycleDialog
 import com.sunzk.base.expand.bindView
@@ -12,11 +11,9 @@ import com.sunzk.colortest.R
 import com.sunzk.colortest.databinding.DialogMockColorSettlementBinding
 import com.sunzk.colortest.db.bean.MockColorResult
 
-class MockColorSettlementDialog(
+class CommonSettlementDialog(
 	context: Context, 
-	private val question: FloatArray,
-	private val answer: FloatArray,
-	private val difficulty: MockColorResult.Difficulty) : LifecycleDialog(context) {
+	private val isRight: Boolean) : LifecycleDialog(context) {
 	companion object {
 		private const val TAG: String = "MockColorSettlementDialog"
 	}
@@ -35,9 +32,8 @@ class MockColorSettlementDialog(
 	}
 
 	private fun initView() = with(viewBinding) {
-		val isRight = difficulty.isRight(question, answer)
 		ivIcon.setImageResource(if (isRight) R.mipmap.icon_answer_success else R.mipmap.icon_answer_fail)
-		tvTitle.text = if (isRight) "答对了，可喜可贺" else "打错了，再接再厉"
+		tvTitle.text = if (isRight) "答对了，可喜可贺" else "答错了，再接再厉"
 		btCancel.onClick {
 			dismiss()
 			onCancelClickListener?.invoke()
