@@ -1,84 +1,69 @@
 package com.sunzk.colortest.view
 
 import android.util.Log
-import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
-import androidx.lifecycle.MutableLiveData
+import com.sunzk.base.expand.emitBy
+import com.sunzk.colortest.entity.HSB.Companion.COLOR_B_MAX
+import com.sunzk.colortest.entity.HSB.Companion.COLOR_B_MIN
+import com.sunzk.colortest.entity.HSB.Companion.COLOR_H_MAX
+import com.sunzk.colortest.entity.HSB.Companion.COLOR_H_MIN
+import com.sunzk.colortest.entity.HSB.Companion.COLOR_S_MAX
+import com.sunzk.colortest.entity.HSB.Companion.COLOR_S_MIN
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.math.min
 
-class HBSColorSelectorData {
-    
-    private val TAG: String = "HBSColorSelectorData"
+class HBSColorSelectorData() {
 
+    companion object {
+        private const val TAG: String = "HBSColorSelectorData"
+    }
+    
     /**
      * from 0 to 360
      */
-    val colorH: MutableLiveData<Int> = MutableLiveData(0)
+    val colorH = MutableStateFlow(0)
 
     /**
-     * from 0 to 1
+     * from 0 to 100
      */
-    val colorS: MutableLiveData<Float> = MutableLiveData(0f)
+    val colorS = MutableStateFlow(0)
     
     /**
-     * from 0 to 1
+     * from 0 to 100
      */
-    val colorB: MutableLiveData<Float> = MutableLiveData(0f)
+    val colorB = MutableStateFlow(0)
     
     fun setColorH(@IntRange(from = COLOR_H_MIN.toLong(), to = COLOR_H_MAX.toLong())h: Int) {
         Log.d(TAG, "setColorH: $h")
         val resultColor = 
-            if (h < COLOR_H_MIN)
+            if (h < COLOR_H_MIN) {
                 COLOR_H_MIN
-            else
+            } else {
                 min(h, COLOR_H_MAX)
-        
-        if (colorH.value == resultColor) {
-            return
-        }
-        colorH.postValue(resultColor)
+            }
+        colorH.emitBy(resultColor)
     }
 
-    fun setColorS(@FloatRange(from = COLOR_S_MIN.toDouble(), to = COLOR_S_MAX.toDouble()) s: Float) {
-        Log.d(TAG, "setColorS: $s")
+    fun setColorS(@IntRange(from = COLOR_S_MIN.toLong(), to = COLOR_S_MAX.toLong()) s: Int) {
+        Log.d(TAG, "setColorS: $s", Throwable())
         val resultColor =
-            if (s < COLOR_S_MIN)
+            if (s < COLOR_S_MIN) {
                 COLOR_S_MIN
-            else
+            } else {
                 min(s, COLOR_S_MAX)
-
-        if (colorS.value == resultColor) {
-            return
-        }
-        colorS.postValue(resultColor)
+            }
+        colorS.emitBy(resultColor)
     }
 
-    fun setColorB(@FloatRange(from = COLOR_B_MIN.toDouble(), to = COLOR_B_MAX.toDouble())b: Float) {
+    fun setColorB(@IntRange(from = COLOR_B_MIN.toLong(), to = COLOR_B_MAX.toLong())b: Int) {
         Log.d(TAG, "setColorB: $b")
         val resultColor =
-            if (b < COLOR_B_MIN)
+            if (b < COLOR_B_MIN) {
                 COLOR_B_MIN
-            else
+            } else {
                 min(b, COLOR_B_MAX)
-
-        if (colorB.value == resultColor) {
-            return
-        }
-        colorB.postValue(resultColor)
-    }
-
-    companion object {
-        const val COLOR_H_MIN = 0
-        const val COLOR_H_MAX = 360
-        const val COLOR_H_INTERVAL = 1
-        
-        const val COLOR_S_MIN = 0f
-        const val COLOR_S_MAX = 1.0f
-        const val COLOR_S_INTERVAL = 0.01f
-        
-        const val COLOR_B_MIN = 0f
-        const val COLOR_B_MAX = 1.0f
-        const val COLOR_B_INTERVAL = 0.01f
+            }
+        colorB.emitBy(resultColor)
     }
 
 }

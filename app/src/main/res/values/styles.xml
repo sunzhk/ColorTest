@@ -27,4 +27,14 @@
 		<item name="android:textColor">#FF101010</item>
 		<item name="android:textSize">14sp</item>
 	</style>
+	
+	<style name="HSBColorSelectorStepButton">
+		<item name="android:layout_width">@dimen/view_hsb_color_selector_step_button_size</item>
+		<item name="android:layout_height">@dimen/view_hsb_color_selector_step_button_size</item>
+		<item name="android:layout_marginStart">@dimen/view_hsb_color_selector_seek_bar_fine_tuning_margin</item>
+		<item name="android:layout_marginEnd">@dimen/view_hsb_color_selector_seek_bar_fine_tuning_margin</item>
+		<item name="android:padding">@dimen/view_hsb_color_selector_step_button_padding</item>
+		<item name="android:clickable">true</item>
+		<item name="android:focusable">true</item>
+	</style>
 </resources>

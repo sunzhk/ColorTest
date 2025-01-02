@@ -59,12 +59,11 @@ class IntermediateColorActivity : BaseActivity() {
 	
 	private fun initView() = with(viewBinding) {
 		initDifficultyUI()
-		viewBinding.hsbColorSelector.setOnColorSelectedListener { h: Float, s: Float, b: Float ->
-			val colorArray = floatArrayOf(h, s, b)
-			viewModel.answerColor.emitBy(colorArray)
+		hsbColorSelector.onColorSelectedListener = { hsb ->
+			viewModel.answerColor.emitBy(hsb.hsbColor)
 		}
-		viewBinding.btNext.setOnClickListener { nextQuestion() }
-		viewBinding.btAnswer.setOnClickListener { showAnswer() }
+		btNext.setOnClickListener { nextQuestion() }
+		btAnswer.setOnClickListener { showAnswer() }
 		initColorContentView()
 	}
 
