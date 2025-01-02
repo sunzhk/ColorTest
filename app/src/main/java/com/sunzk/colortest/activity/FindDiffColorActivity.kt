@@ -18,7 +18,6 @@ import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.databinding.ActivityFindDiffColorBinding
 import com.sunzk.colortest.entity.HSB
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -84,18 +83,30 @@ class FindDiffColorActivity : BaseActivity() {
 		resetDifficulty(countPerSide)
 	}
 
-	private fun switchLight(on: Boolean) {
+	private fun switchLight(on: Boolean) = with(viewBinding) {
 		viewModel.isLight = on
 		if (on) {
-			viewBinding.flContainer.setBackgroundResource(R.color.bg_activity_find_diff_color_light)
-			viewBinding.btLightSwitch.setText(R.string.light_switch_text_turn_off)
-			viewBinding.tvLevel.setTextColor(resources.getColor(R.color.text_default_light))
-			viewBinding.findDiffColor.setResultStrokeColor(resources.getColor(R.color.text_default_light))
+			flContainer.setBackgroundResource(R.color.bg_activity_find_diff_color_light)
+			btLightSwitch.setText(R.string.light_switch_text_turn_off)
+			tvLevel.setTextColor(resources.getColor(R.color.text_default_light))
+			findDiffColor.setResultStrokeColor(resources.getColor(R.color.text_default_light))
+
+			cbAutoNext.setTextColor(resources.getColor(R.color.common_bt_text, null))
+			btLightSwitch.setBackgroundResource(R.drawable.bg_common_bt)
+			btLightSwitch.setTextColor(resources.getColor(R.color.common_bt_text, null))
+			btChange.setBackgroundResource(R.drawable.bg_common_bt)
+			btChange.setTextColor(resources.getColor(R.color.common_bt_text, null))
 		} else {
-			viewBinding.flContainer.setBackgroundResource(R.color.bg_activity_find_diff_color_dark)
-			viewBinding.btLightSwitch.setText(R.string.light_switch_text_turn_on)
-			viewBinding.tvLevel.setTextColor(resources.getColor(R.color.text_default_dark))
-			viewBinding.findDiffColor.setResultStrokeColor(resources.getColor(R.color.text_default_dark))
+			flContainer.setBackgroundResource(R.color.bg_activity_find_diff_color_dark)
+			btLightSwitch.setText(R.string.light_switch_text_turn_on)
+			tvLevel.setTextColor(resources.getColor(R.color.text_default_dark))
+			findDiffColor.setResultStrokeColor(resources.getColor(R.color.text_default_dark))
+
+			cbAutoNext.setTextColor(resources.getColor(R.color.common_bt_text_dark, null))
+			btLightSwitch.setBackgroundResource(R.drawable.bg_common_bt_dark)
+			btLightSwitch.setTextColor(resources.getColor(R.color.common_bt_text_dark, null))
+			btChange.setBackgroundResource(R.drawable.bg_common_bt_dark)
+			btChange.setTextColor(resources.getColor(R.color.common_bt_text_dark, null))
 		}
 	}
 
@@ -106,8 +117,7 @@ class FindDiffColorActivity : BaseActivity() {
 	}
 
 	private fun resetColor() {
-		val baseColor =
-			ColorUtils.randomHSBColor(0f, 0f, 0.2f)
+		val baseColor = ColorUtils.randomHSBColor(0f, 0f, 0.2f)
 		val colorDiff = colorDiff
 		Log.d(
 			TAG,
@@ -116,15 +126,8 @@ class FindDiffColorActivity : BaseActivity() {
 		val diffSmall = colorDiff / 20
 		val diffS =
 			if (baseColor[1] > 0.5f) baseColor[1] - diffSmall else baseColor[1] + diffSmall
-		//		if (diffS > 1.0f) {
-		//			diffS = baseColor[1] - diffSmall;
-		//		}
-		//		float diffS = baseColor[1];
 		val diffB =
 			if (baseColor[2] > 0.6f) baseColor[2] - colorDiff else baseColor[2] + colorDiff
-		//		if (diffB > 1.0f) {
-		//			diffB = baseColor[2] - colorDiff;
-		//		}
 		val diffColor = floatArrayOf(baseColor[0], diffS, diffB)
 		viewBinding.findDiffColor.resetColor(HSB(baseColor), HSB(diffColor))
 	}
