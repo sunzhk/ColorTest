@@ -11,7 +11,6 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -41,11 +40,10 @@ class MockColorActivity : BaseActivity() {
 
 	companion object {
 		private const val TAG = "MockColorActivity"
-		private const val ANSWER_STANDARD = 5
 	}
 
 	private val viewBinding by bindView<ActivityMockColorBinding>()
-	private lateinit var currentHSB: FloatArray
+	private lateinit var currentQuestionHSB: FloatArray
 
 	/**
 	 * 难度
@@ -77,9 +75,8 @@ class MockColorActivity : BaseActivity() {
 		btAnswer.setOnClickListener { v: View? ->
 			showAnswer(v)
 		}
-		hsbColorSelector.setOnColorSelectedListener { h: Float, s: Float, b: Float ->
-			val color = Color.HSVToColor(floatArrayOf(h, s, b))
-			viewResult.setBackgroundColor(color)
+		hsbColorSelector.onColorSelectedListener = { hsb ->
+			viewResult.setBackgroundColor(hsb.rgbColor)
 		}
 	}
 
@@ -119,32 +116,6 @@ class MockColorActivity : BaseActivity() {
 	}
 
 	/**
-	 * 对比答案
-	 */
-	private fun checkAnswer() {
-		val h = currentHSB[0]
-		val s = currentHSB[1]
-		val b = currentHSB[2]
-		val difH = Math.abs(h - viewBinding.hsbColorSelector.colorH)
-		val difS =
-			Math.abs(s * 100 - viewBinding.hsbColorSelector.colorS * 100)
-		val difB =
-			Math.abs(b * 100 - viewBinding.hsbColorSelector.colorB * 100)
-		if (difH < ANSWER_STANDARD && difS < ANSWER_STANDARD && difB < ANSWER_STANDARD) {
-			// TODO: 2020/7/11 显示奖励效果，这里先显示一个Toast顶替一下
-			Toast.makeText(
-				this,
-				String.format(
-					Locale.getDefault(),
-					"各项值的误差不超过%d，真棒",
-					ANSWER_STANDARD
-				),
-				Toast.LENGTH_LONG
-			).show()
-		}
-	}
-
-	/**
 	 * 初始化颜色区域
 	 */
 	private fun initColorArea() {
@@ -171,9 +142,9 @@ class MockColorActivity : BaseActivity() {
 	}
 
 	private fun showAnswer(v: View?) {
-		val showH = currentHSB[0].toInt().toFloat()
-		val showS = (currentHSB[1] * 100).toInt().toFloat()
-		val showB = (currentHSB[2] * 100).toInt().toFloat()
+		val showH = currentQuestionHSB[0].toInt().toFloat()
+		val showS = (currentQuestionHSB[1] * 100).toInt().toFloat()
+		val showB = (currentQuestionHSB[2] * 100).toInt().toFloat()
 		val answerH = viewBinding.hsbColorSelector.progressH.toFloat()
 		val answerS = viewBinding.hsbColorSelector.progressS.toFloat()
 		val answerB = viewBinding.hsbColorSelector.progressB.toFloat()
@@ -208,12 +179,9 @@ class MockColorActivity : BaseActivity() {
 	}
 
 	private fun nextQuestion() {
-		currentHSB = ColorUtils.randomHSBColor(0f, 0.2f, 0.2f)
-		val color = Color.HSVToColor(currentHSB)
-		Log.d(
-			TAG,
-			"nextProblem: " + currentHSB[0] + "," + currentHSB[1] + "," + currentHSB[2] + "->" + color
-		)
+		currentQuestionHSB = ColorUtils.randomHSBColor(0f, 0.2f, 0.2f)
+		val color = Color.HSVToColor(currentQuestionHSB)
+		Log.d(TAG, "MockColorActivity#nextQuestion- ${currentQuestionHSB.joinToString()} -> $color")
 		viewBinding.viewDemo.setBackgroundColor(color)
 		viewBinding.tvAnswer.text = null
 		viewBinding.hsbColorSelector.isEnabled = true

@@ -288,7 +288,7 @@ class MockColorHistoryActivity: BaseActivity() {
 	
 	private var trapezoidDivider = 0.5.dp
 	private var trapezoidWidth = 0f
-	private var trapezoidSlope = 2f
+	private var trapezoidSlope = 1.5f
 	private val trapezoidRadius = 5.dp
 	private val questionRoundPath = Path()
 	private val questionTrapezoidPath = Path()
