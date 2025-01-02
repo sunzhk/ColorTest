@@ -24,12 +24,12 @@ class HSB {
     @FloatRange(from = COLOR_H_MIN.toDouble(), to = COLOR_H_MAX.toDouble())
     var h = 0f
     /**
-     * 饱和度，0%~100%
+     * 饱和度，0~100
      */
     @FloatRange(from = COLOR_S_MIN.toDouble(), to = COLOR_S_MAX.toDouble())
     var s = 0f
     /**
-     * 明度，0%~100%
+     * 明度，0~100
      */
     @FloatRange(from = COLOR_B_MIN.toDouble(), to = COLOR_B_MAX.toDouble())
     var b = 0f
@@ -37,8 +37,8 @@ class HSB {
     constructor() {}
     constructor(colors: FloatArray) {
         h = colors[0]
-        s = colors[1]
-        b = colors[2]
+        s = colors[1] * 100
+        b = colors[2] * 100
     }
     constructor(h: Float, s: Float, b: Float) {
         this.h = h

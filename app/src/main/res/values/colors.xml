@@ -176,4 +176,6 @@
 	<color name="difficulty_normal">#FFF4D03F</color>
 	<color name="difficulty_hard">#FFE55D87</color>
 
+	<color name="common_bt_text">#FF101010</color>
+	<color name="common_bt_text_dark">#FFE0E0E0</color>
 </resources>

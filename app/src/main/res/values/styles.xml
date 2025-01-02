@@ -24,7 +24,13 @@
 
 	<style name="CommonButton">
 		<item name="android:background">@drawable/bg_common_bt</item>
-		<item name="android:textColor">#FF101010</item>
+		<item name="android:textColor">@color/common_bt_text</item>
+		<item name="android:textSize">14sp</item>
+	</style>
+
+	<style name="CommonButton_Dark">
+		<item name="android:background">@drawable/bg_common_bt_dark</item>
+		<item name="android:textColor">@color/common_bt_text_dark</item>
 		<item name="android:textSize">14sp</item>
 	</style>
 	
@@ -37,4 +43,5 @@
 		<item name="android:clickable">true</item>
 		<item name="android:focusable">true</item>
 	</style>
+
 </resources>
