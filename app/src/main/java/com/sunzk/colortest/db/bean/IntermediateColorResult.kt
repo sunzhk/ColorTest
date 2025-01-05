@@ -23,15 +23,31 @@ data class IntermediateColorResult(
         private const val TAG: String = "IntermediateColorResult"
     }
 
+    val questionLeft
+        get() = floatArrayOf(questionLeftH, questionLeftS, questionLeftB)
+    val questionRight
+        get() = floatArrayOf(questionRightH, questionRightS, questionRightB)
+    val answer
+        get() =  floatArrayOf(answerH, answerS, answerB)
+
+    fun isRight(): Boolean {
+        return difficulty.isRight(
+            floatArrayOf(questionLeftH, questionLeftS, questionLeftB),
+            floatArrayOf(questionRightH, questionRightS, questionRightB),
+            floatArrayOf(answerH, answerS, answerB)
+        )
+    }
+
     enum class Difficulty(val text: String, 
+                          val fixedNumberOfParameters: Int,
                           val colorHDifferencePercent: Int,
                           val colorSDifferencePercent: Int,
                           val colorBDifferencePercent: Int,
                           val minSBPercent: Int,
                           val allowDeviation: Int) {
-        Easy("入门", 40, 35, 35, 60, 15),
-        Normal("熟练", 30, 30, 30, 40, 10),
-        Hard("精通", 15, 25, 25, 20, 5);
+        Easy("入门", 2, 40, 35, 35, 60, 15),
+        Normal("熟练", 1, 30, 30, 30, 40, 10),
+        Hard("精通", 0, 15, 25, 25, 20, 5);
 
         fun isRight(leftColor: FloatArray, rightColor: FloatArray, answer: FloatArray): Boolean {
             val centerColor = floatArrayOf(

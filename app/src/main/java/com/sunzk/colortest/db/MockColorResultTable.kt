@@ -27,19 +27,6 @@ object MockColorResultTable: ITable<MockColorResult> {
 	private const val COLUMN_NAME_ANSWER_B = "answerB"
 
 	override fun onCreate(db: SQLiteDatabase) {
-//		var sql = "create table IF NOT EXISTS $TABLE_NAME( %s INTEGER PRIMARY KEY AUTOINCREMENT, %s TIME_STAMP NOT NULL DEFAULT (datetime('now','localtime')), %s TEXT, %s FLOAT, %s FLOAT, %s FLOAT, %s FLOAT, %s FLOAT, %s FLOAT);"
-//		sql = String.format(
-//			Locale.US,
-//			sql,
-//			COLUMN_NAME_ID,
-//			COLUMN_NAME_DATE,
-//			COLUMN_NAME_QUESTION_H,
-//			COLUMN_NAME_QUESTION_S,
-//			COLUMN_NAME_QUESTION_B,
-//			COLUMN_NAME_ANSWER_H,
-//			COLUMN_NAME_ANSWER_S,
-//			COLUMN_NAME_ANSWER_B
-//		)
 		var sql = "create table IF NOT EXISTS $TABLE_NAME( $COLUMN_NAME_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
 				"$COLUMN_NAME_DATE TIME_STAMP NOT NULL DEFAULT (datetime('now','localtime')), " +
 				"$COLUMN_NAME_DIFFICULTY TEXT, " +
