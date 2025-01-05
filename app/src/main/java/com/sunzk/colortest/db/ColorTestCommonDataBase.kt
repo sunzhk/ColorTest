@@ -6,7 +6,7 @@ import android.util.Log
 import com.sunzk.colortest.MyApplication
 
 private const val DBName = "color_test_result.db"
-private const val DB_VERSION = 1
+private const val DB_VERSION = 2
 object ColorTestCommonDataBase : SQLiteOpenHelper(
 	MyApplication.instance,
 	DBName,
@@ -17,6 +17,7 @@ object ColorTestCommonDataBase : SQLiteOpenHelper(
 
 	override fun onCreate(db: SQLiteDatabase) {
 		MockColorResultTable.onCreate(db)
+		IntermediateColorResultTable.onCreate(db)
 	}
 
 	override fun onUpgrade(
@@ -25,20 +26,10 @@ object ColorTestCommonDataBase : SQLiteOpenHelper(
 		newVersion: Int,
 	) {
 		MockColorResultTable.onUpgrade(db, oldVersion, newVersion)
-	}
-
-	private fun tryToOpenDatabase(listener: OnDatabaseOpenListener?) {
-		if (listener == null) {
-			return
-		}
-		try {
-			writableDatabase.use { database -> listener.handleDatabase(database) }
-		} catch (t: Throwable) {
-			Log.e(TAG, "insert: ", t)
+		IntermediateColorResultTable.onUpgrade(db, oldVersion, newVersion)
+		if (newVersion == DB_VERSION) {
+			IntermediateColorResultTable.onCreate(db)
 		}
 	}
 
-	internal interface OnDatabaseOpenListener {
-		fun handleDatabase(sqLiteDatabase: SQLiteDatabase?)
-	}
 }

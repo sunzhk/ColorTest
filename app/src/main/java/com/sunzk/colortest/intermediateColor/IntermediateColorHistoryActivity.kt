@@ -1,4 +1,4 @@
-package com.sunzk.colortest.mockColor
+package com.sunzk.colortest.intermediateColor
 
 import android.os.Bundle
 import android.util.Log
@@ -37,27 +37,27 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.sunzk.colortest.BaseActivity
 import com.sunzk.colortest.R
-import com.sunzk.colortest.db.MockColorResultTable
-import com.sunzk.colortest.db.bean.MockColorResult
+import com.sunzk.colortest.db.bean.IntermediateColorResult
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.base.expand.emitBy
 import com.sunzk.colortest.compose.ui.HistoryPageCommon
 import com.sunzk.colortest.compose.ui.HistoryPageCommon.drawColorContrast
+import com.sunzk.colortest.db.IntermediateColorResultTable
 import com.sunzk.colortest.entity.StatisticsData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class MockColorHistoryActivity: BaseActivity() {
+class IntermediateColorHistoryActivity: BaseActivity() {
 	companion object {
-		private const val TAG: String = "MockColorHistoryActivity"
+		private const val TAG: String = "IntermediateColorHistoryActivity"
 	}
-	
-	private val mHistoryList = MutableStateFlow<List<MockColorResult>>(ArrayList())
-	
-	private val difficultyList = arrayOf<Pair<String, MockColorResult.Difficulty?>>("全部" to null) + MockColorResult.Difficulty.entries.map { it.text to it }.toTypedArray()
-	
-	private val statisticsMap = mutableMapOf<MockColorResult.Difficulty?, StatisticsData>()
-	
+
+	private val mHistoryList = MutableStateFlow<List<IntermediateColorResult>>(ArrayList())
+
+	private val difficultyList = arrayOf<Pair<String, IntermediateColorResult.Difficulty?>>("全部" to null) + IntermediateColorResult.Difficulty.entries.map { it.text to it }.toTypedArray()
+
+	private val statisticsMap = mutableMapOf<IntermediateColorResult.Difficulty?, StatisticsData>()
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContent { Page() }
@@ -66,8 +66,8 @@ class MockColorHistoryActivity: BaseActivity() {
 
 	private fun initData() {
 		lifecycleScope.launch(GlobalDispatchers.IO) {
-			MockColorResultTable.queryAll()?.let { queriedData ->
-				Log.d(TAG, "MockColorHistoryActivity#initData- ${queriedData.size}")
+			IntermediateColorResultTable.queryAll()?.let { queriedData ->
+				Log.d(TAG, "IntermediateColorHistoryActivity#initData- ${queriedData.size}")
 				mHistoryList.emitBy(queriedData)
 				// 更新一下统计数据
 				statisticsMap.clear()
@@ -86,7 +86,7 @@ class MockColorHistoryActivity: BaseActivity() {
 			}
 		}
 	}
-	
+
 	@Composable
 	@Preview
 	fun Page() {
@@ -101,13 +101,13 @@ class MockColorHistoryActivity: BaseActivity() {
 			}
 		}
 		if (showStatisticsDialog.value) {
-			HistoryPageCommon.StatisticsDialog<MockColorResult.Difficulty>(
+			HistoryPageCommon.StatisticsDialog<IntermediateColorResult.Difficulty>(
 				showStatisticsDialog,
 				difficultyList.toList()
 			) { statisticsMap[it.value] }
 		}
 	}
-	
+
 	@Composable
 	fun HistoryList() {
 		val historyList by mHistoryList.collectAsStateWithLifecycle()
@@ -119,9 +119,9 @@ class MockColorHistoryActivity: BaseActivity() {
 			}
 		}
 	}
-	
+
 	@Composable
-	fun HistoryItem(history: MockColorResult) {
+	fun HistoryItem(history: IntermediateColorResult) {
 		var expanded by remember { mutableStateOf(false) }
 		val itemShape = RoundedCornerShape(10.dp)
 		Column(Modifier
@@ -137,10 +137,10 @@ class MockColorHistoryActivity: BaseActivity() {
 				Canvas(modifier = Modifier
 					.fillMaxHeight()
 					.weight(1f)) {
-					drawColorContrast(history.question, history.answer)
+					drawColorContrast(history.questionLeft, history.answer, history.questionRight)
 				}
 				Image(painter = painterResource(if (history.isRight()) R.mipmap.icon_result_right else R.mipmap.icon_result_wrong),
-					contentDescription = null, 
+					contentDescription = null,
 					modifier = Modifier
 						.padding(start = 10.dp, end = 8.dp)
 						.size(30.dp, 30.dp)
@@ -153,9 +153,9 @@ class MockColorHistoryActivity: BaseActivity() {
 	}
 
 	@Composable
-	private fun HistoryItemTitle(history: MockColorResult) {
+	private fun HistoryItemTitle(history: IntermediateColorResult) {
 		Row(modifier = Modifier.fillMaxWidth()) {
-//			Text(text = "${history.id}.", fontSize = 15.sp, color = colorResource(R.color.theme_txt_standard), modifier = Modifier)
+			//			Text(text = "${history.id}.", fontSize = 15.sp, color = colorResource(R.color.theme_txt_standard), modifier = Modifier)
 			Text(text = history.date ?: "",
 				fontSize = 15.sp,
 				color = colorResource(R.color.theme_txt_standard),
@@ -171,18 +171,21 @@ class MockColorHistoryActivity: BaseActivity() {
 	}
 
 	@Composable
-	private fun HistoryValue(history: MockColorResult) {
+	private fun HistoryValue(history: IntermediateColorResult) {
 		Row(modifier = Modifier
 			.padding(top = 5.dp)) {
-			Text(fontSize = 15.sp,
-				text = "示例颜色：\nH: ${history.questionH.toInt()}, S: ${history.questionS.toInt()}%, B: ${history.questionB.toInt()}%",
+			Text(fontSize = 12.sp,
+				text = "示例颜色1：\nH: ${history.questionLeftH.toInt()}, S: ${history.questionLeftS.toInt()}%, B: ${history.questionLeftB.toInt()}%",
 				textAlign = TextAlign.Start,
 				modifier = Modifier.weight(1f))
-			Text(fontSize = 15.sp,
+			Text(fontSize = 12.sp,
 				text = "你的答案：\nH:${history.answerH.toInt()}, S: ${history.answerS.toInt()}%, B: ${history.answerB.toInt()}%",
+				textAlign = TextAlign.Start,
+				modifier = Modifier.weight(1f))
+			Text(fontSize = 12.sp,
+				text = "示例颜色2：\nH: ${history.questionRightH.toInt()}, S: ${history.questionRightS.toInt()}%, B: ${history.questionRightB.toInt()}%",
 				textAlign = TextAlign.Start,
 				modifier = Modifier.weight(1f))
 		}
 	}
-
 }

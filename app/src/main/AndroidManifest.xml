@@ -32,6 +32,7 @@
 		<activity android:name=".activity.FindDiffColorActivity" />
 		<activity android:name=".activity.SelectPicActivity" />
         <activity android:name=".mockColor.MockColorHistoryActivity" />
+        <activity android:name=".intermediateColor.IntermediateColorHistoryActivity" />
 
         <!--	注册辅助功能服务	-->
 		<service android:name=".service.AccessibilityControlService"

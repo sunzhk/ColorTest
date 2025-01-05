@@ -1,5 +1,6 @@
 package com.sunzk.colortest.intermediateColor
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -18,6 +19,7 @@ import com.sunzk.base.expand.bindView
 import com.sunzk.base.expand.collect
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.base.expand.emitBy
+import com.sunzk.base.expand.onClick
 import com.sunzk.base.utils.AppUtils
 import com.sunzk.base.utils.ColorUtils
 import com.sunzk.base.utils.DisplayUtil
@@ -62,6 +64,7 @@ class IntermediateColorActivity : BaseActivity() {
 		hsbColorSelector.onColorSelectedListener = { hsb ->
 			viewModel.answerColor.emitBy(hsb.hsbColor)
 		}
+		btHistory.onClick { startActivity(Intent(this@IntermediateColorActivity, IntermediateColorHistoryActivity::class.java)) }
 		btNext.setOnClickListener { nextQuestion() }
 		btAnswer.setOnClickListener { showAnswer() }
 		initColorContentView()
