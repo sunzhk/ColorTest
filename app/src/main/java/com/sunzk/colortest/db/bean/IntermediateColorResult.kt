@@ -1,5 +1,6 @@
 package com.sunzk.colortest.db.bean
 
+import android.util.Log
 import kotlin.math.abs
 
 /**
@@ -24,11 +25,11 @@ data class IntermediateColorResult(
     }
 
     val questionLeft
-        get() = floatArrayOf(questionLeftH, questionLeftS, questionLeftB)
+        get() = floatArrayOf(questionLeftH, questionLeftS / 100f, questionLeftB / 100f)
     val questionRight
-        get() = floatArrayOf(questionRightH, questionRightS, questionRightB)
+        get() = floatArrayOf(questionRightH, questionRightS / 100f, questionRightB / 100f)
     val answer
-        get() =  floatArrayOf(answerH, answerS, answerB)
+        get() =  floatArrayOf(answerH, answerS / 100f, answerB / 100f)
 
     fun isRight(): Boolean {
         return difficulty.isRight(
@@ -45,9 +46,9 @@ data class IntermediateColorResult(
                           val colorBDifferencePercent: Int,
                           val minSBPercent: Int,
                           val allowDeviation: Int) {
-        Easy("入门", 2, 40, 35, 35, 60, 15),
-        Normal("熟练", 1, 30, 30, 30, 40, 10),
-        Hard("精通", 0, 15, 25, 25, 20, 5);
+        Easy("中杯", 2, 40, 35, 35, 60, 5),
+        Normal("大杯", 1, 30, 30, 30, 40, 8),
+        Hard("超大杯", 0, 15, 25, 25, 20, 10);
 
         fun isRight(leftColor: FloatArray, rightColor: FloatArray, answer: FloatArray): Boolean {
             val centerColor = floatArrayOf(
@@ -55,9 +56,11 @@ data class IntermediateColorResult(
                 (leftColor[1] + rightColor[1]) / 2.0f,
                 (leftColor[2] + rightColor[2]) / 2.0f)
             val difH = abs(answer[0] - centerColor[0]) * 100f / 360f
-            val difS = abs(answer[1] - centerColor[1]) * 100f
-            val difB = abs(answer[2] - centerColor[2]) * 100f
-            return difH <= allowDeviation && difS <= allowDeviation && difB <= allowDeviation
+            val difS = abs(answer[1] - centerColor[1])
+            val difB = abs(answer[2] - centerColor[2])
+            val isRight = difH <= allowDeviation && difS <= allowDeviation && difB <= allowDeviation
+            Log.d(TAG, "Difficulty#isRight- isRight: $isRight, difH: $difH, difS: $difS, difB: $difB, allowDeviation: $allowDeviation")
+            return isRight
         }
     }
 }

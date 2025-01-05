@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.sunzk.base.expand.collect
@@ -289,10 +290,25 @@ class HSBColorSelector : LinearLayout {
         if (percent < 0 || percent > 100) {
             return
         }
-        Log.d(TAG, "reset to $percent%")
+        Log.d(TAG, "HSBColorSelector#reset- to $percent%: [${HSB.COLOR_H_MAX * percent / 100}, ${HSB.COLOR_S_MAX * percent / 100}, ${HSB.COLOR_B_MAX * percent / 100}]")
         colorData.setColorH(HSB.COLOR_H_MAX * percent / 100)
         colorData.setColorS(HSB.COLOR_S_MAX * percent / 100)
         colorData.setColorB(HSB.COLOR_B_MAX * percent / 100)
+    }
+
+    fun setHValue(h: Int) {
+        Log.d(TAG, "HSBColorSelector#setHValue- h: $h")
+        colorData.setColorH(h)
+    }
+    
+    fun setSValue(s: Int) {
+        Log.d(TAG, "HSBColorSelector#setSValue- s: $s")
+        colorData.setColorS(s)
+    }
+    
+    fun setBValue(b: Int) {
+        Log.d(TAG, "HSBColorSelector#setBValue- b: $b")
+        colorData.setColorB(b)
     }
 
     override fun setEnabled(enabled: Boolean) {
@@ -309,4 +325,34 @@ class HSBColorSelector : LinearLayout {
         viewBinding.tvS.isEnabled = enabled
         viewBinding.tvB.isEnabled = enabled
     }
+
+    fun setLock(index: Int, lock: Boolean) {
+        when (index) {
+            0 -> {
+                viewBinding.llHContainer1.isVisible = !lock
+                viewBinding.llHContainer2.isVisible = !lock
+            }
+            1 -> {
+                viewBinding.llSContainer1.isVisible = !lock
+                viewBinding.llSContainer2.isVisible = !lock
+            }
+            2 -> {
+                viewBinding.llBContainer1.isVisible = !lock
+                viewBinding.llBContainer2.isVisible = !lock
+            }
+        }
+    }
+
+    fun lockAll() {
+        setLock(0, true)
+        setLock(1, true)
+        setLock(2, true)
+    }
+
+    fun unLockAll() {
+        setLock(0, false)
+        setLock(1, false)
+        setLock(2, false)
+    }
+
 }

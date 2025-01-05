@@ -47,6 +47,9 @@ import com.sunzk.colortest.entity.StatisticsData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
+/**
+ * 找中间色模式历史记录页
+ */
 class IntermediateColorHistoryActivity: BaseActivity() {
 	companion object {
 		private const val TAG: String = "IntermediateColorHistoryActivity"
@@ -174,15 +177,15 @@ class IntermediateColorHistoryActivity: BaseActivity() {
 	private fun HistoryValue(history: IntermediateColorResult) {
 		Row(modifier = Modifier
 			.padding(top = 5.dp)) {
-			Text(fontSize = 12.sp,
+			Text(fontSize = 11.sp,
 				text = "示例颜色1：\nH: ${history.questionLeftH.toInt()}, S: ${history.questionLeftS.toInt()}%, B: ${history.questionLeftB.toInt()}%",
 				textAlign = TextAlign.Start,
 				modifier = Modifier.weight(1f))
-			Text(fontSize = 12.sp,
+			Text(fontSize = 11.sp,
 				text = "你的答案：\nH:${history.answerH.toInt()}, S: ${history.answerS.toInt()}%, B: ${history.answerB.toInt()}%",
 				textAlign = TextAlign.Start,
 				modifier = Modifier.weight(1f))
-			Text(fontSize = 12.sp,
+			Text(fontSize = 11.sp,
 				text = "示例颜色2：\nH: ${history.questionRightH.toInt()}, S: ${history.questionRightS.toInt()}%, B: ${history.questionRightB.toInt()}%",
 				textAlign = TextAlign.Start,
 				modifier = Modifier.weight(1f))

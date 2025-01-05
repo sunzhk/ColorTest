@@ -87,7 +87,7 @@
 		android:layout_marginBottom="15dp"
 		android:layout_marginStart="15dp"
 		android:layout_marginEnd="15dp"
-		android:padding="10dp"
+		android:padding="20dp"
 		style="@style/CommonButton_Dark"
 		android:text="下一局"
 		android:textSize="21sp"

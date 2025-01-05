@@ -7,6 +7,7 @@
 
 	<!--	色值H	-->
 	<LinearLayout
+		android:id="@+id/ll_h_container1"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="@dimen/view_hsb_color_selector_seek_bar_margin_bottom"
@@ -19,7 +20,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginEnd="8dp"
 			android:textSize="@dimen/view_hsb_color_selector_seek_bar_text_size"
-			android:text="H"/>
+			android:text="色相(H)　"/>
 		<SeekBar
 			android:id="@+id/sb_h"
 			android:layout_width="0dp"
@@ -31,6 +32,7 @@
 			android:splitTrack="false"/>
 	</LinearLayout>
 	<LinearLayout
+		android:id="@+id/ll_h_container2"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
@@ -63,6 +65,7 @@
 		
 	<!--	色值S	-->
 	<LinearLayout
+		android:id="@+id/ll_s_container1"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="@dimen/view_hsb_color_selector_seek_bar_margin_bottom"
@@ -75,7 +78,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginEnd="10dp"
 			android:textSize="@dimen/view_hsb_color_selector_seek_bar_text_size"
-			android:text="S"/>
+			android:text="饱和度(S)"/>
 		<SeekBar
 			android:id="@+id/sb_s"
 			android:layout_width="0dp"
@@ -87,6 +90,7 @@
 			android:splitTrack="false"/>
 	</LinearLayout>
 	<LinearLayout
+		android:id="@+id/ll_s_container2"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
@@ -119,6 +123,7 @@
 	
 	<!--	色值B	-->
 	<LinearLayout
+		android:id="@+id/ll_b_container1"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="@dimen/view_hsb_color_selector_seek_bar_margin_bottom"
@@ -131,7 +136,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginEnd="10dp"
 			android:textSize="@dimen/view_hsb_color_selector_seek_bar_text_size"
-			android:text="B"/>
+			android:text="明度(B)　"/>
 		<SeekBar
 			android:id="@+id/sb_b"
 			android:layout_width="0dp"
@@ -143,6 +148,7 @@
 			android:splitTrack="false"/>
 	</LinearLayout>
 	<LinearLayout
+		android:id="@+id/ll_b_container2"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
