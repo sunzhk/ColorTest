@@ -9,6 +9,7 @@ import androidx.annotation.IntRange
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.sunzk.base.expand.bindView
 import com.sunzk.base.expand.livedata.dec
 import com.sunzk.base.expand.livedata.inc
 import com.sunzk.base.utils.ColorUtils
@@ -26,32 +27,30 @@ class FindDiffColorActivity : BaseActivity() {
 
 	private val TAG: String = "FindDiffColorActivity"
 
-	private lateinit var viewBinding: ActivityFindDiffColorBinding
+	private val viewBinding by bindView<ActivityFindDiffColorBinding>()
 	private val viewModel: FindDiffColorViewModel by viewModels()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		viewBinding = ActivityFindDiffColorBinding.inflate(layoutInflater)
-		setContentView(viewBinding.root)
 		initViews()
 
 		resetLevel(FindDiffColorViewModel.DEFAULT_LEVEL)
 	}
 
-	private fun initViews() {
+	private fun initViews() = with(viewBinding) {
 		initControllerView()
-		viewBinding.cbAutoNext.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
+		cbAutoNext.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
 			if (b && viewBinding.findDiffColor.isShowingResult) {
 				checkAutoNext()
 			}
 		}
-		viewBinding.btChange.setOnClickListener { v: View? -> resetColor() }
+		btChange.setOnClickListener { v: View? -> resetColor() }
 		switchLight(false)
-		viewBinding.btLightSwitch.setOnClickListener { v: View? ->
+		btLightSwitch.setOnClickListener { v: View? ->
 			switchLight(!viewModel.isLight)
 		}
 
-		viewBinding.findDiffColor.setOnDiffColorViewClickListener { view, result ->
+		findDiffColor.setOnDiffColorViewClickListener { view, result ->
 			Log.d(TAG, "onClick: $result")
 			showResult(result)
 		}

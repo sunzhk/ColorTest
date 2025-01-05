@@ -29,7 +29,6 @@ import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.databinding.ActivityGuessColorBinding
 import com.sunzk.colortest.db.IntermediateColorResultTable
 import com.sunzk.colortest.db.bean.IntermediateColorResult
-import com.sunzk.colortest.db.bean.MockColorResult
 import com.sunzk.colortest.dialog.CommonSettlementDialog
 import kotlinx.coroutines.launch
 import java.util.*
@@ -52,7 +51,7 @@ class IntermediateColorActivity : BaseActivity() {
 		Log.d(TAG, "onCreate: ${viewModel.currentDifficulty}")
 		initView()
 		bindData()
-		nextQuestion()
+//		nextQuestion()
 	}
 
 	override fun needBGM(): Boolean {
@@ -71,7 +70,7 @@ class IntermediateColorActivity : BaseActivity() {
 	}
 
 	private fun initDifficultyUI() = with(viewBinding) {
-		btDifficulty.adapter = ArrayAdapter(this@IntermediateColorActivity, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, MockColorResult.Difficulty.entries.map { it.text })
+		btDifficulty.adapter = ArrayAdapter(this@IntermediateColorActivity, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, IntermediateColorResult.Difficulty.entries.map { it.text })
 		btDifficulty.setSelection(IntermediateColorResult.Difficulty.entries.indexOf(viewModel.currentDifficulty.value))
 		btDifficulty.onItemSelectedListener = object : OnItemSelectedListener {
 			override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -138,6 +137,7 @@ class IntermediateColorActivity : BaseActivity() {
 	}
 
 	private fun nextQuestion() {
+		Log.d(TAG, "IntermediateColorActivity#nextQuestion diff=${viewModel.currentDifficulty.value}")
 		val difficulty = viewModel.currentDifficulty.value
 		// 先随机个左边的初始色
 		val nextLeftColor = ColorUtils.randomHSBColor(0f, difficulty.minSBPercent / 100f, difficulty.minSBPercent / 100f)
@@ -155,6 +155,7 @@ class IntermediateColorActivity : BaseActivity() {
 				} else {
 					nextColor
 				}
+				lockHSBSelector(0, nextLeftColor)
 			}
 			1 -> {
 				colorDifferencePercent = difficulty.colorSDifferencePercent * 1.0f
@@ -164,6 +165,7 @@ class IntermediateColorActivity : BaseActivity() {
 				} else {
 					nextColor
 				}
+				lockHSBSelector(1, nextLeftColor)
 			}
 			2 -> {
 				colorDifferencePercent = difficulty.colorBDifferencePercent * 1.0f
@@ -173,8 +175,10 @@ class IntermediateColorActivity : BaseActivity() {
 				} else {
 					nextColor
 				}
+				lockHSBSelector(2, nextLeftColor)
 			}
 			else -> {
+				lockHSBSelector(-1, nextLeftColor)
 			}
 		}
 		viewModel.questionRightColor.emitBy(nextRightColor)
@@ -182,7 +186,42 @@ class IntermediateColorActivity : BaseActivity() {
 		Log.d(TAG, "nextQuestion-next right: ${nextRightColor.contentToString()}")
 
 		viewBinding.hsbColorSelector.isEnabled = true
-		viewBinding.hsbColorSelector.reset(50)
+	}
+	
+	private fun lockHSBSelector(randomIndex: Int, targetColor: FloatArray) = with(viewBinding) {
+		Log.d(TAG, "IntermediateColorActivity#lockHSBSelector- randomIndex: $randomIndex, targetColor: ${targetColor.contentToString()}")
+		hsbColorSelector.unLockAll()
+		hsbColorSelector.reset(50)
+		if (randomIndex < 0) {
+			return@with
+		}
+		val scope = arrayListOf(0, 1, 2).also { it.removeAt(randomIndex) }
+		val diff = viewModel.currentDifficulty.value
+		Log.d(TAG, "IntermediateColorActivity#lockHSBSelector- scope=${scope.joinToString()}, diff=$diff")
+		repeat(diff.fixedNumberOfParameters) {
+			if (scope.isEmpty()) {
+				return@repeat
+			}
+			val index = scope.removeAt(Random().nextInt(scope.size))
+			// 先把值写进去
+			when (index) {
+				0 -> {
+					hsbColorSelector.setHValue(targetColor[0].toInt())
+					Log.d(TAG, "IntermediateColorActivity#lockHSBSelector- lock index: $index, value=${targetColor[0].toInt()}")
+				}
+				1 -> {
+					hsbColorSelector.setSValue((targetColor[1] * 100).toInt())
+					Log.d(TAG, "IntermediateColorActivity#lockHSBSelector- lock index: $index, value=${(targetColor[1] * 100).toInt()}")
+				}
+				2 -> {
+					hsbColorSelector.setBValue((targetColor[2] * 100).toInt())
+					Log.d(TAG, "IntermediateColorActivity#lockHSBSelector- lock index: $index, value=${(targetColor[2] * 100).toInt()}")
+				}
+				else -> {}
+			}
+			// 再锁定
+			hsbColorSelector.setLock(index, true)
+		}
 	}
 
 	private fun showAnswer() {

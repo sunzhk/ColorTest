@@ -27,7 +27,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="256dp"
-		android:text="for 寂书予"
+		android:text="for 寂书予&amp;柯基是猫"
 		android:textColor="#FFA0A0A0"
 		android:textSize="21sp"
 		app:layout_constraintLeft_toLeftOf="parent"

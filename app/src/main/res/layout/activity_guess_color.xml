@@ -20,6 +20,7 @@
 			android:overlapAnchor="false"
 			android:spinnerMode="dropdown"
 			android:text="难度："
+			android:gravity="center"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"/>
 
@@ -38,7 +39,9 @@
 	<TextView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="拖动下方的滚动条，使中间色块为左右两个色块的中间色"
+		android:text="拖动下方的滚动条，使中间色块为左右两个色块的中间色\nP.S.左右色块的色相、饱和度、明度中有两项是相同的"
+		android:textColor="@color/theme_txt_disable"
+		android:textSize="13sp"
 		android:layout_marginTop="20dp"
 		android:layout_marginStart="20dp"
 		android:layout_marginEnd="20dp"/>
