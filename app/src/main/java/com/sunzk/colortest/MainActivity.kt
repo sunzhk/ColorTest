@@ -23,13 +23,10 @@ import java.lang.reflect.Type
 class MainActivity : BaseActivity() {
 	private val TAG: String = "MainActivity"
 
-	private val mainApi: MainApi by serverCreator(Constant.BASE_URL_MOCK) {
-		ServerSetting(3000)
-	}
-
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		requestWindowFeature(Window.FEATURE_NO_TITLE)
+		needFloatingWindow = false
 		setContentView(R.layout.activity_main)
 
 		Log.d(TAG, "onCreate: thread=${threadInfo()}")
@@ -58,8 +55,6 @@ class MainActivity : BaseActivity() {
 
 	private suspend fun requestModeList() {
 		val modeList = withContext(Dispatchers.IO) {
-			// 模拟用的接口网站挂了，先用本地数据吧
-//			mainApi.getModeList2()
 			assets.readFileAsString("ModeList.json")?.runCatching {
 				val type = object : TypeToken<MutableList<ModeEntity>>() {}.type
 				val entity = Gson().fromJson<MutableList<ModeEntity>>(this, type)

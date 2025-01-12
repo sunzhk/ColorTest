@@ -60,7 +60,7 @@ class IntermediateColorActivity : BaseActivity() {
 	
 	private fun initView() = with(viewBinding) {
 		initDifficultyUI()
-		hsbColorSelector.onColorSelectedListener = { hsb ->
+		hsbColorSelector.onColorPick = { hsb ->
 			viewModel.answerColor.emitBy(hsb.hsbColor)
 		}
 		btHistory.onClick { startActivity(Intent(this@IntermediateColorActivity, IntermediateColorHistoryActivity::class.java)) }
@@ -206,15 +206,15 @@ class IntermediateColorActivity : BaseActivity() {
 			// 先把值写进去
 			when (index) {
 				0 -> {
-					hsbColorSelector.setHValue(targetColor[0].toInt())
+					hsbColorSelector.updateH(targetColor[0].toInt())
 					Log.d(TAG, "IntermediateColorActivity#lockHSBSelector- lock index: $index, value=${targetColor[0].toInt()}")
 				}
 				1 -> {
-					hsbColorSelector.setSValue((targetColor[1] * 100).toInt())
+					hsbColorSelector.updateS((targetColor[1] * 100).toInt())
 					Log.d(TAG, "IntermediateColorActivity#lockHSBSelector- lock index: $index, value=${(targetColor[1] * 100).toInt()}")
 				}
 				2 -> {
-					hsbColorSelector.setBValue((targetColor[2] * 100).toInt())
+					hsbColorSelector.updateB((targetColor[2] * 100).toInt())
 					Log.d(TAG, "IntermediateColorActivity#lockHSBSelector- lock index: $index, value=${(targetColor[2] * 100).toInt()}")
 				}
 				else -> {}

@@ -11,8 +11,6 @@ class FindDiffColorViewModel: ViewModel() {
         const val MAX_LEVEL = 10
     }
     
-    val currentLevel = MutableLiveData<Int>(DEFAULT_LEVEL)
-    
-    var isLight = true
-    
+    val currentLevel = MutableLiveData(DEFAULT_LEVEL)
+
 }

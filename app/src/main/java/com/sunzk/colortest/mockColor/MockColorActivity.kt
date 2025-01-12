@@ -75,7 +75,7 @@ class MockColorActivity : BaseActivity() {
 		btAnswer.setOnClickListener { v: View? ->
 			showAnswer(v)
 		}
-		hsbColorSelector.onColorSelectedListener = { hsb ->
+		hsbColorSelector.onColorPick = { hsb ->
 			viewResult.setBackgroundColor(hsb.rgbColor)
 		}
 	}

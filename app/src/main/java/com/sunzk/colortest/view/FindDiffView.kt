@@ -11,9 +11,16 @@ import androidx.cardview.widget.CardView
 import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.colortest.R
 import com.sunzk.colortest.entity.HSB
+import com.sunzk.demo.tools.ext.dp2px
 import java.util.*
 
 class FindDiffView : FrameLayout {
+
+    companion object {
+        private const val TAG = "FindDiffView"
+        private const val CORNER_RADIUS = 5
+    }
+
     private var spacing = 0
     private lateinit var colorViewMap: Array<Array<CustomCardView?>>
     private val viewArrayList =
@@ -167,7 +174,7 @@ class FindDiffView : FrameLayout {
         isShowingResult = true
         val cardView = viewArrayList[diffIndex]
         val gradientDrawable = GradientDrawable()
-        gradientDrawable.cornerRadius = CORNER_RADIUS.toFloat()
+        gradientDrawable.cornerRadius = CORNER_RADIUS.dp2px.toFloat()
         gradientDrawable.setStroke(DisplayUtil.dip2px(context, 3f), resultStrokeColor)
         gradientDrawable.color = cardView!!.cardView!!.cardBackgroundColor
         cardView.cardView!!.visibility = View.INVISIBLE
@@ -201,7 +208,7 @@ class FindDiffView : FrameLayout {
         )
         if (cardView == null) {
             cardView = CustomCardView(context)
-            cardView.cardView!!.radius = CORNER_RADIUS.toFloat()
+            cardView.cardView!!.radius = CORNER_RADIUS.dp2px.toFloat()
             cardView.isClickable = true
             cardView.isFocusable = true
         }
@@ -284,10 +291,5 @@ class FindDiffView : FrameLayout {
         companion object {
             private const val TAG = "CustomCardView"
         }
-    }
-
-    companion object {
-        private const val TAG = "FindDiffView"
-        private const val CORNER_RADIUS = 5
     }
 }

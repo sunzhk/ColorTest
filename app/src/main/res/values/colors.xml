@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="app_base">#FF1079FF</color>
-	<color name="colorPrimary">#6200EE</color>
-	<color name="colorPrimaryDark">#3700B3</color>
+	<color name="colorPrimary">#FFF0F0F0</color>
+	<color name="colorPrimaryDark">#FF333333</color>
+	
+	<color name="app_base">#FF006396</color>
+	<color name="splash_title">#FFF0F0F0</color>
+	<color name="splash_hint">#FFA0A0A0</color>
+	<color name="common_bg">#FFF0F0F0</color>
+
+	<color name="common_bt_bg">#FFF0F0F0</color>
+	<color name="common_bt_bg_disable">#FFF0F0F0</color>
+	<color name="common_bt_bg_pressed">#FFCCCCCC</color>
+	<color name="common_bt_stroke">#FF101010</color>
+	<color name="common_bt_text">#FF333333</color>
+
+	<color name="common_text_hint">#FF555555</color>
+
+	<!--    文字颜色    -->
+	<color name="theme_txt_standard">#FF333333</color>   <!-- 标准色号 -->
+	
+	
 	<color name="colorAccent">@color/app_base</color>
 	<color name="default_activity_background">#FFD0D0D0</color>
 	<color name="activity_mock_color_color_seek_bar_text_color">#FFFFFFFF</color>
-	
-	<color name="bg_activity_find_diff_color_light">#FFDFDFDF</color>
-	<color name="bg_activity_find_diff_color_dark">#FF101010</color>
 	
 	<color name="text_default_light">#FF101010</color>
 	<color name="text_default_dark">#FFDFDFDF</color>
@@ -36,7 +50,6 @@
 	<!-- #################### 文字颜色 ######################### -->
 	<color name="theme_txt">@color/app_base</color>  <!-- 跟随主题的文本颜色-->
 	<color name="theme_txt2">#FFE8F2FF</color>  <!-- 跟随主题的文本颜色-->
-	<color name="theme_txt_standard">#FF333333</color>   <!-- 标准色号 -->
 	<color name="theme_txt_standard_dis">#B4333333</color>   <!-- 标准色号 -->
 	<color name="theme_txt_standard_30">#4D333333</color>        <!-- 标准色号  不透明度30-->
 	<color name="theme_txt_sub">#FF666666</color>        <!-- 次要文字 -->
@@ -176,6 +189,5 @@
 	<color name="difficulty_normal">#FFF4D03F</color>
 	<color name="difficulty_hard">#FFE55D87</color>
 
-	<color name="common_bt_text">#FF101010</color>
-	<color name="common_bt_text_dark">#FFE0E0E0</color>
+	
 </resources>

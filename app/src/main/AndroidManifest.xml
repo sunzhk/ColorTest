@@ -33,8 +33,9 @@
 		<activity android:name=".activity.SelectPicActivity" />
         <activity android:name=".mockColor.MockColorHistoryActivity" />
         <activity android:name=".intermediateColor.IntermediateColorHistoryActivity" />
+		<activity android:name=".activity.SettingActivity" />
 
-        <!--	注册辅助功能服务	-->
+		<!--	注册辅助功能服务	-->
 		<service android:name=".service.AccessibilityControlService"
 			android:label="@string/accessibility_tip"
 			android:exported="true"
@@ -48,6 +49,9 @@
 				android:name="android.accessibilityservice"
 				android:resource="@xml/accessibility_config"/>
 		</service>
-	</application>
+
+        <service android:name=".service.BGMService"
+				android:exported="false"/>
+    </application>
 
 </manifest>

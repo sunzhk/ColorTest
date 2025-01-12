@@ -106,7 +106,7 @@
 			android:padding="10dp"
 			android:text="就是这个颜色了"/>
 	</LinearLayout>
-	<com.sunzk.colortest.view.HSBColorSelector
+	<com.sunzk.colortest.view.colorSelector.HSBColorSelector
 		android:id="@+id/hsb_color_selector"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

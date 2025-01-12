@@ -64,6 +64,10 @@ class MockColorHistoryActivity: BaseActivity() {
 		initData()
 	}
 
+	override fun needBGM(): Boolean {
+		return true
+	}
+
 	private fun initData() {
 		lifecycleScope.launch(GlobalDispatchers.IO) {
 			MockColorResultTable.queryAll()?.let { queriedData ->
