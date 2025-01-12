@@ -11,6 +11,10 @@ object Constant {
 	val BASE_URL_GITHUB = "https://api.codetabs.com/v1/proxy/?quest=https://raw.githubusercontent.com/sunzhk/ColorTest/data/"
 	val BASE_URL_MOCK = "http://mock-api.com/rnNrALnl.mock/"
 
+	const val SP_NAME_APP = "AppSetting"
+	const val SP_KEY_NIGHT_MODE = "Key_NightMode"
+	const val SP_KEY_BGM = "Key_BGM"
+	
 	val MODE_ENTITY_LIST: Array<ModeEntity>
 	const val MODE_SELECT_DATA_NAME = "settings"
 	const val MODE_SELECT_DATA_KEY = "modeList"

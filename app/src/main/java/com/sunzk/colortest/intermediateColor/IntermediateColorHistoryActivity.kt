@@ -67,6 +67,10 @@ class IntermediateColorHistoryActivity: BaseActivity() {
 		initData()
 	}
 
+	override fun needBGM(): Boolean {
+		return true
+	}
+
 	private fun initData() {
 		lifecycleScope.launch(GlobalDispatchers.IO) {
 			IntermediateColorResultTable.queryAll()?.let { queriedData ->

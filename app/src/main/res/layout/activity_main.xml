@@ -4,7 +4,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="#FF006396"
+	android:background="@color/app_base"
 	tools:context=".MainActivity">
 
 	<TextView
@@ -12,7 +12,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Color Test"
-		android:textColor="#FFF0F0F0"
+		android:textColor="@color/splash_title"
 		android:textSize="58sp"
 		android:textStyle="bold"
 		app:layout_constraintBottom_toBottomOf="parent"
@@ -28,7 +28,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="256dp"
 		android:text="for 寂书予&amp;柯基是猫"
-		android:textColor="#FFA0A0A0"
+		android:textColor="@color/splash_hint"
 		android:textSize="21sp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"

@@ -39,16 +39,7 @@ class FindDiffColorActivity : BaseActivity() {
 
 	private fun initViews() = with(viewBinding) {
 		initControllerView()
-		cbAutoNext.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
-			if (b && viewBinding.findDiffColor.isShowingResult) {
-				checkAutoNext()
-			}
-		}
 		btChange.setOnClickListener { v: View? -> resetColor() }
-		switchLight(false)
-		btLightSwitch.setOnClickListener { v: View? ->
-			switchLight(!viewModel.isLight)
-		}
 
 		findDiffColor.setOnDiffColorViewClickListener { view, result ->
 			Log.d(TAG, "onClick: $result")
@@ -82,33 +73,6 @@ class FindDiffColorActivity : BaseActivity() {
 		resetDifficulty(countPerSide)
 	}
 
-	private fun switchLight(on: Boolean) = with(viewBinding) {
-		viewModel.isLight = on
-		if (on) {
-			flContainer.setBackgroundResource(R.color.bg_activity_find_diff_color_light)
-			btLightSwitch.setText(R.string.light_switch_text_turn_off)
-			tvLevel.setTextColor(resources.getColor(R.color.text_default_light))
-			findDiffColor.setResultStrokeColor(resources.getColor(R.color.text_default_light))
-
-			cbAutoNext.setTextColor(resources.getColor(R.color.common_bt_text, null))
-			btLightSwitch.setBackgroundResource(R.drawable.bg_common_bt)
-			btLightSwitch.setTextColor(resources.getColor(R.color.common_bt_text, null))
-			btChange.setBackgroundResource(R.drawable.bg_common_bt)
-			btChange.setTextColor(resources.getColor(R.color.common_bt_text, null))
-		} else {
-			flContainer.setBackgroundResource(R.color.bg_activity_find_diff_color_dark)
-			btLightSwitch.setText(R.string.light_switch_text_turn_on)
-			tvLevel.setTextColor(resources.getColor(R.color.text_default_dark))
-			findDiffColor.setResultStrokeColor(resources.getColor(R.color.text_default_dark))
-
-			cbAutoNext.setTextColor(resources.getColor(R.color.common_bt_text_dark, null))
-			btLightSwitch.setBackgroundResource(R.drawable.bg_common_bt_dark)
-			btLightSwitch.setTextColor(resources.getColor(R.color.common_bt_text_dark, null))
-			btChange.setBackgroundResource(R.drawable.bg_common_bt_dark)
-			btChange.setTextColor(resources.getColor(R.color.common_bt_text_dark, null))
-		}
-	}
-
 	private fun resetDifficulty(countPerSide: Int) {
 		Log.d(TAG, "resetDifficulty: $countPerSide")
 		viewBinding.findDiffColor.resetCount(countPerSide)
@@ -132,26 +96,13 @@ class FindDiffColorActivity : BaseActivity() {
 	}
 
 	private fun showResult(result: Boolean) {
-		//		tvHint.setText(result ? "猜中啦！" : "猜错啦！");
 		if (result) {
 			viewBinding.findDiffColor.showResult()
-			checkAutoNext()
-			//			new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-			//					.setTitle("被发现啦").setMessage("厉害呀~这都能找到~")
-			//					.setPositiveButton("继续", (dialog, which) -> dialog.cancel())
-			//					.setOnCancelListener(dialog -> resetColor())
-			//					.create().show();
-		}
-	}
-
-	private fun checkAutoNext() {
-		if (viewBinding.cbAutoNext.isChecked) {
-			lifecycleScope.launch {
-				delay(600)
-				launch(Dispatchers.Main) {
-					resetColor()
-				}
-			}
+//			new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
+//					.setTitle("被发现啦").setMessage("厉害呀~这都能找到~")
+//					.setPositiveButton("继续", (dialog, which) -> dialog.cancel())
+//					.setOnCancelListener(dialog -> resetColor())
+//					.create().show();
 		}
 	}
 
