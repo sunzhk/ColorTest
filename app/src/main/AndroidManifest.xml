@@ -29,7 +29,7 @@
 			android:windowSoftInputMode="adjustPan"/>
 		<activity android:name=".intermediateColor.IntermediateColorActivity" />
 		<activity android:name=".activity.ModeSelectActivity" />
-		<activity android:name=".activity.FindDiffColorActivity" />
+		<activity android:name=".findDiff.FindDiffColorActivity" />
 		<activity android:name=".activity.SelectPicActivity" />
         <activity android:name=".mockColor.MockColorHistoryActivity" />
         <activity android:name=".intermediateColor.IntermediateColorHistoryActivity" />
