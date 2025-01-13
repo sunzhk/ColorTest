@@ -1,6 +1,8 @@
 package com.sunzk.base.expand.livedata
 
 import androidx.lifecycle.MutableLiveData
+import com.sunzk.base.expand.emitBy
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * MutableLiveData的扩展，便于进行简单的四则运算
@@ -58,5 +60,16 @@ fun MutableLiveData<Int>.dec(): MutableLiveData<Int> {
     this.value?.let {
         postValue(it - 1)
     }
+    return this
+}
+
+
+fun MutableStateFlow<Int>.inc(): MutableStateFlow<Int> {
+    emitBy(this.value + 1)
+    return this
+}
+
+fun MutableStateFlow<Int>.dec(): MutableStateFlow<Int> {
+    emitBy(this.value - 1)
     return this
 }

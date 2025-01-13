@@ -1,24 +1,20 @@
-package com.sunzk.colortest.activity
+package com.sunzk.colortest.findDiff
 
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.CompoundButton
 import androidx.activity.viewModels
-import androidx.annotation.IntRange
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.sunzk.base.expand.bindView
+import com.sunzk.base.expand.collect
+import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.base.expand.livedata.dec
 import com.sunzk.base.expand.livedata.inc
-import com.sunzk.base.utils.ColorUtils
 import com.sunzk.colortest.BaseActivity
-import com.sunzk.colortest.R
 import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.databinding.ActivityFindDiffColorBinding
 import com.sunzk.colortest.entity.HSB
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -33,14 +29,12 @@ class FindDiffColorActivity : BaseActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		initViews()
-
-		resetLevel(FindDiffColorViewModel.DEFAULT_LEVEL)
+		bindData()
 	}
 
 	private fun initViews() = with(viewBinding) {
 		initControllerView()
 		btChange.setOnClickListener { v: View? -> resetColor() }
-
 		findDiffColor.setOnDiffColorViewClickListener { view, result ->
 			Log.d(TAG, "onClick: $result")
 			showResult(result)
@@ -48,61 +42,42 @@ class FindDiffColorActivity : BaseActivity() {
 	}
 
 	private fun initControllerView() {
-		viewModel.currentLevel.observe(this, Observer { level ->
-			resetLevel(level)
-		})
 		viewBinding.ivLevelLeft.setOnClickListener {
-			val currentLevel: Int =
-				viewModel.currentLevel.value ?: FindDiffColorViewModel.DEFAULT_LEVEL
+			val currentLevel: Int = viewModel.currentGameData.value.level
 			if (currentLevel > FindDiffColorViewModel.MIN_LEVEL) {
-				viewModel.currentLevel.dec()
+				viewModel.changeLevel(currentLevel - 1)
 			}
 		}
 		viewBinding.ivLevelRight.setOnClickListener {
-			val currentLevel: Int =
-				viewModel.currentLevel.value ?: FindDiffColorViewModel.DEFAULT_LEVEL
+			val currentLevel: Int = viewModel.currentGameData.value.level
 			if (currentLevel < FindDiffColorViewModel.MAX_LEVEL) {
-				viewModel.currentLevel.inc()
+				viewModel.changeLevel(currentLevel + 1)
 			}
 		}
 	}
 
-	private fun resetLevel(@IntRange(from = 1, to = 10) level: Int) {
-		Log.d(TAG, "resetLevel: $level")
-		viewBinding.tvLevel.text = level.toString()
-		resetDifficulty(countPerSide)
+	private fun bindData() {
+		viewModel.currentGameData.collect(lifecycleScope) { data ->
+			Log.d(TAG, "FindDiffColorActivity#bindData- new data: $data")
+			viewBinding.tvLevel.text = "${data.level}"
+			if (viewBinding.findDiffColor.countPerSide != data.countPerSide) {
+				viewBinding.findDiffColor.resetCount(data.countPerSide)
+			}
+			viewBinding.findDiffColor.resetColor(HSB(data.baseColor), HSB(data.diffColor), data.diffIndex)
+		}
 	}
-
-	private fun resetDifficulty(countPerSide: Int) {
-		Log.d(TAG, "resetDifficulty: $countPerSide")
-		viewBinding.findDiffColor.resetCount(countPerSide)
-		resetColor()
-	}
-
+	
 	private fun resetColor() {
-		val baseColor = ColorUtils.randomHSBColor(0f, 0f, 0.2f)
-		val colorDiff = colorDiff
-		Log.d(
-			TAG,
-			"resetColor-colorDiff: $colorDiff"
-		)
-		val diffSmall = colorDiff / 20
-		val diffS =
-			if (baseColor[1] > 0.5f) baseColor[1] - diffSmall else baseColor[1] + diffSmall
-		val diffB =
-			if (baseColor[2] > 0.6f) baseColor[2] - colorDiff else baseColor[2] + colorDiff
-		val diffColor = floatArrayOf(baseColor[0], diffS, diffB)
-		viewBinding.findDiffColor.resetColor(HSB(baseColor), HSB(diffColor))
+		Log.d(TAG, "FindDiffColorActivity#resetColor")
+		viewModel.nextRandomData()
 	}
 
 	private fun showResult(result: Boolean) {
 		if (result) {
 			viewBinding.findDiffColor.showResult()
-			lifecycleScope.launch {
+			lifecycleScope.launch(GlobalDispatchers.Main) {
 				delay(600)
-				launch(Dispatchers.Main) {
-					resetColor()
-				}
+				resetColor()
 			}
 //			new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
 //					.setTitle("被发现啦").setMessage("厉害呀~这都能找到~")
@@ -111,19 +86,6 @@ class FindDiffColorActivity : BaseActivity() {
 //					.create().show();
 		}
 	}
-
-	private val countPerSide: Int
-		get() = viewModel.currentLevel.value!! + 2
-
-	private val colorDiff: Float
-		get() {
-			val currentLevel = viewModel.currentLevel.value!!
-			Log.d(
-				TAG,
-				"getColorDiff: " + currentLevel + " - " + 0.3f / (currentLevel * 10)
-			)
-			return 0.02f + 0.5f / (currentLevel * 10)
-		}
 
 	override fun needBGM(): Boolean {
 		return true

@@ -1,6 +1,6 @@
 package com.sunzk.colortest
 
-import com.sunzk.colortest.activity.FindDiffColorActivity
+import com.sunzk.colortest.findDiff.FindDiffColorActivity
 import com.sunzk.colortest.intermediateColor.IntermediateColorActivity
 import com.sunzk.colortest.mockColor.MockColorActivity
 import com.sunzk.colortest.entity.GameMode
