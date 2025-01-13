@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -37,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.blankj.utilcode.util.ScreenUtils
 import com.sunzk.colortest.R
-import com.sunzk.colortest.db.bean.MockColorResult
+import com.sunzk.colortest.entity.HSB
 import com.sunzk.colortest.entity.StatisticsData
 import com.sunzk.demo.tools.ext.px
 import com.sunzk.demo.tools.ext.toLimitedString
@@ -180,15 +179,15 @@ object HistoryPageCommon {
 	// 临时参数 - 四边形区域
 	private val trapezoidPath = Path()
 
-	fun DrawScope.drawColorContrast(vararg colors: FloatArray) {
+	fun DrawScope.drawColorContrast(vararg colors: HSB) {
 		// 循环绘制每一段
 		colors.forEachIndexed { index, color ->
 			if (index == 0 || index == colors.size - 1) {
 				// 头尾绘制梯形
-				drawTrapezoid(colors.size, color, index == 0)
+				drawTrapezoid(colors.size, color.hsbColor, index == 0)
 			} else {
 				// 中间绘制平行四边形
-				drawParallelogram(colors.size, index, color)
+				drawParallelogram(colors.size, index, color.hsbColor)
 			}
 		}
 	}

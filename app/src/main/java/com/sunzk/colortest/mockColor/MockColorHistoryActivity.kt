@@ -43,6 +43,7 @@ import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.base.expand.emitBy
 import com.sunzk.colortest.compose.ui.HistoryPageCommon
 import com.sunzk.colortest.compose.ui.HistoryPageCommon.drawColorContrast
+import com.sunzk.colortest.entity.HSB
 import com.sunzk.colortest.entity.StatisticsData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -141,7 +142,7 @@ class MockColorHistoryActivity: BaseActivity() {
 				Canvas(modifier = Modifier
 					.fillMaxHeight()
 					.weight(1f)) {
-					drawColorContrast(history.question, history.answer)
+					drawColorContrast(HSB(history.question), HSB(history.answer))
 				}
 				Image(painter = painterResource(if (history.isRight()) R.mipmap.icon_result_right else R.mipmap.icon_result_wrong),
 					contentDescription = null, 

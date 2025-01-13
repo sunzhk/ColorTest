@@ -1,6 +1,6 @@
 package com.sunzk.colortest.findDiff
 
-data class FindDiffColorData(
+data class FindDiffColorPageData(
 	val level: Int,
 	val countPerSide: Int,
 	val baseColor: FloatArray,
@@ -11,7 +11,7 @@ data class FindDiffColorData(
 		if (this === other) return true
 		if (javaClass != other?.javaClass) return false
 
-		other as FindDiffColorData
+		other as FindDiffColorPageData
 
 		if (level != other.level) return false
 		if (countPerSide != other.countPerSide) return false
