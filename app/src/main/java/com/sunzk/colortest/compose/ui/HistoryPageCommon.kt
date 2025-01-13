@@ -184,10 +184,10 @@ object HistoryPageCommon {
 		colors.forEachIndexed { index, color ->
 			if (index == 0 || index == colors.size - 1) {
 				// 头尾绘制梯形
-				drawTrapezoid(colors.size, color.hsbColor, index == 0)
+				drawTrapezoid(colors.size, color, index == 0)
 			} else {
 				// 中间绘制平行四边形
-				drawParallelogram(colors.size, index, color.hsbColor)
+				drawParallelogram(colors.size, index, color)
 			}
 		}
 	}
@@ -217,7 +217,7 @@ object HistoryPageCommon {
 	/**
 	 * 绘制头尾的梯形
 	 */
-	private fun DrawScope.drawTrapezoid(count: Int, color: FloatArray, isHead: Boolean) {
+	private fun DrawScope.drawTrapezoid(count: Int, color: HSB, isHead: Boolean) {
 		// 计算每一段使用宽度：(总宽度 / 颜色段数) + (总高度 * 梯形斜率 / 2) - (梯形分割线 * 颜色段数 - 1)
 		trapezoidWidth = (size.width / count) + (size.height * trapezoidSlope / 2) - (trapezoidDivider.toPx() * (count - 1))
 		// 计算每一段短边宽度：长边宽度 - 总高度 * 梯形斜率
@@ -239,7 +239,7 @@ object HistoryPageCommon {
 		// 取 path 交集
 		resetRound()
 		roundPath.op(roundPath, trapezoidPath, PathOperation.Intersect)
-		drawPath(path = roundPath, color = Color(android.graphics.Color.HSVToColor(color)))
+		drawPath(path = roundPath, color = Color(color.rgbColor))
 	}
 
 	// 临时参数 - 平行四边形边长
@@ -250,8 +250,8 @@ object HistoryPageCommon {
 	 * 
 	 * @param index 第几个四边形（包括头尾梯形）
 	 */
-	private fun DrawScope.drawParallelogram(count: Int, index: Int, color: FloatArray) {
-		Log.d(TAG, "HistoryPageCommon#drawParallelogram- count: $count, index: $index, color: ${color.contentToString()}")
+	private fun DrawScope.drawParallelogram(count: Int, index: Int, color: HSB) {
+		Log.d(TAG, "HistoryPageCommon#drawParallelogram- count: $count, index: $index, color: $color")
 		// 计算每一段的边长：(总高度 / 颜色段数) - (梯形分割线 * 颜色段数 - 1)
 		parallelogramSideLength = (size.width / count) - (trapezoidDivider.toPx() * (count - 1))
 		// 计算头尾梯形的使用宽度(长边宽度)：(总宽度 / 颜色段数) + (总高度 * 梯形斜率 / 2) - (梯形分割线 * 颜色段数 - 1)
@@ -273,7 +273,7 @@ object HistoryPageCommon {
 			// 回起点
 			lineTo(trapezoidWidth + (parallelogramSideLength * (index - 1)) + (trapezoidDivider.toPx() * (index - 1)), 0F)
 		}
-		drawPath(path = trapezoidPath, color = Color(android.graphics.Color.HSVToColor(color)))
+		drawPath(path = trapezoidPath, color = Color(color.rgbColor))
 	}
 
 	// </editor-fold>

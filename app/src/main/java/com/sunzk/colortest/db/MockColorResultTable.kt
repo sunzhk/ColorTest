@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.sunzk.colortest.Runtime
 import com.sunzk.colortest.db.bean.MockColorResult
+import com.sunzk.colortest.entity.HSB
 import java.util.ArrayList
 import java.util.Locale
 
@@ -62,12 +63,12 @@ object MockColorResultTable: ITable<MockColorResult> {
 						query.getInt(0),
 						query.getString(1),
 						MockColorResult.Difficulty.entries.find { it.name == query.getString(2) } ?: MockColorResult.Difficulty.Normal,
-						query.getFloat(3),
-						query.getFloat(4),
-						query.getFloat(5),
-						query.getFloat(6),
-						query.getFloat(7),
-						query.getFloat(8)
+						HSB(query.getFloat(3),
+							query.getFloat(4),
+							query.getFloat(5)),
+						HSB(query.getFloat(6),
+							query.getFloat(7),
+							query.getFloat(8))
 					))
 				}
 				query.close()

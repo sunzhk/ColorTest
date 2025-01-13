@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.sunzk.base.expand.emitBy
 import com.sunzk.base.utils.ColorUtils
+import com.sunzk.colortest.entity.HSB
 import com.sunzk.demo.tools.ext.square
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Random
@@ -30,7 +31,7 @@ class FindDiffColorViewModel : ViewModel() {
 
 	private fun randomData(level: Int): FindDiffColorPageData {
 		val countPerSide = level + 2
-		val baseColor = ColorUtils.randomHSBColor(0f, 0f, 0.2f)
+		val baseColor = HSB(ColorUtils.randomHSBColor(0f, 0f, 0.2f))
 		val colorDiff = colorDiff(level)
 		Log.d(TAG, "resetColor-colorDiff: $colorDiff")
 		val diffSmall = colorDiff / 20
@@ -38,7 +39,7 @@ class FindDiffColorViewModel : ViewModel() {
 			if (baseColor[1] > 0.5f) baseColor[1] - diffSmall else baseColor[1] + diffSmall
 		val diffB =
 			if (baseColor[2] > 0.6f) baseColor[2] - colorDiff else baseColor[2] + colorDiff
-		val diffColor = floatArrayOf(baseColor[0], diffS, diffB)
+		val diffColor = HSB(baseColor[0], diffS, diffB)
 		return FindDiffColorPageData(level, countPerSide, baseColor, diffColor, Random().nextInt(square(countPerSide)))
 	}
 

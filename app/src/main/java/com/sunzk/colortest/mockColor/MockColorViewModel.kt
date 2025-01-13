@@ -15,7 +15,7 @@ class MockColorViewModel: ViewModel() {
 	/**
 	 * 当前问题的颜色
 	 */
-    var currentQuestionHSB: MutableStateFlow<FloatArray> = MutableStateFlow(ColorUtils.randomHSBColor(0f, 0.2f, 0.2f))
+    var currentQuestionHSB: MutableStateFlow<HSB> = MutableStateFlow(HSB.random(0f, 0.2f, 0.2f))
 
     /**
      * 难度
@@ -26,6 +26,6 @@ class MockColorViewModel: ViewModel() {
     
     fun nextQuestion() {
 	    currentPickHSB.update(180f, 50f ,50f)
-        currentQuestionHSB.emitBy(ColorUtils.randomHSBColor(0f, 0.2f, 0.2f))
+        currentQuestionHSB.emitBy(HSB.random(0f, 0.2f, 0.2f))
     }
 }

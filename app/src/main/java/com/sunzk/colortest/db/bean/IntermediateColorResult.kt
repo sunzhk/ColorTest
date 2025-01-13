@@ -56,10 +56,11 @@ data class IntermediateColorResult(
 		Hard("超大杯", 0, 15, 25, 25, 20, 10);
 
 		fun isRight(leftColor: HSB, rightColor: HSB, answer: HSB): Boolean {
-			val centerColor = floatArrayOf(
+			val centerColor = HSB(
 				(leftColor[0] + rightColor[0]) / 2.0f,
 				(leftColor[1] + rightColor[1]) / 2.0f,
-				(leftColor[2] + rightColor[2]) / 2.0f)
+				(leftColor[2] + rightColor[2]) / 2.0f
+			)
 			val difH = abs(answer[0] - centerColor[0]) * 100f / 360f
 			val difS = abs(answer[1] - centerColor[1])
 			val difB = abs(answer[2] - centerColor[2])

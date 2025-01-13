@@ -39,7 +39,7 @@ class IntermediateColorViewModel : ViewModel() {
     private fun createQuestion(difficulty: IntermediateColorResult.Difficulty = DEFAULT_DIFFICULTY): IntermediateColorPageData {
         Log.d(TAG, "IntermediateColorViewModel#randomRightColor- diff=$difficulty")
         // 先随机个左边的初始色
-        val nextLeftColor = HSB(ColorUtils.randomHSBColor(0f, difficulty.minSBPercent / 100f, difficulty.minSBPercent / 100f))
+        val nextLeftColor = HSB.random(0f, difficulty.minSBPercent / 100f, difficulty.minSBPercent / 100f)
         // 基于左边的颜色，生成一个右侧的颜色
         val randomIndex = Random().nextInt(3)
         val nextRightColor = randomRightColor(difficulty, nextLeftColor, randomIndex)

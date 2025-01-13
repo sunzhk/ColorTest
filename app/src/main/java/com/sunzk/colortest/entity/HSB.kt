@@ -2,6 +2,7 @@ package com.sunzk.colortest.entity
 
 import android.graphics.Color
 import androidx.annotation.FloatRange
+import com.sunzk.base.utils.ColorUtils
 
 /**
  * 标准色值实体
@@ -19,6 +20,10 @@ class HSB {
 		const val COLOR_B_MIN = 0
 		const val COLOR_B_MAX = 100
 		const val COLOR_B_INTERVAL = 1
+		
+		fun random(minH: Float, minS: Float, minB: Float): HSB {
+			return HSB(ColorUtils.randomHSBColor(minH, minS, minB))
+		}
 	}
 
 	/**
@@ -101,6 +106,19 @@ class HSB {
 		sb.append(", b=").append(b)
 		sb.append('}')
 		return sb.toString()
+	}
+
+	override fun equals(other: Any?): Boolean {
+		if (this === other) return true
+		if (javaClass != other?.javaClass) return false
+
+		other as HSB
+
+		if (h != other.h) return false
+		if (s != other.s) return false
+		if (b != other.b) return false
+
+		return true
 	}
 
 	fun clone(): HSB {
