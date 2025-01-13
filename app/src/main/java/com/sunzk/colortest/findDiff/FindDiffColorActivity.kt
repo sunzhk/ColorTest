@@ -63,7 +63,7 @@ class FindDiffColorActivity : BaseActivity() {
 			if (viewBinding.findDiffColor.countPerSide != data.countPerSide) {
 				viewBinding.findDiffColor.resetCount(data.countPerSide)
 			}
-			viewBinding.findDiffColor.resetColor(HSB(data.baseColor), HSB(data.diffColor), data.diffIndex)
+			viewBinding.findDiffColor.resetColor(data.baseColor, data.diffColor, data.diffIndex)
 		}
 	}
 	

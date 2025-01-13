@@ -29,6 +29,7 @@ import com.sunzk.colortest.db.bean.MockColorResult
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.base.expand.emitBy
 import com.sunzk.colortest.dialog.CommonSettlementDialog
+import com.sunzk.colortest.entity.HSB
 import kotlinx.coroutines.*
 import okhttp3.internal.toHexString
 import java.util.*
@@ -103,9 +104,9 @@ class MockColorActivity : BaseActivity() {
 				}
 		}
 		viewModel.currentQuestionHSB.collect(lifecycleScope) { currentQuestionHSB ->
-			val color = Color.HSVToColor(currentQuestionHSB)
-			Log.d(TAG, "MockColorActivity#nextQuestion- ${currentQuestionHSB.joinToString()} -> ${color.toHexString()}")
-			viewBinding.viewDemo.setBackgroundColor(color)
+			val rgbColor = currentQuestionHSB.rgbColor
+			Log.d(TAG, "MockColorActivity#nextQuestion- $currentQuestionHSB -> ${rgbColor.toHexString()}")
+			viewBinding.viewDemo.setBackgroundColor(rgbColor)
 			viewBinding.tvAnswer.text = null
 			viewBinding.hsbColorSelector.isEnabled = true
 			viewBinding.hsbColorSelector.updateHSB(
@@ -148,19 +149,13 @@ class MockColorActivity : BaseActivity() {
 
 	private fun showAnswer(v: View?) {
 		val question = viewModel.currentQuestionHSB.value
-		val showH = question[0].toInt().toFloat()
-		val showS = (question[1] * 100).toInt().toFloat()
-		val showB = (question[2] * 100).toInt().toFloat()
-		val answerH = viewBinding.hsbColorSelector.progressH.toFloat()
-		val answerS = viewBinding.hsbColorSelector.progressS.toFloat()
-		val answerB = viewBinding.hsbColorSelector.progressB.toFloat()
-
+		val answer = viewBinding.hsbColorSelector.hsb
 		lifecycleScope.launch {
-			saveResult(showH.toInt(), showS.toInt(), showB.toInt())
+			saveResult(question, answer)
 			showScore(Runtime.testResultNumber)
 		}
 
-		val isRight = viewModel.currentDifficulty.value.isRight(floatArrayOf(showH, showS, showB), floatArrayOf(answerH, answerS, answerB))
+		val isRight = viewModel.currentDifficulty.value.isRight(question, answer)
 		val dialog = CommonSettlementDialog(this, isRight)
 		dialog.onCancelClickListener = {
 			finish()
@@ -171,15 +166,11 @@ class MockColorActivity : BaseActivity() {
 		dialog.show()
 	}
 
-	private suspend fun saveResult(showH: Int, showS: Int, showB: Int) = withContext(GlobalDispatchers.IO) {
+	private suspend fun saveResult(question: HSB, answer: HSB) = withContext(GlobalDispatchers.IO) {
 		val result = MockColorResultTable.add(MockColorResult(
 			difficulty = viewModel.currentDifficulty.value,
-			questionH = showH.toFloat(),
-			questionS = showS.toFloat(),
-			questionB = showB.toFloat(),
-			answerH = viewBinding.hsbColorSelector.progressH.toFloat(),
-			answerS = viewBinding.hsbColorSelector.progressS.toFloat(),
-			answerB = viewBinding.hsbColorSelector.progressB.toFloat()
+			question = question,
+			answer = answer
 		))
 		Log.d(TAG, "MockColorActivity#saveResult- $result")
 	}

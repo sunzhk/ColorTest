@@ -142,7 +142,7 @@ class MockColorHistoryActivity: BaseActivity() {
 				Canvas(modifier = Modifier
 					.fillMaxHeight()
 					.weight(1f)) {
-					drawColorContrast(HSB(history.question), HSB(history.answer))
+					drawColorContrast(history.question, history.answer)
 				}
 				Image(painter = painterResource(if (history.isRight()) R.mipmap.icon_result_right else R.mipmap.icon_result_wrong),
 					contentDescription = null, 
