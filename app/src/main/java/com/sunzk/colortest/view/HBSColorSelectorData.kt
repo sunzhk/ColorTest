@@ -12,7 +12,7 @@ import com.sunzk.colortest.entity.HSB.Companion.COLOR_S_MIN
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.math.min
 
-class HBSColorSelectorData() {
+class HBSColorSelectorData {
 
     companion object {
         private const val TAG: String = "HBSColorSelectorData"
@@ -45,7 +45,7 @@ class HBSColorSelectorData() {
     }
 
     fun setColorS(@IntRange(from = COLOR_S_MIN.toLong(), to = COLOR_S_MAX.toLong()) s: Int) {
-        Log.d(TAG, "setColorS: $s", Throwable())
+        Log.d(TAG, "setColorS: $s")
         val resultColor =
             if (s < COLOR_S_MIN) {
                 COLOR_S_MIN

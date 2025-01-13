@@ -306,6 +306,7 @@ class HSBColorSelector : LinearLayout, IColorPicker {
     }
 
     override fun updateHSB(h: Float, s: Float, b: Float) {
+        Log.d(TAG, "HSBColorSelector#updateHSB- h: $h, s: $s, b: $b")
         colorData.setColorH(h.toInt())
         colorData.setColorB(b.toInt())
         colorData.setColorS(s.toInt())
