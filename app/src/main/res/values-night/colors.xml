@@ -16,4 +16,8 @@
 
 	<!--    文字颜色    -->
 	<color name="theme_txt_standard">#FFD0D0D0</color>   <!-- 标准色号 -->
+
+	<color name="difficulty_easy">#FF008000</color>
+	<color name="difficulty_normal">#FFFFA500</color>
+	<color name="difficulty_hard">#FFFF4400</color>
 </resources>

@@ -16,8 +16,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.arcsoft.closeli.utils.takeIfIs
+import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ScreenUtils
-import com.sunzk.base.expand.emitBy
 import com.sunzk.base.expand.onClick
 import com.sunzk.colortest.R
 import com.sunzk.colortest.Runtime
@@ -34,14 +34,14 @@ object FloatingSettingWindowManager {
 
 	private val X_START = 10f.dp2px
 	private val Y_START = 10f.dp2px
-	private val X_END = ScreenUtils.getScreenWidth() - X_START
-	private val Y_END = ScreenUtils.getScreenHeight() - Y_START
+	private val X_END = ScreenUtils.getAppScreenWidth() - X_START
+	private val Y_END = ScreenUtils.getAppScreenHeight() - Y_START
 	private var floatingView: SoftReference<FloatingSettingBinding>? = null
 
 	/**
 	 * 记录一下定位，在重建的时候还原现场
 	 */
-	private val location = Point(X_START, Y_START + 40.dp2px)
+	private val location = Point(X_START, Y_START + 50.dp2px)
 
 	/**
 	 * 记录一下展开状态，在重建的时候还原现场
@@ -138,6 +138,20 @@ object FloatingSettingWindowManager {
 			isFold = false
 			ivSetting.isVisible = false
 			llSetting.isVisible = true
+			root.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+			Log.d(TAG, "FloatingSettingWindowManager#unfold- measure size=[${root.measuredWidthAndState}, ${root.measuredHeightAndState}]")
+			if ((location.x + root.measuredWidth > X_END)) {
+				root.updateLayoutParams<MarginLayoutParams> {
+					marginStart = X_END - root.measuredWidth
+					location.x = marginStart
+				}
+			}
+			if (location.y + root.measuredHeight > Y_END) {
+				root.updateLayoutParams<MarginLayoutParams> {
+					topMargin = Y_END - root.measuredHeight
+					location.y = topMargin
+				}
+			}
 		}
 	}
 
@@ -169,8 +183,8 @@ object FloatingSettingWindowManager {
 					floatView.updateLayoutParams<MarginLayoutParams> { 
 						marginStart += movedX
 						topMargin += movedY
-						marginStart = marginStart.coerceIn(X_START, X_END)
-						topMargin = topMargin.coerceIn(Y_START, Y_END)
+						marginStart = marginStart.coerceIn(X_START, X_END - floatView.width)
+						topMargin = topMargin.coerceIn(Y_START, Y_END - floatView.height)
 						location.x = marginStart
 						location.y = topMargin
 						Log.d(TAG, "ItemViewTouchListener#onTouch- marginStart=$marginStart, topMargin=$topMargin")

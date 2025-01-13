@@ -14,8 +14,9 @@
 		android:layout_height="wrap_content"
 		android:layout_marginStart="15dp"
 		android:layout_marginEnd="15dp"
+		app:layout_constraintVertical_bias="0.6"
 		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintBottom_toTopOf="@+id/tv_level"
 		tools:layout_editor_absoluteX="20dp" />
 
 	<ImageView
@@ -57,12 +58,12 @@
 
 	<Button
 		android:id="@+id/bt_change"
+		style="@style/CommonButton"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="20dp"
+		android:layout_marginBottom="30dp"
 		android:layout_marginStart="20dp"
 		android:layout_marginEnd="20dp"
-		style="@style/CommonButton"
 		android:text="换一换"
 		android:textSize="21sp"
 		app:layout_constraintBottom_toBottomOf="parent"
