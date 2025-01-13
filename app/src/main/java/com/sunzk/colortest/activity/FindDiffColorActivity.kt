@@ -98,6 +98,12 @@ class FindDiffColorActivity : BaseActivity() {
 	private fun showResult(result: Boolean) {
 		if (result) {
 			viewBinding.findDiffColor.showResult()
+			lifecycleScope.launch {
+				delay(600)
+				launch(Dispatchers.Main) {
+					resetColor()
+				}
+			}
 //			new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
 //					.setTitle("被发现啦").setMessage("厉害呀~这都能找到~")
 //					.setPositiveButton("继续", (dialog, which) -> dialog.cancel())

@@ -9,6 +9,9 @@ import com.sunzk.base.expand.coroutines.GlobalMainScope
 import com.sunzk.colortest.R
 import kotlinx.coroutines.flow.MutableStateFlow
 
+/**
+ * 背景音乐服务
+ */
 class BGMService: Service() {
 	companion object {
 		private const val TAG: String = "BGMService"
@@ -27,7 +30,7 @@ class BGMService: Service() {
 			if (it) {
 				if (mediaPlayer == null) {
 					mediaPlayer = MediaPlayer.create(this@BGMService, R.raw.bgm).apply {
-						setVolume(0.3f, 0.3f)
+						setVolume(0.2f, 0.2f)
 						isLooping = true
 					}
 				}

@@ -18,7 +18,12 @@
 
 	<!--    文字颜色    -->
 	<color name="theme_txt_standard">#FF333333</color>   <!-- 标准色号 -->
+
+	<color name="difficulty_easy">#FF7FCC19</color>
+	<color name="difficulty_normal">#FFF4D03F</color>
+	<color name="difficulty_hard">#FFE55D87</color>
 	
+	<!--	以下是未整理的颜色	-->
 	
 	<color name="colorAccent">@color/app_base</color>
 	<color name="default_activity_background">#FFD0D0D0</color>
@@ -184,10 +189,6 @@
 	<color name="clr_press">#66000000</color>
 	<color name="clr_get_score_bg">#FFFFC367</color>
 	<color name="clr_get_score_activated_bg">#FFFFF4ED</color>
-
-	<color name="difficulty_easy">#FF7FCC19</color>
-	<color name="difficulty_normal">#FFF4D03F</color>
-	<color name="difficulty_hard">#FFE55D87</color>
 
 	
 </resources>

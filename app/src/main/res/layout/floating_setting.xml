@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:animateLayoutChanges="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/iv_setting"
@@ -15,7 +16,6 @@
         android:background="@drawable/bg_floating_setting"
         android:src="@mipmap/icon_setting"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/ll_setting"/>
     
@@ -32,7 +32,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_setting"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/iv_close"
@@ -53,6 +54,8 @@
                 android:id="@+id/tv_background_music"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:lines="1"
                 android:text="背景音乐："
                 android:textColor="@color/common_bt_text"
                 android:textSize="@dimen/floating_setting_text_size"/>
@@ -75,6 +78,8 @@
                 android:id="@+id/tv_dark_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:lines="1"
                 android:text="深色模式"
                 android:textColor="@color/common_bt_text"
                 android:textSize="@dimen/floating_setting_text_size"/>

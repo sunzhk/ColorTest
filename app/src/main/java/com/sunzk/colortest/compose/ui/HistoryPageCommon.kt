@@ -54,7 +54,7 @@ object HistoryPageCommon {
 		Column(modifier = Modifier
 			.fillMaxWidth()
 			.fillMaxHeight()
-			.background(Color(0xFFF0F0F0)), content = content)
+			.background(colorResource(R.color.common_bg)), content = content)
 	}
 
 	/**

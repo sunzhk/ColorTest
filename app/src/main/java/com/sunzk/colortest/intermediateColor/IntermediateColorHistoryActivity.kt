@@ -133,8 +133,8 @@ class IntermediateColorHistoryActivity: BaseActivity() {
 		val itemShape = RoundedCornerShape(10.dp)
 		Column(Modifier
 			.padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
-			.border(1.5.dp, colorResource(R.color.theme_txt_disable), shape = itemShape)
-			.background(Color.White, shape = itemShape)
+			.border(1.5.dp, colorResource(R.color.common_bt_stroke), shape = itemShape)
+			.background(colorResource(R.color.common_bt_bg), shape = itemShape)
 			.padding(8.dp)
 			.clickable { expanded = expanded.not() }) {
 			HistoryItemTitle(history)
@@ -162,7 +162,6 @@ class IntermediateColorHistoryActivity: BaseActivity() {
 	@Composable
 	private fun HistoryItemTitle(history: IntermediateColorResult) {
 		Row(modifier = Modifier.fillMaxWidth()) {
-			//			Text(text = "${history.id}.", fontSize = 15.sp, color = colorResource(R.color.theme_txt_standard), modifier = Modifier)
 			Text(text = history.date ?: "",
 				fontSize = 15.sp,
 				color = colorResource(R.color.theme_txt_standard),
