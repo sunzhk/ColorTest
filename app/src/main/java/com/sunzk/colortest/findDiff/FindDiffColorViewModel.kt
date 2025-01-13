@@ -28,7 +28,7 @@ class FindDiffColorViewModel : ViewModel() {
 		currentGameData.emitBy(randomData(level))
 	}
 
-	private fun randomData(level: Int): FindDiffColorData {
+	private fun randomData(level: Int): FindDiffColorPageData {
 		val countPerSide = level + 2
 		val baseColor = ColorUtils.randomHSBColor(0f, 0f, 0.2f)
 		val colorDiff = colorDiff(level)
@@ -39,7 +39,7 @@ class FindDiffColorViewModel : ViewModel() {
 		val diffB =
 			if (baseColor[2] > 0.6f) baseColor[2] - colorDiff else baseColor[2] + colorDiff
 		val diffColor = floatArrayOf(baseColor[0], diffS, diffB)
-		return FindDiffColorData(level, countPerSide, baseColor, diffColor, Random().nextInt(square(countPerSide)))
+		return FindDiffColorPageData(level, countPerSide, baseColor, diffColor, Random().nextInt(square(countPerSide)))
 	}
 
 	private fun colorDiff(level: Int): Float {
