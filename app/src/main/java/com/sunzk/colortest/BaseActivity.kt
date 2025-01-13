@@ -4,6 +4,7 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Window
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -29,6 +30,7 @@ open class BaseActivity : FragmentActivity() {
 	    } else {
             overridePendingTransition(0, 0)
         }
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
         Runtime.globalBGMSwitch.collect(lifecycleScope) {
             if (lifecycle.currentState == Lifecycle.State.RESUMED) {
                 whenBGMSwitch(it)

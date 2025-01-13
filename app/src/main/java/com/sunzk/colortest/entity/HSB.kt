@@ -45,6 +45,18 @@ class HSB {
         this.s = s
         this.b = b
     }
+    
+    fun update(h: Float, s: Float, b: Float) {
+        this.h = h
+        this.s = s
+        this.b = b
+    }
+    
+    fun update(hsb: HSB) {
+        this.h = hsb.h
+        this.s = hsb.s
+        this.b = hsb.b
+    }
 
     /**
      * RGB色值
