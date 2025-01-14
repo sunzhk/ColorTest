@@ -1,7 +1,6 @@
 package com.sunzk.colortest.mockColor
 
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
@@ -27,7 +26,6 @@ import com.sunzk.colortest.databinding.ActivityMockColorBinding
 import com.sunzk.colortest.db.MockColorResultTable
 import com.sunzk.colortest.db.bean.MockColorResult
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
-import com.sunzk.base.expand.emitBy
 import com.sunzk.colortest.dialog.CommonSettlementDialog
 import com.sunzk.colortest.entity.HSB
 import kotlinx.coroutines.*
@@ -69,17 +67,17 @@ class MockColorActivity : BaseActivity() {
 			showAnswer(v)
 		}
 		hsbColorSelector.onColorPick = { hsb ->
-			viewModel.currentPickHSB.update(hsb)
+			viewModel.pageData.value.pickHSB.update(hsb)
 			viewResult.setBackgroundColor(hsb.rgbColor)
 		}
 	}
 
 	private fun initDifficulty() = with(viewBinding) {
 		btDifficulty.adapter = ArrayAdapter(this@MockColorActivity, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, MockColorResult.Difficulty.entries.map { it.text })
-		btDifficulty.setSelection(MockColorResult.Difficulty.entries.indexOf(viewModel.currentDifficulty.value))
+		btDifficulty.setSelection(MockColorResult.Difficulty.entries.indexOf(viewModel.pageData.value.difficulty))
 		btDifficulty.onItemSelectedListener = object : OnItemSelectedListener {
 			override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-				viewModel.currentDifficulty.emitBy(MockColorResult.Difficulty.entries[position])
+				viewModel.switchDifficulty(MockColorResult.Difficulty.entries[position])
 			}
 
 			override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -89,32 +87,37 @@ class MockColorActivity : BaseActivity() {
 	}
 
 	private fun bindData() {
-		viewModel.currentDifficulty.collect(lifecycleScope) {
-			val color = when (it) {
-				MockColorResult.Difficulty.Hard -> R.color.difficulty_hard
-				MockColorResult.Difficulty.Normal -> R.color.difficulty_normal
-				MockColorResult.Difficulty.Easy -> R.color.difficulty_easy
+		viewModel.pageData.collect(lifecycleScope) { (difficulty, questionHSB, pickHSB) ->
+			handleDifficulty(difficulty)
+			handleQuestion(questionHSB)
+			handlePickColor(pickHSB)
+		}
+	}
+
+	private fun handleDifficulty(difficulty: MockColorResult.Difficulty) {
+		val color = when (difficulty) {
+			MockColorResult.Difficulty.Hard -> R.color.difficulty_hard
+			MockColorResult.Difficulty.Normal -> R.color.difficulty_normal
+			MockColorResult.Difficulty.Easy -> R.color.difficulty_easy
+		}
+		ResourcesCompat.getDrawable(resources, R.drawable.bg_common_bt, null)
+			?.mutate()
+			?.takeIfIs<GradientDrawable>()
+			?.let { drawable ->
+				drawable.setColor(resources.getColor(color, null))
+				viewBinding.btDifficulty.background = drawable
 			}
-			ResourcesCompat.getDrawable(resources, R.drawable.bg_common_bt, null)
-				?.mutate()
-				?.takeIfIs<GradientDrawable>()
-				?.let { drawable ->
-					drawable.setColor(resources.getColor(color, null))
-					viewBinding.btDifficulty.background = drawable
-				}
-		}
-		viewModel.currentQuestionHSB.collect(lifecycleScope) { currentQuestionHSB ->
-			val rgbColor = currentQuestionHSB.rgbColor
-			Log.d(TAG, "MockColorActivity#nextQuestion- $currentQuestionHSB -> ${rgbColor.toHexString()}")
-			viewBinding.viewDemo.setBackgroundColor(rgbColor)
-			viewBinding.tvAnswer.text = null
-			viewBinding.hsbColorSelector.isEnabled = true
-			viewBinding.hsbColorSelector.updateHSB(
-				viewModel.currentPickHSB.h,
-				viewModel.currentPickHSB.s,
-				viewModel.currentPickHSB.b
-			)
-		}
+	}
+
+	private fun handleQuestion(questionHSB: HSB) {
+		val rgbColor = questionHSB.rgbColor
+		Log.d(TAG, "MockColorActivity#nextQuestion- $questionHSB -> ${rgbColor.toHexString()}")
+		viewBinding.viewDemo.setBackgroundColor(rgbColor)
+		viewBinding.tvAnswer.text = null
+	}
+
+	private fun handlePickColor(pickHSB: HSB) {
+		viewBinding.hsbColorSelector.updateHSB(pickHSB.h, pickHSB.s, pickHSB.b)
 	}
 
 	override fun needBGM(): Boolean {
@@ -148,14 +151,14 @@ class MockColorActivity : BaseActivity() {
 	}
 
 	private fun showAnswer(v: View?) {
-		val question = viewModel.currentQuestionHSB.value
+		val question = viewModel.pageData.value.questionHSB
 		val answer = viewBinding.hsbColorSelector.hsb
 		lifecycleScope.launch {
 			saveResult(question, answer)
 			showScore(Runtime.testResultNumber)
 		}
 
-		val isRight = viewModel.currentDifficulty.value.isRight(question, answer)
+		val isRight = viewModel.pageData.value.difficulty.isRight(question, answer)
 		val dialog = CommonSettlementDialog(this, isRight)
 		dialog.onCancelClickListener = {
 			finish()
@@ -168,7 +171,7 @@ class MockColorActivity : BaseActivity() {
 
 	private suspend fun saveResult(question: HSB, answer: HSB) = withContext(GlobalDispatchers.IO) {
 		val result = MockColorResultTable.add(MockColorResult(
-			difficulty = viewModel.currentDifficulty.value,
+			difficulty = viewModel.pageData.value.difficulty,
 			question = question,
 			answer = answer
 		))
