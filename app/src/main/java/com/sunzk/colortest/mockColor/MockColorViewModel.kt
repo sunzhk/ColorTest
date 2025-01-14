@@ -3,10 +3,6 @@ package com.sunzk.colortest.mockColor
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.sunzk.base.expand.emitBy
-import com.sunzk.colortest.db.bean.IntermediateColorResult
-import com.sunzk.colortest.db.bean.MockColorResult
-import com.sunzk.colortest.intermediateColor.IntermediateColorViewModel
-import com.sunzk.colortest.intermediateColor.IntermediateColorViewModel.Companion
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

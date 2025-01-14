@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.sunzk.colortest.Runtime
-import com.sunzk.colortest.db.bean.IntermediateColorResult
+import com.sunzk.colortest.intermediateColor.IntermediateColorResult
 import com.sunzk.colortest.entity.HSB
 import java.util.ArrayList
 

@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,12 +37,10 @@ import androidx.lifecycle.lifecycleScope
 import com.sunzk.colortest.BaseActivity
 import com.sunzk.colortest.R
 import com.sunzk.colortest.db.MockColorResultTable
-import com.sunzk.colortest.db.bean.MockColorResult
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.base.expand.emitBy
 import com.sunzk.colortest.compose.ui.HistoryPageCommon
 import com.sunzk.colortest.compose.ui.HistoryPageCommon.drawColorContrast
-import com.sunzk.colortest.entity.HSB
 import com.sunzk.colortest.entity.StatisticsData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

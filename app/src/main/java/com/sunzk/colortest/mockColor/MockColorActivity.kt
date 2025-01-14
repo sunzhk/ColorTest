@@ -24,7 +24,6 @@ import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.Runtime
 import com.sunzk.colortest.databinding.ActivityMockColorBinding
 import com.sunzk.colortest.db.MockColorResultTable
-import com.sunzk.colortest.db.bean.MockColorResult
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.colortest.dialog.CommonSettlementDialog
 import com.sunzk.colortest.entity.HSB
