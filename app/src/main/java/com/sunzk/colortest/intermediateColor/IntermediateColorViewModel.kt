@@ -3,7 +3,6 @@ package com.sunzk.colortest.intermediateColor
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.sunzk.base.expand.emitBy
-import com.sunzk.base.utils.ColorUtils
 import com.sunzk.colortest.db.bean.IntermediateColorResult
 import com.sunzk.colortest.entity.HSB
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +38,7 @@ class IntermediateColorViewModel : ViewModel() {
     private fun createQuestion(difficulty: IntermediateColorResult.Difficulty = DEFAULT_DIFFICULTY): IntermediateColorPageData {
         Log.d(TAG, "IntermediateColorViewModel#randomRightColor- diff=$difficulty")
         // 先随机个左边的初始色
-        val nextLeftColor = HSB.random(0f, difficulty.minSBPercent / 100f, difficulty.minSBPercent / 100f)
+        val nextLeftColor = HSB.random(0f, difficulty.minSBPercent.toFloat(), difficulty.minSBPercent.toFloat())
         // 基于左边的颜色，生成一个右侧的颜色
         val randomIndex = Random().nextInt(3)
         val nextRightColor = randomRightColor(difficulty, nextLeftColor, randomIndex)

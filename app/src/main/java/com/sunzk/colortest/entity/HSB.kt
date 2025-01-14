@@ -20,9 +20,13 @@ class HSB {
 		const val COLOR_B_MIN = 0
 		const val COLOR_B_MAX = 100
 		const val COLOR_B_INTERVAL = 1
-		
+
 		fun random(minH: Float, minS: Float, minB: Float): HSB {
-			return HSB(ColorUtils.randomHSBColor(minH, minS, minB))
+			return HSB(ColorUtils.randomHSBColor(minH, minS / 100, minB / 100))
+		}
+
+		fun random(minH: Float, maxH: Float, minS: Float, maxS: Float, minB: Float, maxB: Float): HSB {
+			return HSB(ColorUtils.randomHSBColor(minH, maxH, minS / 100, maxS / 100, minB / 100, maxB / 100))
 		}
 	}
 
@@ -120,8 +124,19 @@ class HSB {
 
 		return true
 	}
+	
+	fun copy(h: Float = this.h, s: Float = this.s, b: Float = this.b): HSB {
+		return HSB(h, s, b)
+	}
 
 	fun clone(): HSB {
 		return HSB(h, s, b)
+	}
+
+	override fun hashCode(): Int {
+		var result = h.hashCode()
+		result = 31 * result + s.hashCode()
+		result = 31 * result + b.hashCode()
+		return result
 	}
 }

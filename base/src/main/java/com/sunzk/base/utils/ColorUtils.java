@@ -42,12 +42,15 @@ public class ColorUtils {
 		return randomHSBColor(0, 0, 0);
 	}
 
-
 	public static float[] randomHSBColor(float minH, float minS, float minB) {
+		return randomHSBColor(minH, 360f, minS, 1f, minB, 1f);
+	}
+
+	public static float[] randomHSBColor(float minH, float maxH, float minS, float maxS, float minB, float maxB) {
 		Random random = new Random();
-		float h = random.nextInt((int) (360 - minH)) + minH;
-		float s = (1.0f - minS) * random.nextFloat() + minS;
-		float b = (1.0f - minB) * random.nextFloat() + minB;
+		float h = random.nextInt((int) (maxH - minH)) + minH;
+		float s = (maxS - minS) * random.nextFloat() + minS;
+		float b = (maxB - minB) * random.nextFloat() + minB;
 		return new float[]{h, s, b};
 	}
 }
