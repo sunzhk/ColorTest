@@ -39,18 +39,18 @@ class SelectPicActivity : BaseActivity() {
             }
             false
         }
-        RxPermissions(this).request(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA
-        ).subscribe { granted: Boolean ->
-            if (granted) { // Always true pre-M
-                selectPic()
-            } else {
-                Toast.makeText(this, "请到设置修改权限", Toast.LENGTH_SHORT).show()
-                finish()
-            }
-        }
+//        RxPermissions(this).request(
+//            Manifest.permission.READ_EXTERNAL_STORAGE,
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//            Manifest.permission.CAMERA
+//        ).subscribe { granted: Boolean ->
+//            if (granted) { // Always true pre-M
+//                selectPic()
+//            } else {
+//                Toast.makeText(this, "请到设置修改权限", Toast.LENGTH_SHORT).show()
+//                finish()
+//            }
+//        }
     }
 
     private fun showColor(v: View, event: MotionEvent) {

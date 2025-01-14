@@ -302,6 +302,7 @@ object Logger {
 //						}
                     }
                 }
+            Unit
         }
         register(listener)
         //如果APK启动前U盘就已经插上了，就需要先判断一下当前的USB状态，直接写

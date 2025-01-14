@@ -8,16 +8,11 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder
 import com.arcsoft.closeli.utils.takeIfIs
 import com.google.gson.Gson
 import com.sunzk.base.expand.emitBy
 import com.sunzk.base.utils.Logger
 import com.sunzk.colortest.entity.ModeEntity
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.functions.Function
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.*
@@ -35,41 +30,7 @@ object Runtime {
 
     private val modeEntities: MutableList<ModeEntity> =
         ArrayList()
-    private var modeEntitiesWriterDisposable: Disposable? = null
 
-    fun writeModeListToDataStore() {
-        if (modeEntitiesWriterDisposable != null) {
-            modeEntitiesWriterDisposable!!.dispose()
-            modeEntitiesWriterDisposable = null
-        }
-        val dataStore =
-            RxPreferenceDataStoreBuilder(
-                context = MyApplication.instance!!, 
-                name = Constant.MODE_SELECT_DATA_NAME
-            ).build()
-        modeEntitiesWriterDisposable =
-            dataStore.updateDataAsync(
-                Function { preferences: Preferences ->
-                    val mutablePreferences = preferences.toMutablePreferences()
-                    val key =
-                        stringPreferencesKey(Constant.MODE_SELECT_DATA_KEY)
-                    mutablePreferences.set(
-                        key,
-                        Gson().toJson(modeEntities)
-                    )
-                    Single.just<Preferences>(
-                        mutablePreferences
-                    )
-                }
-            )
-                .subscribeOn(Schedulers.io())
-                .subscribe { preferences: Preferences?, throwable: Throwable? ->
-                    throwable?.let {
-                        Logger.w(TAG, "Runtime#writeModeListToDataStore- ", throwable)
-                    }
-                }
-    }
-    
     fun initConfig(context: Context) {
         val sp = context.getSharedPreferences(Constant.SP_NAME_APP, Context.MODE_PRIVATE)
         initBGMSwitch(sp)
