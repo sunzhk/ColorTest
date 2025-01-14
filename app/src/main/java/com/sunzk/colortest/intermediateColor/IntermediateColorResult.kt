@@ -1,4 +1,4 @@
-package com.sunzk.colortest.db.bean
+package com.sunzk.colortest.intermediateColor
 
 import android.util.Log
 import com.sunzk.colortest.entity.HSB

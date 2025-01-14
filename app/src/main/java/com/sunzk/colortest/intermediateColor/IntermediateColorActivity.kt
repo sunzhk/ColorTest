@@ -25,7 +25,6 @@ import com.sunzk.colortest.R
 import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.databinding.ActivityGuessColorBinding
 import com.sunzk.colortest.db.IntermediateColorResultTable
-import com.sunzk.colortest.db.bean.IntermediateColorResult
 import com.sunzk.colortest.dialog.CommonSettlementDialog
 import com.sunzk.colortest.entity.HSB
 import kotlinx.coroutines.launch

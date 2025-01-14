@@ -4,10 +4,9 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.sunzk.colortest.Runtime
-import com.sunzk.colortest.db.bean.MockColorResult
+import com.sunzk.colortest.mockColor.MockColorResult
 import com.sunzk.colortest.entity.HSB
 import java.util.ArrayList
-import java.util.Locale
 
 /**
  * 模仿颜色结果表
