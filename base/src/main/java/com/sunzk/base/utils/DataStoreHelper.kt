@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder
 import androidx.datastore.rxjava3.RxDataStore
-import com.sunzk.base.utils.Logger.w
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.functions.Function

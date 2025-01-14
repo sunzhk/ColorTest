@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -28,11 +29,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-//        javaCompileOptions {
-//            annotationProcessorOptions {
-//                arguments = [AROUTER_MODULE_NAME: project.getName()]
-//            }
-//        }
         kapt {
             arguments {
                 //根据模块名来命名路由根节点
@@ -41,9 +37,6 @@ android {
                 arg("AROUTER_GENERATE_DOC", "enable")
             }
         }
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
     }
     buildFeatures {
         buildConfig true
@@ -101,15 +94,16 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.recyclerView)
     implementation project(path: ':base')
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.fragment)
@@ -117,46 +111,26 @@ dependencies {
     
     implementation(libs.gson)
 
-    //RxJava3的依赖包
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-    //RxAndroid3的依赖包
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.4'
-
     //ARouter
-    implementation 'com.alibaba:arouter-api:1.4.1'
+    implementation("com.alibaba:arouter-api:1.4.1")
 //    annotationProcessor 'com.alibaba:arouter-compiler:1.5.2'
-    kapt 'com.alibaba:arouter-compiler:1.2.2'
+    kapt("com.alibaba:arouter-compiler:1.2.2")
 
     // 动态权限申请
-    implementation 'com.github.tbruyelle:rxpermissions:0.12'
+    implementation("com.github.tbruyelle:rxpermissions:0.12")
     // 拍照或从相册选择图片
-    implementation 'com.github.wildma:PictureSelector:2.1.0'
+    implementation("com.github.wildma:PictureSelector:2.1.0")
     // 显示大图，缩放、拖动
-    implementation 'com.shizhefei:LargeImageView:1.1.0'
+    implementation("com.shizhefei:LargeImageView:1.1.0")
 
-    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha07"
-    implementation "androidx.datastore:datastore-preferences-rxjava3:1.0.0-alpha07"
-    implementation "androidx.datastore:datastore-preferences-core:1.0.0-alpha07"
+    implementation(libs.bundles.datastore)
 
 //    implementation("com.squareup.moshi:moshi:1.13.0")
 //    implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
-//    implementation "androidx.datastore:datastore:1.0.0-alpha07"
-//    implementation "androidx.datastore:datastore-rxjava3:1.0.0-alpha07"
-//    implementation "androidx.datastore:datastore-core:1.0.0-alpha07"
-
 
     implementation(platform(libs.androidx.compose.bom))
-//    androidTestImplementation(composeBom)
-    implementation(libs.compose.material3)
-//    implementation(libs.compose.ui.tooling.preview)
     implementation(libs.bundles.compose)
-//    debugImplementation(libs.compose.ui.tooling)
-//    // Optional - Integration with activities
-    implementation(libs.androidx.activity.compose)
-//    // Optional - Integration with ViewModels
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     // Android Studio Preview support
-    implementation 'androidx.compose.ui:ui-tooling-preview'
-    debugImplementation 'androidx.compose.ui:ui-tooling'
+    debugImplementation libs.compose.ui.tooling
 }

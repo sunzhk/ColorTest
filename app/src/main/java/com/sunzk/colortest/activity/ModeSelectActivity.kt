@@ -127,7 +127,6 @@ class ModeSelectActivity : BaseActivity() {
 
 			private fun refreshModeEntityListInDataStore() {
 				Runtime.modeList = modeEntityList
-				Runtime.writeModeListToDataStore()
 			}
 		})
 		val touchHelper = ItemTouchHelper(callback)

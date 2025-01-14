@@ -3,8 +3,6 @@ package com.sunzk.base.utils
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStreamReader
 import java.util.*
 
@@ -41,7 +39,7 @@ object USBUtils {
     val allExternalSdcardPath: List<String>
         get() {
             val pathList: MutableList<String> = ArrayList()
-            var isr: InputStreamReader? = null
+            val isr: InputStreamReader?
             try {
                 // 运行mount命令，获取命令的输出，得到系统中挂载的所有目录
                 val runtime = Runtime.getRuntime()
@@ -64,10 +62,10 @@ object USBUtils {
                         if (line.contains("fat") || line.contains("fuse") || line.contains("ntfs")) {
                             // 将mount命令获取的列表分割，items[0]为设备名，items[1]为挂载路径
                             val items = line.split(" ").toTypedArray()
-                            if (items != null && items.size > 1) {
-                                val path = items[1].toLowerCase(Locale.getDefault())
+                            if (items.size > 1) {
+                                val path = items[1].lowercase()
                                 // 添加一些判断，确保是sd卡，如果是otg等挂载方式，可以具体分析并添加判断条件
-                                if (path != null && !pathList.contains(path) && path.contains("sd")) pathList.add(
+                                if (!pathList.contains(path) && path.contains("sd")) pathList.add(
                                     items[1]
                                 )
                             }
