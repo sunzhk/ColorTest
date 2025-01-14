@@ -1,4 +1,4 @@
-package com.sunzk.colortest.view.colorSelector
+package com.sunzk.colortest.view.colorPicker
 
 import android.content.Context
 import android.graphics.Canvas
@@ -15,7 +15,12 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.annotation.UiThread
+import androidx.core.view.marginEnd
+import androidx.core.view.marginStart
+import com.arcsoft.closeli.utils.takeIfIs
+import com.blankj.utilcode.util.ScreenUtils
 import com.sunzk.base.utils.ColorUtils
 import com.sunzk.colortest.entity.HSB
 import com.sunzk.demo.tools.ext.dp2px
@@ -42,6 +47,9 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 	constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : this(context, attrs, defStyleAttr, 0)
 	// </editor-fold>
 
+	override val pickerView: View
+		get() = this
+	
 	override val hsb: HSB
 		get() = HSB(hValue, sPercent, bPercent)
 
@@ -98,6 +106,37 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 		invalidate()
 		onColorPick?.invoke(hsb)
 	}
+	// </editor-fold>
+	
+	// <editor-fold desc="宽高计算">
+
+	private var widthSpecMode: Int = 0
+	private var heightSpecMode: Int = 0
+	private var widthSpecSize = 0
+	private var heightSpecSize = 0
+
+	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+		widthSpecMode = MeasureSpec.getMode(widthMeasureSpec)
+		heightSpecMode = MeasureSpec.getMode(heightMeasureSpec)
+		widthSpecSize = MeasureSpec.getSize(widthMeasureSpec)
+		heightSpecSize = MeasureSpec.getSize(heightMeasureSpec)
+		val spacing = paddingLeft + paddingRight + (layoutParams?.takeIfIs<MarginLayoutParams>()?.let { marginStart + marginEnd } ?: 0)
+		when (widthSpecMode) {
+			MeasureSpec.UNSPECIFIED, MeasureSpec.AT_MOST -> {
+				widthSpecSize = min(ScreenUtils.getAppScreenWidth(), ScreenUtils.getAppScreenHeight()) - spacing
+				heightSpecSize = widthSpecSize
+			}
+			MeasureSpec.EXACTLY -> {
+				widthSpecSize = min(widthSpecSize, heightSpecSize) - spacing
+				heightSpecSize = widthSpecSize
+			}
+		}
+		Log.d(TAG, "ColorWheelColorPicker#onMeasure- UNSPECIFIED=${MeasureSpec.UNSPECIFIED}, AT_MOST=${MeasureSpec.AT_MOST}, EXACTLY=${MeasureSpec.EXACTLY}")
+		Log.d(TAG, "ColorWheelColorPicker#onMeasure- widthSpecMode=$widthSpecMode, heightSpecMode=$heightSpecMode, widthSpecSize=$widthSpecSize, heightSpecSize=$heightSpecSize")
+		setMeasuredDimension(widthSpecSize, heightSpecSize)
+	}
+
 	// </editor-fold>
 
 	override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
