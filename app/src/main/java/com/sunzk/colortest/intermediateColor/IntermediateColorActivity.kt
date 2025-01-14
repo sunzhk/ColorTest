@@ -54,7 +54,7 @@ class IntermediateColorActivity : BaseActivity() {
 	
 	private fun initView() = with(viewBinding) {
 		initDifficultyUI()
-		hsbColorSelector.onColorPick = { hsb ->
+		hsbColorPicker.onColorPick = { hsb ->
 			viewModel.updateAnswerColor(hsb)
 			cdColorCenter.setCardBackgroundColor(hsb.rgbColor)
 		}
@@ -131,13 +131,13 @@ class IntermediateColorActivity : BaseActivity() {
 		viewBinding.cdColorLeft.setCardBackgroundColor(questionLeftColor.rgbColor)
 		viewBinding.cdColorRight.setCardBackgroundColor(questionRightColor.rgbColor)
 		viewBinding.cdColorCenter.setCardBackgroundColor(answerColor.rgbColor)
-		viewBinding.hsbColorSelector.updateHSB(answerColor.h, answerColor.s, answerColor.b)
+		viewBinding.hsbColorPicker.updateHSB(answerColor.h, answerColor.s, answerColor.b)
 	}
 
 	private fun lockHSBSelector(hsbBarLock: BooleanArray, targetColor: HSB) = with(viewBinding) {
 		Log.d(TAG, "IntermediateColorActivity#lockHSBSelector- hsbBarLock: $hsbBarLock, targetColor: $targetColor")
 		hsbBarLock.forEachIndexed { index, lock ->
-			hsbColorSelector.setLock(index, lock)
+			hsbColorPicker.setLock(index, lock)
 		}
 	}
 

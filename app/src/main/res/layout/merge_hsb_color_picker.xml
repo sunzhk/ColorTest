@@ -41,7 +41,7 @@
 		android:layout_marginBottom="@dimen/view_hsb_color_selector_seek_bar_input_margin_bottom">
 		<ImageView
 			android:id="@+id/iv_h_fine_tuning_left"
-			style="@style/HSBColorSelectorStepButton"
+			style="@style/HSBColorPickerStepButton"
 			android:src="@drawable/seek_fine_tuning_left"/>
 		<EditText
 			android:id="@+id/tv_h"
@@ -59,7 +59,7 @@
 			android:text="度"/>
 		<ImageView
 			android:id="@+id/iv_h_fine_tuning_right"
-			style="@style/HSBColorSelectorStepButton"
+			style="@style/HSBColorPickerStepButton"
 			android:src="@drawable/seek_fine_tuning_right"/>
 	</LinearLayout>
 		
@@ -99,7 +99,7 @@
 		android:layout_marginBottom="@dimen/view_hsb_color_selector_seek_bar_input_margin_bottom">
 		<ImageView
 			android:id="@+id/iv_s_fine_tuning_left"
-			style="@style/HSBColorSelectorStepButton"
+			style="@style/HSBColorPickerStepButton"
 			android:src="@drawable/seek_fine_tuning_left"/>
 		<EditText
 			android:id="@+id/tv_s"
@@ -117,7 +117,7 @@
 			android:text="%"/>
 		<ImageView
 			android:id="@+id/iv_s_fine_tuning_right"
-			style="@style/HSBColorSelectorStepButton"
+			style="@style/HSBColorPickerStepButton"
 			android:src="@drawable/seek_fine_tuning_right"/>
 	</LinearLayout>
 	
@@ -157,7 +157,7 @@
 		android:layout_marginBottom="@dimen/view_hsb_color_selector_seek_bar_input_margin_bottom">
 		<ImageView
 			android:id="@+id/iv_b_fine_tuning_left"
-			style="@style/HSBColorSelectorStepButton"
+			style="@style/HSBColorPickerStepButton"
 			android:src="@drawable/seek_fine_tuning_left"/>
 		<EditText
 			android:id="@+id/tv_b"
@@ -175,7 +175,7 @@
 			android:text="%"/>
 		<ImageView
 			android:id="@+id/iv_b_fine_tuning_right"
-			style="@style/HSBColorSelectorStepButton"
+			style="@style/HSBColorPickerStepButton"
 			android:src="@drawable/seek_fine_tuning_right"/>
 	</LinearLayout>
 

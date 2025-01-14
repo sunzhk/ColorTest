@@ -105,10 +105,12 @@
 				android:text="就是这个颜色了"/>
 		</LinearLayout>
 		
-		<com.sunzk.colortest.view.colorSelector.HSBColorSelector
-			android:id="@+id/hsb_color_selector"
+		<com.sunzk.colortest.view.colorPicker.MergedColorPicker
+			android:id="@+id/hsb_color_picker"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:layout_marginStart="20dp"
+			android:layout_marginEnd="20dp"
 			android:layout_marginBottom="15dp"/>
 			
 		<TextView
