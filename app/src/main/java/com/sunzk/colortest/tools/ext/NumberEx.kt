@@ -111,12 +111,12 @@ inline val Float.dp2px: Int
 inline val Int.sp2px: Int
 	get() = ConvertUtils.sp2px(this.toFloat())
 
-inline val Float.sp2px: Int
-	get() = ConvertUtils.sp2px(this)
+inline val Float.sp2px: Float
+	get() = ConvertUtils.sp2px(this).toFloat()
 
 inline val Int.px2dp: Int
 	get() = ConvertUtils.px2dp(this.toFloat())
-inline val Float.px2dp: Int
-	get() = ConvertUtils.px2dp(this.toFloat())
+inline val Float.px2dp: Float
+	get() = ConvertUtils.px2dp(this).toFloat()
 
 inline val Int.px: Dp get() = this.px2dp.dp

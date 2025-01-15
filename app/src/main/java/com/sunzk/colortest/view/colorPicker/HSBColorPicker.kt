@@ -329,7 +329,7 @@ class HSBColorPicker : LinearLayout, IColorPicker {
         viewBinding.tvB.isEnabled = enabled
     }
 
-    fun setLock(index: Int, lock: Boolean) {
+    override fun setLock(index: Int, lock: Boolean) {
         when (index) {
             0 -> {
                 viewBinding.llHContainer1.isVisible = !lock

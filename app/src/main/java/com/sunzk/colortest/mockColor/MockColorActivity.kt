@@ -112,7 +112,6 @@ class MockColorActivity : BaseActivity() {
 		val rgbColor = questionHSB.rgbColor
 		Log.d(TAG, "MockColorActivity#nextQuestion- $questionHSB -> ${rgbColor.toHexString()}")
 		viewBinding.viewDemo.setBackgroundColor(rgbColor)
-		viewBinding.tvAnswer.text = null
 	}
 
 	private fun handlePickColor(pickHSB: HSB) {
