@@ -1,4 +1,4 @@
-package com.sunzk.colortest.findDiff
+package com.sunzk.colortest.findDiffColor
 
 import android.os.Bundle
 import android.util.Log
@@ -9,12 +9,9 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.sunzk.base.expand.bindView
 import com.sunzk.base.expand.collect
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
-import com.sunzk.base.expand.livedata.dec
-import com.sunzk.base.expand.livedata.inc
 import com.sunzk.colortest.BaseActivity
 import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.databinding.ActivityFindDiffColorBinding
-import com.sunzk.colortest.entity.HSB
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

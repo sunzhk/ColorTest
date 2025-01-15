@@ -85,52 +85,52 @@ class ModeSelectActivity : BaseActivity() {
 				}
 			}
 		viewBinding.rvModeList.adapter = adapter
-		val callback: ItemTouchHelper.Callback = DragSwipeCallback(object : IDragSwipe {
-			override fun onItemSwapped(fromPosition: Int, toPosition: Int) {
-				Logger.d(
-					TAG,
-					"ModeSelectActivity#onItemSwapped- ",
-					fromPosition,
-					toPosition
-				)
-				if (fromPosition < toPosition) {
-					for (i in fromPosition until toPosition) {
-						Collections.swap(modeEntityList, i, i + 1)
-					}
-				} else {
-					for (i in fromPosition downTo toPosition + 1) {
-						Collections.swap(modeEntityList, i, i - 1)
-					}
-				}
-				adapter.notifyItemMoved(fromPosition, toPosition)
-				refreshModeEntityListInDataStore()
-			}
-
-			override fun onItemDeleted(position: Int) {
-				Logger.d(
-					TAG,
-					"ModeSelectActivity#onItemDeleted- ",
-					position
-				)
-			}
-
-			override fun onItemDone(position: Int) {
-				Logger.d(
-					TAG,
-					"ModeSelectActivity#onItemDone- ",
-					position
-				)
-				modeEntityList.removeAt(position)
-				adapter.notifyItemRemoved(position)
-				refreshModeEntityListInDataStore()
-			}
-
-			private fun refreshModeEntityListInDataStore() {
-				Runtime.modeList = modeEntityList
-			}
-		})
-		val touchHelper = ItemTouchHelper(callback)
-		touchHelper.attachToRecyclerView(viewBinding.rvModeList)
+//		val callback: ItemTouchHelper.Callback = DragSwipeCallback(object : IDragSwipe {
+//			override fun onItemSwapped(fromPosition: Int, toPosition: Int) {
+//				Logger.d(
+//					TAG,
+//					"ModeSelectActivity#onItemSwapped- ",
+//					fromPosition,
+//					toPosition
+//				)
+//				if (fromPosition < toPosition) {
+//					for (i in fromPosition until toPosition) {
+//						Collections.swap(modeEntityList, i, i + 1)
+//					}
+//				} else {
+//					for (i in fromPosition downTo toPosition + 1) {
+//						Collections.swap(modeEntityList, i, i - 1)
+//					}
+//				}
+//				adapter.notifyItemMoved(fromPosition, toPosition)
+//				refreshModeEntityListInDataStore()
+//			}
+//
+//			override fun onItemDeleted(position: Int) {
+//				Logger.d(
+//					TAG,
+//					"ModeSelectActivity#onItemDeleted- ",
+//					position
+//				)
+//			}
+//
+//			override fun onItemDone(position: Int) {
+//				Logger.d(
+//					TAG,
+//					"ModeSelectActivity#onItemDone- ",
+//					position
+//				)
+//				modeEntityList.removeAt(position)
+//				adapter.notifyItemRemoved(position)
+//				refreshModeEntityListInDataStore()
+//			}
+//
+//			private fun refreshModeEntityListInDataStore() {
+//				Runtime.modeList = modeEntityList
+//			}
+//		})
+//		val touchHelper = ItemTouchHelper(callback)
+//		touchHelper.attachToRecyclerView(viewBinding.rvModeList)
 	}
 
 	private fun checkAccess(): Boolean {

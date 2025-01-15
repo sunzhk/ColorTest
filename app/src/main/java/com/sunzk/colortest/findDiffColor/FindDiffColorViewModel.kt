@@ -1,15 +1,12 @@
-package com.sunzk.colortest.findDiff
+package com.sunzk.colortest.findDiffColor
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.sunzk.base.expand.emitBy
-import com.sunzk.base.utils.ColorUtils
 import com.sunzk.colortest.entity.HSB
 import com.sunzk.demo.tools.ext.square
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Random
-import kotlin.math.max
-import kotlin.math.min
 
 class FindDiffColorViewModel : ViewModel() {
 
