@@ -24,8 +24,8 @@ android {
         applicationId "com.sunzk.colortest"
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 17
-        versionName "2.7.0"
+        versionCode 18
+        versionName "2.7.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
