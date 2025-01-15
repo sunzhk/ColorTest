@@ -8,13 +8,14 @@
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="@dimen/common_title_height"
+		android:layout_marginTop="10dp">
 
 		<Spinner
 			android:id="@+id/bt_difficulty"
 			android:layout_width="wrap_content"
-			android:layout_height="39dp"
-			android:layout_margin="10dp"
+			android:layout_height="match_parent"
+			android:layout_marginStart="10dp"
 			style="@style/CommonButton"
 			android:padding="5dp"
 			android:overlapAnchor="false"
@@ -23,28 +24,30 @@
 			android:gravity="center"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"/>
+		
+		<ImageView
+			android:id="@+id/iv_difficulty_hint"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_marginStart="10dp"
+			android:padding="3dp"
+			android:src="@mipmap/icon_common_info"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintTop_toTopOf="@+id/bt_difficulty"
+			app:layout_constraintBottom_toBottomOf="@+id/bt_difficulty"
+			app:layout_constraintStart_toEndOf="@+id/bt_difficulty"/>
 
 		<Button
 			android:id="@+id/bt_history"
-			android:layout_width="81dp"
-			android:layout_height="39dp"
-			android:layout_margin="10dp"
+			android:layout_width="61dp"
+			android:layout_height="match_parent"
+			android:layout_marginEnd="10dp"
 			style="@style/CommonButton"
-			android:padding="5dp"
-			android:text="查看历史"
+			android:gravity="center"
+			android:text="@string/list_history"
 			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
-	
-	<TextView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="拖动下方的滚动条，使中间色块为左右两个色块的中间色\nP.S.左右色块的色相、饱和度、明度中有两项是相同的"
-		android:textColor="@color/theme_txt_disable"
-		android:textSize="13sp"
-		android:layout_marginTop="20dp"
-		android:layout_marginStart="20dp"
-		android:layout_marginEnd="20dp"/>
 	
 	<View
 		android:layout_width="match_parent"
@@ -106,7 +109,7 @@
 			android:padding="10dp"
 			android:text="就是这个颜色了"/>
 	</LinearLayout>
-	<com.sunzk.colortest.view.colorPicker.HSBColorPicker
+	<com.sunzk.colortest.view.colorPicker.MergedColorPicker
 		android:id="@+id/hsb_color_picker"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

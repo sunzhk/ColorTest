@@ -17,4 +17,10 @@ interface IColorPicker {
 	
 	@UiThread
 	fun updateHSB(h: Float, s: Float, b: Float)
+
+	/**
+	 * 锁定或解锁HSB中的一项
+	 */
+	@UiThread
+	fun setLock(index: Int, lock: Boolean)
 }

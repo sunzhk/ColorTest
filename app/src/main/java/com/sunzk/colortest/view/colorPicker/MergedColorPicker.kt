@@ -2,6 +2,7 @@ package com.sunzk.colortest.view.colorPicker
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import androidx.lifecycle.findViewTreeLifecycleOwner
@@ -58,7 +59,7 @@ class MergedColorPicker: FrameLayout, IColorPicker {
 					onColorPick?.invoke(hsb)
 				}
 				colorPicker.pickerView.visibility = if (type == Runtime.colorPickerType.value) View.VISIBLE else View.GONE
-				addView(colorPicker.pickerView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
+				addView(colorPicker.pickerView, FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).also { it.gravity = Gravity.CENTER })
 			}
 		}
 	}
@@ -80,6 +81,10 @@ class MergedColorPicker: FrameLayout, IColorPicker {
 
 	override fun updateHSB(h: Float, s: Float, b: Float) {
 		colorPickerMap.values.forEach { it.updateHSB(h, s, b) }
+	}
+
+	override fun setLock(index: Int, lock: Boolean) {
+		colorPickerMap.values.forEach { it.setLock(index, lock) }
 	}
 
 	private fun selectColorPicker(selectedType: ColorPickerType) {
