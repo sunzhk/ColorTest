@@ -1,4 +1,4 @@
-package com.sunzk.colortest.findDiff
+package com.sunzk.colortest.findDiffColor
 
 import com.sunzk.colortest.entity.HSB
 

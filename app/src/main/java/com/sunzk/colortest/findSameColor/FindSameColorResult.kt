@@ -1,4 +1,4 @@
-package com.sunzk.colortest.findSame
+package com.sunzk.colortest.findSameColor
 
 data class FindSameColorResult(
 	val difficulty: FindSameColorResult.Difficulty

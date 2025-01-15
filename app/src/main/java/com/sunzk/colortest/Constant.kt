@@ -1,10 +1,11 @@
 package com.sunzk.colortest
 
-import com.sunzk.colortest.findDiff.FindDiffColorActivity
+import com.sunzk.colortest.findDiffColor.FindDiffColorActivity
 import com.sunzk.colortest.intermediateColor.IntermediateColorActivity
 import com.sunzk.colortest.mockColor.MockColorActivity
 import com.sunzk.colortest.entity.GameMode
 import com.sunzk.colortest.entity.ModeEntity
+import com.sunzk.colortest.findSameColor.FindSameColorActivity
 
 object Constant {
 
@@ -25,7 +26,7 @@ object Constant {
 			ModeEntity("标准模式", GameMode.MockColor, MockColorActivity::class.java.name),
 			ModeEntity("找中间色", GameMode.IntermediateColor, IntermediateColorActivity::class.java.name),
 			ModeEntity("找不同", GameMode.FindDiffColor, FindDiffColorActivity::class.java.name),
-//			ModeEntity("选图片", SelectPicActivity::class.java.name)
+			ModeEntity("找相同", GameMode.FindSameColor, FindSameColorActivity::class.java.name)
 		)
 	}
 }

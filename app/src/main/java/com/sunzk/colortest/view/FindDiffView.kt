@@ -21,6 +21,11 @@ class FindDiffView : FrameLayout {
 		private const val CORNER_RADIUS = 5
 	}
 
+	var needSpacing: Boolean = true
+		set(value) {
+			field = value
+			resetCount(countPerSide, true)
+		}
 	private var spacing = 0
 	private lateinit var colorViewMap: Array<Array<CustomItemView?>>
 	private val viewArrayList = ArrayList<CustomItemView?>()
@@ -88,7 +93,9 @@ class FindDiffView : FrameLayout {
 	}
 
 	private fun calSpacing(context: Context, countPerSide: Int): Int {
-		return DisplayUtil.dip2px(context, 3 + 3 * 1.0f / countPerSide)
+		return if (needSpacing) {
+			DisplayUtil.dip2px(context, 3 + 3f / countPerSide)
+		} else 0
 	}
 
 	/**
@@ -180,6 +187,7 @@ class FindDiffView : FrameLayout {
 		viewSideLength: Int,
 	): CustomItemView {
 		val finalCardView = cardView?.apply { reset() } ?: CustomItemView(context, itemBorderColor)
+		finalCardView.needCorner(needSpacing)
 		val layoutParams = createLayoutParams(row, column, viewSideLength)
 		Log.d(TAG, "createOrResetColorView: $row-$column : ${layoutParams.leftMargin}-${layoutParams.topMargin}")
 		this.addView(finalCardView, layoutParams)
@@ -233,6 +241,10 @@ class FindDiffView : FrameLayout {
 		
 		fun reset() {
 			drawable.setStroke(0, Color.TRANSPARENT)
+		}
+
+		fun needCorner(needSpacing: Boolean) {
+			drawable.cornerRadius = if (needSpacing) CORNER_RADIUS.dp2px.toFloat() else 0f
 		}
 	}
 }

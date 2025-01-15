@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 /**
  * 猜两个颜色的中间色
  */
-@Route(path = RouteInfo.PATH_ACTIVITY_GUESS_COLOR)
+@Route(path = RouteInfo.PATH_ACTIVITY_INTERMEDIATE_COLOR)
 class IntermediateColorActivity : BaseActivity() {
 
 	companion object {

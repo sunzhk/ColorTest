@@ -13,5 +13,10 @@
     "path": "activityFindDiffColor",
     "gameMode": "FindDiffColor",
     "title": "找不同"
+  },
+  {
+    "path": "activityFindSameColor",
+    "gameMode": "FindSameColor",
+    "title": "找相同"
   }
 ]
