@@ -66,6 +66,7 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.0"}
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 
@@ -76,6 +77,6 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 "datastore" = ["androidx-datastore-preferences", "androidx-datastore-preferences-core"]
 "androidx_widget" = ["androidx_viewpager2", "androidx_cardview", "androidx_constraintlayout"]
 "jiguang" = ["jiguang-jpush", "jiguang-jcore", "jiguang-plugin-vivo", "jiguang-plugin-oppo", "jiguang-plugin-xiaomi"]
-"compose" = ["androidx-compose-bom", "androidx-compose-foundation", "compose-material3", "androidx-activity-compose", "androidx-lifecycle-viewmodel-compose", "compose-ui-tooling-preview"]
+"compose" = ["androidx-compose-bom", "androidx-compose-foundation", "compose-material3", "compose-constraintlayout", "androidx-activity-compose", "androidx-lifecycle-viewmodel-compose", "compose-ui-tooling-preview"]
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
