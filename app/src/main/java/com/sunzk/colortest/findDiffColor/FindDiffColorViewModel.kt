@@ -34,8 +34,10 @@ class FindDiffColorViewModel : ViewModel() {
 		val baseColor = HSB.random(0f, 360f, 30f, 90f, 30f, 90f)
 		val colorDiff = colorDiff(level)
 		Log.d(TAG, "resetColor-colorDiff: $colorDiff")
-		val diffSmall = colorDiff / 20
+		val diffSmall = colorDiff
 		val diffColor = baseColor.copy(
+//			h = if (baseColor[0] > 180f) baseColor[0] - colorDiff else baseColor[0] + colorDiff,
+//			s = if (baseColor[1] > 50f) baseColor[1] - colorDiff else baseColor[1] + colorDiff,
 			s = if (baseColor[1] > 50f) baseColor[1] - diffSmall else baseColor[1] + diffSmall, 
 			b = if (baseColor[2] > 60f) baseColor[2] - colorDiff else baseColor[2] + colorDiff
 		)
@@ -44,6 +46,7 @@ class FindDiffColorViewModel : ViewModel() {
 
 	private fun colorDiff(level: Int): Float {
 		Log.d(TAG, "getColorDiff: " + level + " - " + 0.3f / (level * 10))
-		return 1 + (8f / (level * 1.6f))
+//		return 1 + (8f / Math.pow(level.toDouble(), 1.6).toFloat())
+		return 1f + 5f / level.toFloat()
 	}
 }

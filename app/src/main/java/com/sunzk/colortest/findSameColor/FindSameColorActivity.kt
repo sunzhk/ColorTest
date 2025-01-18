@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -20,18 +24,25 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -40,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -148,9 +160,10 @@ class FindSameColorActivity : BaseActivity() {
 	@Composable
 	fun ColumnScope.GameContent(modifier: Modifier, pageData: FindSameColorPageData, count: Int, boxWidth: Dp, exampleBoxWidth: Dp) {
 		CountDownTimer(modifier)
-		GameScoring()
+		Scoreboard(Modifier
+			.padding(top = 30.dp))
 		ColorBoxArea(Modifier
-			.padding(top = 50.dp)
+			.padding(top = 30.dp)
 			.align(Alignment.CenterHorizontally), pageData.boxColors, count, boxWidth)
 		ExampleColorBox(Modifier
 			.padding(top = 70.dp)
@@ -179,6 +192,7 @@ class FindSameColorActivity : BaseActivity() {
 	 */
 	@Composable
 	fun ColorBoxArea(modifier: Modifier, boxColors: List<HSB>, count: Int, width: Dp) {
+		val boxCoverStateMap = HashMap<Int, MutableIntState>()
 		Column(modifier = modifier.then(Modifier.size(width, width))) {
 			repeat(count) { columnIndex ->
 				Row(modifier = Modifier
@@ -186,9 +200,11 @@ class FindSameColorActivity : BaseActivity() {
 					.weight(1f)) {
 					repeat(count) { rowIndex ->
 						Log.d(TAG, "FindSameColorActivity#ColorBoxArea- column=$columnIndex, row=$rowIndex")
+						val index = columnIndex * count + rowIndex
 						SelectableBox(Modifier
 							.fillMaxHeight()
-							.weight(1f), boxColors[columnIndex * count + rowIndex])
+							.weight(1f), index, boxColors[index],
+							boxCoverStateMap)
 					}
 				}
 			}
@@ -196,32 +212,47 @@ class FindSameColorActivity : BaseActivity() {
 	}
 
 	@Composable
-	fun SelectableBox(modifier: Modifier, color: HSB) {
-		var isRight by remember { mutableStateOf(false) }
-		Box(modifier = modifier.then(Modifier
+	fun SelectableBox(modifier: Modifier, index: Int, color: HSB, coverStateMap: HashMap<Int, MutableIntState>) {
+		val boxCoverState = coverStateMap.getOrPut(index) { mutableIntStateOf(0) }
+		ConstraintLayout(modifier = modifier.then(Modifier
 			.background(color = color.composeColor)
 			.let {
-				if (isRight) {
+				if (boxCoverState.intValue == 1) {
 					it.border(4.dp, colorResource(R.color.white_50))
 				} else {
 					it
 				}
 			}
-			.onClick(100) {
+			.onClick(300) {
 				Log.d(TAG, "FindSameColorActivity#SelectableBox- color=$color")
-				if (isRight) {
+				if (boxCoverState.intValue > 0 || coverStateMap.any { (_, value) -> value.intValue == 1 }) {
 					return@onClick
 				}
-				isRight = (color == viewModel.exampleColor)
+				val isRight = (color == viewModel.exampleColor)
 				viewModel.onColorClick(isRight)
 				if (isRight) {
 					lifecycleScope.launch {
-						delay(400)
-						viewModel.nextQuestion()
-						isRight = false
+						boxCoverState.intValue = 1
+						delay(500)
+						coverStateMap.values.forEach { it.intValue = 0 }
 					}
+				} else {
+					boxCoverState.intValue = 2
 				}
-			}))
+			})) {
+			if (boxCoverState.intValue == 2) {
+				Image(painter = painterResource(R.mipmap.icon_find_same_wrong),
+					contentDescription = "",
+					modifier = Modifier.constrainAs(createRefs()[0]) {
+						start.linkTo(parent.start)
+						end.linkTo(parent.end)
+						top.linkTo(parent.top)
+						bottom.linkTo(parent.bottom)
+						height = Dimension.percent(0.8f)
+						width = Dimension.percent(0.8f)
+					}.alpha(0.8f))
+			}
+		}
 	}
 
 	/**
@@ -245,7 +276,7 @@ class FindSameColorActivity : BaseActivity() {
 				.fillMaxWidth()
 				.fillMaxHeight())) {
 			Text("游戏结束", fontSize = 35.sp, color = colorResource(R.color.theme_txt_standard), textAlign = TextAlign.Center, modifier = Modifier.padding(top = 60.dp))
-			GameScoring(Modifier.padding(top = 40.dp))
+			Scoreboard(Modifier.padding(top = 40.dp))
 			CorrectRateHint()
 			Row(modifier = Modifier
 				.padding(top = 40.dp)
@@ -290,10 +321,10 @@ class FindSameColorActivity : BaseActivity() {
 	// </editor-fold>
 
 	/**
-	 * 得分情况
+	 * 计分板
 	 */
 	@Composable
-	fun GameScoring(modifier: Modifier = Modifier) {
+	fun Scoreboard(modifier: Modifier = Modifier) {
 		Row(horizontalArrangement = Arrangement.Center,
 			modifier = modifier.then(Modifier
 				.fillMaxWidth()
@@ -306,6 +337,50 @@ class FindSameColorActivity : BaseActivity() {
 			Text("正确次数\n$rightCount", fontSize = 21.sp, color = colorResource(R.color.theme_txt_standard), textAlign = TextAlign.Center)
 			Box(modifier = Modifier.weight(1f))
 		}
+		Box(modifier = Modifier
+			.padding(top = 20.dp)
+			.wrapContentWidth()) {
+			Text("总分 ${viewModel.score}", fontSize = 21.sp, color = colorResource(R.color.theme_txt_standard), textAlign = TextAlign.Center, modifier = Modifier
+				.padding(top = 30.dp)
+				.wrapContentSize())
+			FloatingNumberAnimation()
+		}
+	}
+
+	@Composable
+	fun BoxScope.FloatingNumberAnimation() {
+		val addScore by viewModel.addScoreEvent.collectAsStateWithLifecycle(0L to -1)
+		var isVisible by remember { mutableStateOf(false) }
+		val alphaAnim by animateFloatAsState(
+			animationSpec = tween(350), 
+			targetValue = if (isVisible) 1f else 0f,
+			label = "alpha"
+		)
+		val translateYAnim by animateFloatAsState(
+			animationSpec = tween(320),
+			targetValue = if (isVisible) -100f else 0f,
+			label = "translateY"
+		)
+		LaunchedEffect(addScore) {
+			if (addScore.second >= 0) {
+				isVisible = true
+				delay(250)
+				isVisible = false
+			}
+		}
+		Text(
+			text = "+${addScore.second}",
+			fontSize = 23.sp, 
+			color = colorResource(R.color.theme_txt_standard), 
+			textAlign = TextAlign.Center,
+			modifier = Modifier
+				.align(Alignment.BottomEnd)
+				.graphicsLayer {
+					alpha = alphaAnim
+					translationY = translateYAnim
+				},
+//				style = MaterialTheme.typography.headlineLarge
+		)
 	}
 	
 	@Composable
