@@ -1,5 +1,6 @@
 package com.sunzk.colortest.findSameColor
 
+import android.util.Log
 import android.util.Range
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.sunzk.base.expand.livedata.inc
 import com.sunzk.colortest.entity.HSB
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,13 +18,11 @@ import kotlin.random.Random
 class FindSameColorViewModel: ViewModel() {
 	companion object {
 		private const val TAG: String = "FindSameColorViewModel"
-		private const val GAME_TIME = 15_000L
+		private const val GAME_TIME = 60_000L
 	}
 	
 	private val _pageData = MutableStateFlow(newPageData(FindSameColorResult.Difficulty.Normal))
 	val pageData: StateFlow<FindSameColorPageData> = _pageData
-
-	val gameCountDown = MutableStateFlow(GAME_TIME)
 
 	/**
 	 * 游戏状态
@@ -30,6 +30,12 @@ class FindSameColorViewModel: ViewModel() {
 	private val _gameState = MutableStateFlow(GameState.Ready)
 	val gameState: StateFlow<GameState> = _gameState
 
+	// <editor-fold desc="每一轮游戏的临时参数">
+	/**
+	 * 剩余时长
+	 */
+	val gameCountDown = MutableStateFlow(GAME_TIME)
+	private var countTimeJob: Job? = null
 	/**
 	 * 点击次数
 	 */
@@ -40,35 +46,52 @@ class FindSameColorViewModel: ViewModel() {
 	 */
 	val rightCount = MutableStateFlow(0)
 
+	/**
+	 * 本轮得分
+	 */
+	var score = 0
+
+	/**
+	 * 加分事件
+	 */
+	val addScoreEvent = MutableSharedFlow<Pair<Long, Int>>()
+
+	private var wrongClickCount = 0
+	private val _wrongClickAlert = MutableStateFlow(false)
+	// </editor-fold>
+
 	val difficulty: FindSameColorResult.Difficulty
 		get() = pageData.value.difficulty
 	
 	val exampleColor: HSB
 		get() = pageData.value.exampleColor
 
-	private var wrongClickCount = 0
-	private val _wrongClickAlert = MutableStateFlow(false)
 	val wrongClickAlert : StateFlow<Boolean> = _wrongClickAlert
-	
-	private var countTimeJob: Job? = null
-	
+
+	/**
+	 * 准备一场新的游戏，从选择难度开始
+	 */
 	fun prepareGame() {
-		resetWrongClick()
+		resetRoundData()
 		_gameState.emitBy(GameState.Ready)
 		countTimeJob?.cancel()
 		gameCountDown.emitBy(GAME_TIME)
 		_wrongClickAlert.emitBy(false)
 	}
-	
+
+	/**
+	 * 开始新一轮游戏
+	 */
 	fun startNewGame(difficulty: FindSameColorResult.Difficulty) {
-		resetWrongClick()
-		clickCount.emitBy(0)
-		rightCount.emitBy(0)
+		resetRoundData()
 		nextQuestion(difficulty)
 		startPlayGame()
 	}
-	
-	fun nextQuestion(difficulty: FindSameColorResult.Difficulty = _pageData.value.difficulty) {
+
+	/**
+	 * 下一题
+	 */
+	private fun nextQuestion(difficulty: FindSameColorResult.Difficulty = _pageData.value.difficulty) {
 		wrongClickCount = 0
 		_pageData.emitBy(newPageData(difficulty))
 	}
@@ -133,7 +156,6 @@ class FindSameColorViewModel: ViewModel() {
 
 	private fun startPlayGame() {
 		countTimeJob = viewModelScope.launch {
-			resetWrongClick()
 			_gameState.emitBy(GameState.Playing)
 			var lastTime = GAME_TIME
 			do {
@@ -145,22 +167,39 @@ class FindSameColorViewModel: ViewModel() {
 			_gameState.emitBy(GameState.Over)
 		}
 	}
-	
+
 	/**
 	 * 记一下点错了几次，瞎点我可就要骂人了
 	 */
 	fun onColorClick(isRight: Boolean) {
 		clickCount.inc()
 		if (isRight) {
+			// 做对了，加一下得分
+			val addScore = difficulty.addScore(wrongClickCount + 1)
+			Log.d(TAG, "FindSameColorViewModel#onColorClick- 难度加成${difficulty.ordinal + 1}, 点击次数${wrongClickCount + 1}, 加分$addScore")
+			addScoreEvent.emitBy(System.currentTimeMillis() to addScore)
+			score += addScore
+			wrongClickCount = 0
 			rightCount.inc()
+			viewModelScope.launch {
+				delay(400)
+				nextQuestion()
+			}
 		} else {
 			wrongClickCount++
 		}
-		if (wrongClickCount >= (difficulty.boxNumber / 2)) {
-			wrongClickCount = 0
+//		if (wrongClickCount >= (difficulty.boxNumber / 2)) {
+//			wrongClickCount = 0
 //			改成计时计分模式了，就不要纠结连点了几次了吧
 //			_wrongClickAlert.emitBy(true)
-		}
+//		}
+	}
+	
+	private fun resetRoundData() {
+		resetWrongClick()
+		clickCount.emitBy(0)
+		rightCount.emitBy(0)
+		score = 0
 	}
 	
 	fun resetWrongClick() {
