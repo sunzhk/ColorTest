@@ -1,7 +1,6 @@
 package com.sunzk.colortest.findSameColor
 
 import android.util.Range
-import org.jetbrains.annotations.TestOnly
 
 data class FindSameColorResult(
 	val difficulty: Difficulty,
@@ -10,9 +9,9 @@ data class FindSameColorResult(
 ) {
 
 	enum class Difficulty(val text: String, val boxNumber: Int, private val maxTryCount: Int, private val scoreMagnification: Float, val hDiffRange: Range<Int>, val sDiffRange: Range<Int>, val bDiffRange: Range<Int>) {
-		Easy("简单", 4, 3, 1f, Range(5, 10), Range(5, 10), Range(5, 10)),
-		Normal("普通", 9, 5, 2f, Range(4, 8), Range(4, 8), Range(4, 8)),
-		Hard("困难", 16, 9, 3f, Range(3, 6), Range(3, 6), Range(3, 6));
+		Easy("简单", 4, 2, 1f, Range(10, 20), Range(8, 14), Range(8, 14)),
+		Normal("普通", 9, 4, 2f, Range(9, 19), Range(7, 14), Range(7, 14)),
+		Hard("困难", 16, 8, 3f, Range(8, 18), Range(6, 14), Range(6, 14));
 		
 		fun addScore(clickCount: Int): Int {
 			return if (clickCount > maxTryCount) {

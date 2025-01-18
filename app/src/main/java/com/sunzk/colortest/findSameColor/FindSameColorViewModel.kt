@@ -12,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -37,9 +38,9 @@ class FindSameColorViewModel: ViewModel() {
 	val gameCountDown = MutableStateFlow(GAME_TIME)
 	private var countTimeJob: Job? = null
 	/**
-	 * 点击次数
+	 * 这轮游戏的点击次数
 	 */
-	val clickCount = MutableStateFlow(0)
+	val roundClickCount = MutableStateFlow(0)
 
 	/**
 	 * 正确次数
@@ -56,8 +57,7 @@ class FindSameColorViewModel: ViewModel() {
 	 */
 	val addScoreEvent = MutableSharedFlow<Pair<Long, Int>>()
 
-	private var wrongClickCount = 0
-	private val _wrongClickAlert = MutableStateFlow(false)
+	private var currentColorClickCount = 0
 	// </editor-fold>
 
 	val difficulty: FindSameColorResult.Difficulty
@@ -66,7 +66,8 @@ class FindSameColorViewModel: ViewModel() {
 	val exampleColor: HSB
 		get() = pageData.value.exampleColor
 
-	val wrongClickAlert : StateFlow<Boolean> = _wrongClickAlert
+	private val _pausingAlert = MutableStateFlow(false)
+	val pausingAlert : StateFlow<Boolean> = _pausingAlert
 
 	/**
 	 * 准备一场新的游戏，从选择难度开始
@@ -75,8 +76,6 @@ class FindSameColorViewModel: ViewModel() {
 		resetRoundData()
 		_gameState.emitBy(GameState.Ready)
 		countTimeJob?.cancel()
-		gameCountDown.emitBy(GAME_TIME)
-		_wrongClickAlert.emitBy(false)
 	}
 
 	/**
@@ -85,14 +84,24 @@ class FindSameColorViewModel: ViewModel() {
 	fun startNewGame(difficulty: FindSameColorResult.Difficulty) {
 		resetRoundData()
 		nextQuestion(difficulty)
-		startPlayGame()
+		startPlayGame(GAME_TIME)
+	}
+	
+	fun pauseGame() {
+		_pausingAlert.emitBy(true)
+		countTimeJob?.cancel()
+	}
+	
+	fun continueGame() {
+		_pausingAlert.emitBy(false)
+		startPlayGame(gameCountDown.value)
 	}
 
 	/**
 	 * 下一题
 	 */
 	private fun nextQuestion(difficulty: FindSameColorResult.Difficulty = _pageData.value.difficulty) {
-		wrongClickCount = 0
+		currentColorClickCount = 0
 		_pageData.emitBy(newPageData(difficulty))
 	}
 
@@ -154,14 +163,17 @@ class FindSameColorViewModel: ViewModel() {
 		}
 	}
 
-	private fun startPlayGame() {
+	private fun startPlayGame(countDownTime: Long) {
 		countTimeJob = viewModelScope.launch {
 			_gameState.emitBy(GameState.Playing)
-			var lastTime = GAME_TIME
+			var lastTime = countDownTime
 			do {
+				if (!isActive) {
+					return@launch
+				}
 				gameCountDown.emitBy(lastTime)
-				delay(999)
-				lastTime -= 1000
+				delay(99)
+				lastTime -= 100
 			} while (gameCountDown.value > 0)
 			resetWrongClick()
 			_gameState.emitBy(GameState.Over)
@@ -172,49 +184,43 @@ class FindSameColorViewModel: ViewModel() {
 	 * 记一下点错了几次，瞎点我可就要骂人了
 	 */
 	fun onColorClick(isRight: Boolean) {
-		clickCount.inc()
+		roundClickCount.inc()
+		currentColorClickCount++
 		if (isRight) {
 			// 做对了，加一下得分
-			val addScore = difficulty.addScore(wrongClickCount + 1)
-			Log.d(TAG, "FindSameColorViewModel#onColorClick- 难度加成${difficulty.ordinal + 1}, 点击次数${wrongClickCount + 1}, 加分$addScore")
+			val addScore = difficulty.addScore(currentColorClickCount)
+			Log.d(TAG, "FindSameColorViewModel#onColorClick- 难度加成${difficulty.ordinal + 1}, 点击次数${currentColorClickCount + 1}, 加分$addScore")
 			addScoreEvent.emitBy(System.currentTimeMillis() to addScore)
 			score += addScore
-			wrongClickCount = 0
+			currentColorClickCount = 0
 			rightCount.inc()
 			viewModelScope.launch {
 				delay(400)
 				nextQuestion()
 			}
-		} else {
-			wrongClickCount++
 		}
-//		if (wrongClickCount >= (difficulty.boxNumber / 2)) {
-//			wrongClickCount = 0
-//			改成计时计分模式了，就不要纠结连点了几次了吧
-//			_wrongClickAlert.emitBy(true)
-//		}
 	}
 	
 	private fun resetRoundData() {
 		resetWrongClick()
-		clickCount.emitBy(0)
+		gameCountDown.value = GAME_TIME
+		roundClickCount.emitBy(0)
 		rightCount.emitBy(0)
 		score = 0
 	}
 	
-	fun resetWrongClick() {
-		wrongClickCount = 0
-		_wrongClickAlert.emitBy(false)
+	private fun resetWrongClick() {
+		currentColorClickCount = 0
 	}
 
 	/**
 	 * 计算一下正确率
 	 */
 	fun correctRatePercent(): Float {
-		if (clickCount.value <= 0) {
+		if (roundClickCount.value <= 0) {
 			return 0f
 		}
-		return rightCount.value.toFloat() * 100f / clickCount.value.toFloat()
+		return rightCount.value.toFloat() * 100f / roundClickCount.value.toFloat()
 	}
 
 	enum class GameState {

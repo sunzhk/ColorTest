@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
@@ -104,7 +105,7 @@ class FindSameColorActivity : BaseActivity() {
 				GameState.Over -> { GameOver(Modifier.padding(top = 50.dp)) }
 			}
 		}
-		WrongAlertDialog()
+		PausingAlertDialog()
 	}
 	
 	// <editor-fold desc="难度选择">
@@ -159,14 +160,21 @@ class FindSameColorActivity : BaseActivity() {
 	// <editor-fold desc="游戏内容UI">
 	@Composable
 	fun ColumnScope.GameContent(modifier: Modifier, pageData: FindSameColorPageData, count: Int, boxWidth: Dp, exampleBoxWidth: Dp) {
-		CountDownTimer(modifier)
+		Image(painter = painterResource(R.mipmap.icon_common_pause), contentDescription = "",
+			modifier = Modifier
+				.padding(top = 20.dp, end = 20.dp)
+				.size(30.dp)
+				.align(Alignment.End)
+				.onClick { viewModel.pauseGame() }
+		)
+		CountDownTimer(Modifier.padding(top = 25.dp))
 		Scoreboard(Modifier
-			.padding(top = 30.dp))
+			.padding(top = 25.dp))
 		ColorBoxArea(Modifier
-			.padding(top = 30.dp)
+			.padding(top = 25.dp)
 			.align(Alignment.CenterHorizontally), pageData.boxColors, count, boxWidth)
 		ExampleColorBox(Modifier
-			.padding(top = 70.dp)
+			.padding(top = 65.dp)
 			.align(Alignment.CenterHorizontally), pageData.exampleColor, exampleBoxWidth)
 		Box(modifier = Modifier.weight(1f))
 	}
@@ -181,7 +189,7 @@ class FindSameColorActivity : BaseActivity() {
 			val string = TimeUtils.millis2String(time, "mm:ss")
 			Log.d(TAG, "FindSameColorActivity#CountDownTimer- $it -> $string")
 			string
-		}, fontSize = 27.sp, color = colorResource(R.color.theme_txt_standard), textAlign = TextAlign.Center,
+		}, fontSize = 31.sp, color = colorResource(R.color.theme_txt_standard), textAlign = TextAlign.Center,
 			modifier = modifier.then(Modifier
 				.fillMaxWidth()
 				.wrapContentHeight()))
@@ -243,14 +251,16 @@ class FindSameColorActivity : BaseActivity() {
 			if (boxCoverState.intValue == 2) {
 				Image(painter = painterResource(R.mipmap.icon_find_same_wrong),
 					contentDescription = "",
-					modifier = Modifier.constrainAs(createRefs()[0]) {
-						start.linkTo(parent.start)
-						end.linkTo(parent.end)
-						top.linkTo(parent.top)
-						bottom.linkTo(parent.bottom)
-						height = Dimension.percent(0.8f)
-						width = Dimension.percent(0.8f)
-					}.alpha(0.8f))
+					modifier = Modifier
+						.constrainAs(createRefs()[0]) {
+							start.linkTo(parent.start)
+							end.linkTo(parent.end)
+							top.linkTo(parent.top)
+							bottom.linkTo(parent.bottom)
+							height = Dimension.percent(0.8f)
+							width = Dimension.percent(0.8f)
+						}
+						.alpha(0.8f))
 			}
 		}
 	}
@@ -279,7 +289,7 @@ class FindSameColorActivity : BaseActivity() {
 			Scoreboard(Modifier.padding(top = 40.dp))
 			CorrectRateHint()
 			Row(modifier = Modifier
-				.padding(top = 40.dp)
+				.padding(top = 50.dp)
 				.fillMaxWidth()) {
 				Button({
 					viewModel.prepareGame()
@@ -329,7 +339,7 @@ class FindSameColorActivity : BaseActivity() {
 			modifier = modifier.then(Modifier
 				.fillMaxWidth()
 				.wrapContentHeight())) {
-			val clickCount by viewModel.clickCount.collectAsStateWithLifecycle()
+			val clickCount by viewModel.roundClickCount.collectAsStateWithLifecycle()
 			val rightCount by viewModel.rightCount.collectAsStateWithLifecycle()
 			Box(modifier = Modifier.weight(1f))
 			Text("点击次数\n$clickCount", fontSize = 21.sp, color = colorResource(R.color.theme_txt_standard), textAlign = TextAlign.Center)
@@ -338,10 +348,9 @@ class FindSameColorActivity : BaseActivity() {
 			Box(modifier = Modifier.weight(1f))
 		}
 		Box(modifier = Modifier
-			.padding(top = 20.dp)
+			.padding(top = 30.dp)
 			.wrapContentWidth()) {
 			Text("总分 ${viewModel.score}", fontSize = 21.sp, color = colorResource(R.color.theme_txt_standard), textAlign = TextAlign.Center, modifier = Modifier
-				.padding(top = 30.dp)
 				.wrapContentSize())
 			FloatingNumberAnimation()
 		}
@@ -384,24 +393,35 @@ class FindSameColorActivity : BaseActivity() {
 	}
 	
 	@Composable
-	fun WrongAlertDialog() {
-		val wrongAlert by viewModel.wrongClickAlert.collectAsStateWithLifecycle()
-		if (wrongAlert) {
+	fun PausingAlertDialog() {
+		val pause by viewModel.pausingAlert.collectAsStateWithLifecycle()
+		if (pause) {
 			Dialog({
-				viewModel.resetWrongClick()
-			}, properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = false)) {
-				Column(modifier = Modifier.wrapContentSize()) {
-					Text(text = "过分了昂，你不会想每个都点一遍蒙混过关吧！",
+				viewModel.continueGame()
+			}, properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)) {
+				Column(modifier = Modifier
+					.width((ScreenUtils.getScreenWidth() * 2 / 3).dp)
+					.background(colorResource(R.color.common_dialog_bg), shape = RoundedCornerShape(10.dp))
+					.padding(top = 30.dp, bottom = 20.dp, start = 10.dp, end = 10.dp)) {
+					Text(text = "- 暂停 -",
 						fontSize = 30.sp,
 						textAlign = TextAlign.Center,
 						color = colorResource(R.color.theme_txt_standard),
 						modifier = Modifier.align(Alignment.CenterHorizontally))
-					Button({
-						viewModel.resetWrongClick()
-					}, modifier = Modifier
-						.align(Alignment.CenterHorizontally)
-						.padding(top = 30.dp)) {
-						Text(text = "我错了！我有罪！", fontSize = 20.sp)
+					Row(modifier = Modifier
+						.padding(top = 30.dp)
+						.align(Alignment.CenterHorizontally)) {
+						TextButton({
+							viewModel.continueGame()
+							viewModel.prepareGame()
+						}, modifier = Modifier) {
+							Text(text = "换个难度", fontSize = 20.sp)
+						}
+						TextButton({
+							viewModel.continueGame()
+						}, modifier = Modifier) {
+							Text(text = "继续游戏", fontSize = 20.sp)
+						}
 					}
 				}
 			}

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,6 +45,13 @@ class ModeSelectActivity : BaseActivity() {
 		}
 		showVersionUpgradeDialog()
 		initModeList()
+		onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+			override fun handleOnBackPressed() {
+				Logger.d(TAG, "ModeSelectActivity#handleOnBackPressed")
+				moveTaskToBack(true)
+//				finish()
+			}
+		})
 	}
 
 	private fun initModeList() {
