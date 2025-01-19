@@ -43,13 +43,12 @@ class ModeSelectActivity : BaseActivity() {
 			showAlertDialog()
 			return
 		}
-		showVersionUpgradeDialog()
+//		showVersionUpgradeDialog()
 		initModeList()
 		onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
 			override fun handleOnBackPressed() {
 				Logger.d(TAG, "ModeSelectActivity#handleOnBackPressed")
 				moveTaskToBack(true)
-//				finish()
 			}
 		})
 	}

@@ -1,22 +1,27 @@
 [
   {
-    "path": "activityMockColor",
+    "path": "ActivityMockColor",
     "gameMode": "MockColor",
     "title": "标准模式"
   },
   {
-    "path": "activityIntermediateColor",
+    "path": "ActivityIntermediateColor",
     "gameMode": "IntermediateColor",
     "title": "找中间色"
   },
   {
-    "path": "activityFindDiffColor",
+    "path": "ActivityFindDiffColor",
     "gameMode": "FindDiffColor",
     "title": "找不同"
   },
   {
-    "path": "activityFindSameColor",
+    "path": "ActivityFindSameColor",
     "gameMode": "FindSameColor",
     "title": "找相同"
+  },
+  {
+    "path": "ActivitySortColor",
+    "gameMode": "SortColor",
+    "title": "色彩排序"
   }
 ]
