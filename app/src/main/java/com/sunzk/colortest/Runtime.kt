@@ -86,7 +86,7 @@ object Runtime {
     // </editor-fold>
     
     // <editor-fold desc="取色器">
-    private val _colorPickerType = MutableStateFlow(ColorPickerType.ColorWheel)
+    private val _colorPickerType = MutableStateFlow(ColorPickerType.HSBProgress)
     val colorPickerType: StateFlow<ColorPickerType> = _colorPickerType
     
     private fun initColorPickerType(sharedPreferences: SharedPreferences) {

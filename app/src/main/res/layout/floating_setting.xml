@@ -49,6 +49,7 @@
             style="@style/SettingItem">
             <ImageView
                 style="@style/SettingItemIcon"
+                android:padding="3dp"
                 android:src="@mipmap/icon_setting_background_music"/>
             <TextView
                 android:id="@+id/tv_background_music"
