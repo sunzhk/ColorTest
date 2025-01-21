@@ -1,6 +1,8 @@
 package com.sunzk.colortest.sortColor
 
 import android.util.Log
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
@@ -9,24 +11,35 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.sunzk.colortest.R
 import com.sunzk.demo.tools.ext.dp2px
 
 object SortColorView {
@@ -34,35 +47,82 @@ object SortColorView {
 	private const val TAG: String = "SortColorView"
 
 	private val cornerRadius = 5.dp2px.toFloat()
+	private val scaleStart = 1.0f
+	private val scaleEnd = 1.06f
 	
 	@Composable
 	fun SortColorView(modifier: Modifier, 
 	                  colorArray: Array<SortColorData>,
 	                  orientation: Orientation = Orientation.VERTICAL,
 					  divider: Dp = 0.dp,
+	                  showResult: MutableState<Boolean>, 
 					  onBoxDrag: ((from: Int, to: Int) -> Unit)? = null) {
+		val rightImage = ImageBitmap.imageResource(R.mipmap.icon_sort_color_right)
+		val wrongImage = ImageBitmap.imageResource(R.mipmap.icon_sort_color_wrong)
+
 		val zIndex = remember { mutableFloatStateOf(1f) }
 		val touchBoxInfo = remember { mutableStateOf<TouchBoxInfo?>(null) }
 		val blockList = ArrayList<SortColorBlockData>()
+
+		var scaleIndex = remember { mutableIntStateOf(-1) }
+		val animatedScale = createBlockScaleAnim(colorArray, scaleIndex, showResult)
 		Box(modifier.then(Modifier.zIndex(zIndex.floatValue))) {
 			Canvas(modifier = Modifier
 				.sortColorLayout(orientation, colorArray.size, divider)
 				.pointerInput(Unit) {
-					handlePointerInputEvent(zIndex, touchBoxInfo, blockList, onBoxDrag)
+					handlePointerInputEvent(showResult, zIndex, touchBoxInfo, blockList, onBoxDrag)
 				}
 			) {
 				fillBlockList(colorArray, colorArray.size, blockList, orientation, divider)
-				drawColorBlockArray(blockList)
+				drawColorBlockArray(blockList, scaleIndex.intValue, animatedScale.value, rightImage, wrongImage)
 				touchBoxInfo.value?.takeIf { it.offset != Offset.Zero }?.let { (offset, originalBoxInfo) ->
 					drawDragColorBlock(offset, originalBoxInfo)
 				}
 			}
 		}
 	}
-	
+
+	@Composable
+	private fun createBlockScaleAnim(
+		colorArray: Array<SortColorData>,
+		scaleIndex: MutableIntState,
+		showResult: MutableState<Boolean>,
+	): State<Float> {
+		var animState by remember { mutableStateOf(false) }
+		val scale = remember { mutableStateOf(scaleStart) }
+		LaunchedEffect(showResult.value) {
+			Log.d(TAG, "SortColorView#SortColorView-scale-anim showResult=${showResult.value}, animState=$animState")
+			if (animState || !showResult.value) {
+				return@LaunchedEffect
+			}
+			animState = true
+			Log.d(TAG, "SortColorView#SortColorView-scale-anim anim to $scaleEnd")
+			scaleIndex.intValue = 0
+			scale.value = scaleEnd
+		}
+		return animateFloatAsState(
+			targetValue = scale.value,
+			animationSpec = tween(durationMillis = 250),
+			finishedListener = {
+				if (scale.value == scaleEnd) {
+					Log.d(TAG, "SortColorView#SortColorView-scale-anim anim to 1")
+					scale.value = scaleStart
+					colorArray[scaleIndex.intValue] = colorArray[scaleIndex.intValue].copy(showResult = true)
+				} else if (scaleIndex.intValue < (colorArray.size - 1)) {
+					scaleIndex.intValue++
+					scale.value = scaleEnd
+				} else {
+					Log.d(TAG, "SortColorView#SortColorView-scale-anim anim finish")
+					animState = false
+				}
+			}
+		)
+	}
+
 	// <editor-fold desc="触摸事件处理">
 	
 	private suspend fun PointerInputScope.handlePointerInputEvent(
+		showResult: State<Boolean>,
 		zIndex: MutableFloatState,
 		touchBoxInfo: MutableState<TouchBoxInfo?>,
 		blockList: ArrayList<SortColorBlockData>,
@@ -71,21 +131,33 @@ object SortColorView {
 		detectDragGestures(
 			onDragStart = { offset: Offset ->
 				Log.d(TAG, "SortColorView#SortColorView- onDragStart offset=$offset")
+				if (showResult.value) {
+					return@detectDragGestures
+				}
 				zIndex.floatValue = 10f
 				findDragBox(offset, blockList, touchBoxInfo)
 			},
 			onDrag = { change, dragAmount ->
 				Log.d(TAG, "SortColorView#SortColorView- onDrag dragAmount=$dragAmount")
+				if (showResult.value) {
+					return@detectDragGestures
+				}
 				handleBoxDrag(change, dragAmount, touchBoxInfo)
 			},
 			onDragEnd = {
 				Log.d(TAG, "SortColorView#SortColorView- onDragEnd")
+				if (showResult.value) {
+					return@detectDragGestures
+				}
 				zIndex.floatValue = 1f
 				handleBoxDragEnd(touchBoxInfo, blockList, onBoxDrag)
 				touchBoxInfo.value = null
 			},
 			onDragCancel = {
 				Log.d(TAG, "SortColorView#SortColorView- onDragCancel")
+				if (showResult.value) {
+					return@detectDragGestures
+				}
 				zIndex.floatValue = 1f
 				touchBoxInfo.value = null
 			}
@@ -196,12 +268,12 @@ object SortColorView {
 		}
 		repeat(number) { index ->
 			blockList.add(SortColorBlockData(
-				color = colors[index].color,
+				color = colors[index],
 				offset = when (orientation) {
 					Orientation.HORIZONTAL -> Offset(startOffset.x + index * blockSideLength + index * divider.value, startOffset.y)
 					Orientation.VERTICAL -> Offset(startOffset.x, startOffset.y + index * blockSideLength + index * divider.value)
 				},
-				size = Size(blockSideLength, blockSideLength)
+				size = Size(blockSideLength, blockSideLength),
 			))
 		}
 	}
@@ -212,20 +284,36 @@ object SortColorView {
 	/**
 	 * 绘制色块
 	 */
-	private fun DrawScope.drawColorBlockArray(blockList: ArrayList<SortColorBlockData>) {
-		blockList.forEach { (color, offset, size) ->
+	private fun DrawScope.drawColorBlockArray(blockList: ArrayList<SortColorBlockData>,
+	                                          scaleIndex: Int,
+	                                          animatedScale: Float,
+	                                          rightImage: ImageBitmap,
+	                                          wrongImage: ImageBitmap) {
+		val iconSize = IntSize((blockList[0].size.width / 2f).toInt(), (blockList[0].size.height / 2f).toInt())
+		val iconOffsetDiff = IntOffset((iconSize.width / 2), (iconSize.height / 2))
+		blockList.forEachIndexed { index, (color, offset, size) ->
 			val radius = (size.width / 10).coerceAtLeast(cornerRadius)
-			drawRoundRect(color = color.composeColor,
-				topLeft = offset,
-				size = size,
+			drawRoundRect(color = color.color.composeColor,
+				topLeft = if (scaleIndex == index && animatedScale != 1f) {
+					offset - Offset(size.width * (animatedScale - 1) / 2, size.height * (animatedScale - 1) / 2)
+				} else {
+					offset
+				},
+				size = if (scaleIndex == index) size * animatedScale else size,
 				cornerRadius = CornerRadius(radius, radius))
+			if (color.showResult) {
+				this.drawImage(if (color.ordinal == index) rightImage else wrongImage, 
+					dstOffset = IntOffset((offset.x + iconOffsetDiff.x).toInt(),
+					(offset.y + iconOffsetDiff.y).toInt()),
+					dstSize = iconSize)
+			}
 		}
 	}
 	
 	private fun DrawScope.drawDragColorBlock(dragOffset: Offset, originalBoxInfo: SortColorBlockData) {
 		val radius = (originalBoxInfo.size.width / 10).coerceAtLeast(cornerRadius)
 		// 先绘制色块
-		drawRoundRect(color = originalBoxInfo.color.composeColor,
+		drawRoundRect(color = originalBoxInfo.color.color.composeColor,
 			topLeft = dragOffset,
 			size = originalBoxInfo.size,
 			cornerRadius = CornerRadius(radius, radius))
@@ -235,7 +323,7 @@ object SortColorView {
 		val maxWidth = (originalBoxInfo.size.width / 6).coerceAtLeast(8.dp.toPx())
 		val minWidth = maxWidth / 2
 		// 从from到to，绘制一条两端粗中间细的线
-		drawLine(color = originalBoxInfo.color.composeColor, start = from, end = to, strokeWidth = maxWidth)
+		drawLine(color = originalBoxInfo.color.color.composeColor, start = from, end = to, strokeWidth = maxWidth)
 	}
 	// </editor-fold>
 
