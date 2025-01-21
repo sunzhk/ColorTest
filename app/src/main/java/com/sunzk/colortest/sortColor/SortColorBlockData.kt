@@ -9,7 +9,7 @@ import com.sunzk.colortest.entity.HSB
  * 色块数据实体
  */
 data class SortColorBlockData(
-	val color: HSB,
+	val color: SortColorData,
 	val offset: Offset,
 	val size: Size,
 ) {

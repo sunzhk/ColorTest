@@ -9,41 +9,51 @@ import kotlinx.coroutines.flow.StateFlow
 class SortColorViewModel: ViewModel() {
 	companion object {
 		private const val TAG: String = "SortColorViewModel"
-		const val COLOR_COUNT = 7
+		const val COLOR_COUNT = 9
 	}
 
 	/**
 	 * 颜色列表1
 	 */
-	private val _colorArray1 = MutableStateFlow(randomColors())
+	private val _colorArray1 = MutableStateFlow(randomLeftColors())
 	val colorArray1: StateFlow<Array<SortColorData>> = _colorArray1
 
 	/**
 	 * 颜色列表2
 	 */
-	private val _colorArray2 = MutableStateFlow(randomColors())
+	private val _colorArray2 = MutableStateFlow(randomRightColors())
 	val colorArray2: StateFlow<Array<SortColorData>> = _colorArray2
 
+	private fun randomLeftColors(): Array<SortColorData> {
+		return randomColors(start = HSB.random(minH = 0f, maxH = 140f, minS = 40f, maxS = 70f, minB = 50f, maxB = 70f))
+	}
+	private fun randomRightColors(): Array<SortColorData> {
+		return randomColors(start = HSB.random(minH = 180f, maxH = 320f, minS = 40f, maxS = 70f, minB = 50f, maxB = 70f))
+	}
 
-	private fun randomColors(start: HSB = HSB.random(minH = 0f, maxH = 320f, minS = 40f, maxS = 70f, minB = 50f, maxB = 70f), 
-	                         end: HSB = start.copy(h = start.h + 40, s = start.s + 30, b = start.b + 30), number: Int = COLOR_COUNT): Array<SortColorData> {
-		val colors = Array(number) { index ->
+	private fun randomColors(
+		start: HSB,
+		end: HSB = start.copy(h = start.h + 40, s = start.s + 30, b = start.b + 30),
+		number: Int = COLOR_COUNT,
+	): Array<SortColorData> {
+		val randomColorDataArray = Array(number - 2) { index ->
 			SortColorData(
-				ordinal = index,
-				color = if (index == 0) {
-					start
-				} else if (index == number - 1) {
-					end
-				} else {
-					HSB(
-						start.h + (end.h - start.h) * index / (number - 1),
-						start.s + (end.s - start.s) * index / (number - 1),
-						start.b + (end.b - start.b) * index / (number - 1)
-					)
-				}
+				ordinal = index + 1,
+				color = HSB(
+					start.h + (end.h - start.h) * (index + 1) / (number - 1),
+					start.s + (end.s - start.s) * (index + 1) / (number - 1),
+					start.b + (end.b - start.b) * (index + 1) / (number - 1)
+				)
 			)
 		}
-		colors.shuffle()
+		randomColorDataArray.shuffle()
+		val colors = Array(number) { index ->
+			when (index) {
+				0 -> SortColorData(start, index)
+				number - 1 -> SortColorData(end, index)
+				else -> randomColorDataArray[index - 1]
+			}
+		}
 		return colors
 	}
 
@@ -62,9 +72,24 @@ class SortColorViewModel: ViewModel() {
 			this[to] = temp
 		})
 	}
+	
+	fun checkResult(): Boolean {
+		colorArray1.value.forEachIndexed { index, sortColorData -> 
+			if (index != sortColorData.ordinal) {
+				return false
+			}
+		}
+		colorArray2.value.forEachIndexed { index, sortColorData ->
+			if (index != sortColorData.ordinal) {
+				return false
+			}
+		}
+		return true
+	}
 }
 
 data class SortColorData(
 	val color: HSB,
-	val ordinal: Int
+	val ordinal: Int,
+	val showResult: Boolean = false
 )
