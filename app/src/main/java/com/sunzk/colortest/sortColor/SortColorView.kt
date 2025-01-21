@@ -47,16 +47,17 @@ object SortColorView {
 	private const val TAG: String = "SortColorView"
 
 	private val cornerRadius = 5.dp2px.toFloat()
-	private val scaleStart = 1.0f
-	private val scaleEnd = 1.06f
+	private const val SCALE_START = 1.0f
+	private const val SCALE_END = 1.08f
 	
 	@Composable
-	fun SortColorView(modifier: Modifier, 
+	fun SortColorView(modifier: Modifier,
 	                  colorArray: Array<SortColorData>,
 	                  orientation: Orientation = Orientation.VERTICAL,
-					  divider: Dp = 0.dp,
-	                  showResult: MutableState<Boolean>, 
-					  onBoxDrag: ((from: Int, to: Int) -> Unit)? = null) {
+	                  divider: Dp = 0.dp,
+	                  showResult: MutableState<Boolean>,
+	                  onBoxDrag: ((from: Int, to: Int) -> Unit)? = null,
+	                  onShowResultAnim: ((finish: Boolean) -> Unit)? = null) {
 		val rightImage = ImageBitmap.imageResource(R.mipmap.icon_sort_color_right)
 		val wrongImage = ImageBitmap.imageResource(R.mipmap.icon_sort_color_wrong)
 
@@ -64,8 +65,8 @@ object SortColorView {
 		val touchBoxInfo = remember { mutableStateOf<TouchBoxInfo?>(null) }
 		val blockList = ArrayList<SortColorBlockData>()
 
-		var scaleIndex = remember { mutableIntStateOf(-1) }
-		val animatedScale = createBlockScaleAnim(colorArray, scaleIndex, showResult)
+		val scaleIndex = remember { mutableIntStateOf(-1) }
+		val animatedScale = createBlockScaleAnim(colorArray, scaleIndex, showResult, onShowResultAnim)
 		Box(modifier.then(Modifier.zIndex(zIndex.floatValue))) {
 			Canvas(modifier = Modifier
 				.sortColorLayout(orientation, colorArray.size, divider)
@@ -87,33 +88,36 @@ object SortColorView {
 		colorArray: Array<SortColorData>,
 		scaleIndex: MutableIntState,
 		showResult: MutableState<Boolean>,
+		onShowResultAnim: ((finish: Boolean) -> Unit)?
 	): State<Float> {
 		var animState by remember { mutableStateOf(false) }
-		val scale = remember { mutableStateOf(scaleStart) }
+		val scale = remember { mutableFloatStateOf(SCALE_START) }
 		LaunchedEffect(showResult.value) {
 			Log.d(TAG, "SortColorView#SortColorView-scale-anim showResult=${showResult.value}, animState=$animState")
 			if (animState || !showResult.value) {
 				return@LaunchedEffect
 			}
 			animState = true
-			Log.d(TAG, "SortColorView#SortColorView-scale-anim anim to $scaleEnd")
+			Log.d(TAG, "SortColorView#SortColorView-scale-anim anim to $SCALE_END")
 			scaleIndex.intValue = 0
-			scale.value = scaleEnd
+			scale.floatValue = SCALE_END
+			onShowResultAnim?.invoke(false)
 		}
 		return animateFloatAsState(
-			targetValue = scale.value,
-			animationSpec = tween(durationMillis = 250),
+			targetValue = scale.floatValue,
+			animationSpec = tween(durationMillis = 1000 / colorArray.size),
 			finishedListener = {
-				if (scale.value == scaleEnd) {
+				if (scale.floatValue == SCALE_END) {
 					Log.d(TAG, "SortColorView#SortColorView-scale-anim anim to 1")
-					scale.value = scaleStart
+					scale.floatValue = SCALE_START
 					colorArray[scaleIndex.intValue] = colorArray[scaleIndex.intValue].copy(showResult = true)
 				} else if (scaleIndex.intValue < (colorArray.size - 1)) {
 					scaleIndex.intValue++
-					scale.value = scaleEnd
+					scale.floatValue = SCALE_END
 				} else {
 					Log.d(TAG, "SortColorView#SortColorView-scale-anim anim finish")
 					animState = false
+					onShowResultAnim?.invoke(true)
 				}
 			}
 		)
@@ -165,7 +169,7 @@ object SortColorView {
 	}
 
 	private fun findDragBox(offset: Offset, blockList: ArrayList<SortColorBlockData>, touchBoxInfo: MutableState<TouchBoxInfo?>) {
-		blockList.find { block -> block.checkInBlock(offset) }
+		blockList.find { block -> block.color.canMove && block.checkInBlock(offset) }
 			?.let { block ->
 				Log.d(TAG, "SortColorView#findDragBox- find block=$block")
 				touchBoxInfo.value = TouchBoxInfo(block.offset.copy(), block)
@@ -197,7 +201,7 @@ object SortColorView {
 			return
 		}
 		blockList.indexOfFirst { block ->
-			block.checkAroundBlock(info.offset)
+			block.color.canMove && block.checkAroundBlock(info.offset)
 		}
 			.takeIf { it >= 0 }
 			?.let { toBox ->
@@ -289,8 +293,8 @@ object SortColorView {
 	                                          animatedScale: Float,
 	                                          rightImage: ImageBitmap,
 	                                          wrongImage: ImageBitmap) {
-		val iconSize = IntSize((blockList[0].size.width / 2f).toInt(), (blockList[0].size.height / 2f).toInt())
-		val iconOffsetDiff = IntOffset((iconSize.width / 2), (iconSize.height / 2))
+		val iconSize = IntSize((blockList[0].size.width / 3f).toInt(), (blockList[0].size.height / 3f).toInt())
+		val iconOffsetDiff = IntOffset((((blockList[0].size.width - iconSize.width) / 2).toInt()), (((blockList[0].size.height - iconSize.height) / 2).toInt()))
 		blockList.forEachIndexed { index, (color, offset, size) ->
 			val radius = (size.width / 10).coerceAtLeast(cornerRadius)
 			drawRoundRect(color = color.color.composeColor,
@@ -301,9 +305,10 @@ object SortColorView {
 				},
 				size = if (scaleIndex == index) size * animatedScale else size,
 				cornerRadius = CornerRadius(radius, radius))
-			if (color.showResult) {
-				this.drawImage(if (color.ordinal == index) rightImage else wrongImage, 
-					dstOffset = IntOffset((offset.x + iconOffsetDiff.x).toInt(),
+			if (color.showResult && color.ordinal != index) {
+//				this.drawImage(if (color.ordinal == index) rightImage else wrongImage,
+				this.drawImage(wrongImage,
+						dstOffset = IntOffset((offset.x + iconOffsetDiff.x).toInt(),
 					(offset.y + iconOffsetDiff.y).toInt()),
 					dstSize = iconSize)
 			}
@@ -321,7 +326,6 @@ object SortColorView {
 		val from = Offset(originalBoxInfo.offset.x + originalBoxInfo.size.width / 2, originalBoxInfo.offset.y + originalBoxInfo.size.height / 2)
 		val to = Offset(dragOffset.x + originalBoxInfo.size.width / 2, dragOffset.y + originalBoxInfo.size.height / 2)
 		val maxWidth = (originalBoxInfo.size.width / 6).coerceAtLeast(8.dp.toPx())
-		val minWidth = maxWidth / 2
 		// 从from到to，绘制一条两端粗中间细的线
 		drawLine(color = originalBoxInfo.color.color.composeColor, start = from, end = to, strokeWidth = maxWidth)
 	}
