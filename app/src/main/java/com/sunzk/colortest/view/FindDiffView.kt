@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import com.sunzk.base.expand.onClick
-import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.colortest.R
 import com.sunzk.colortest.entity.HSB
 import com.sunzk.demo.tools.ext.dp2px
@@ -94,7 +93,7 @@ class FindDiffView : FrameLayout {
 
 	private fun calSpacing(context: Context, countPerSide: Int): Int {
 		return if (needSpacing) {
-			DisplayUtil.dip2px(context, 3 + 3f / countPerSide)
+			(3 + 3f / countPerSide).dp2px
 		} else 0
 	}
 
@@ -236,7 +235,7 @@ class FindDiffView : FrameLayout {
 		}
 		
 		fun showBorder() {
-			drawable.setStroke(DisplayUtil.dip2px(context, 3f), itemBorderColor)
+			drawable.setStroke(3.dp2px, itemBorderColor)
 		}
 		
 		fun reset() {
