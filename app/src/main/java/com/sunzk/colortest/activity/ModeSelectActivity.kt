@@ -9,22 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.sunzk.base.expand.bindView
 import com.sunzk.base.utils.AppUtils
-import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.base.utils.Logger
 import com.sunzk.colortest.*
 import com.sunzk.colortest.databinding.ActivityModeSelectBinding
 import com.sunzk.colortest.databinding.ItemModeBinding
 import com.sunzk.colortest.entity.ModeEntity
-import com.sunzk.colortest.view.DragSwipeCallback
-import com.sunzk.colortest.view.IDragSwipe
 import com.sunzk.colortest.view.SpaceItemDecoration
+import com.sunzk.demo.tools.ext.dp2px
 import java.util.*
 
 @Route(path = RouteInfo.PATH_ACTIVITY_MODE_SELECT)
@@ -60,7 +57,7 @@ class ModeSelectActivity : BaseActivity() {
 			LinearLayoutManager.VERTICAL,
 			false
 		)
-		val itemDecoration = DisplayUtil.dip2px(this, 6f)
+		val itemDecoration = 6.dp2px
 		viewBinding.rvModeList.addItemDecoration(
 			SpaceItemDecoration(
 				0,
