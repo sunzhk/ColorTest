@@ -10,10 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
@@ -29,7 +29,6 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.sunzk.colortest.BaseActivity
 import com.sunzk.colortest.R
 import com.sunzk.colortest.RouteInfo
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Route(path = RouteInfo.PATH_ACTIVITY_SORT_COLOR, group = RouteInfo.GROUP_GAME, name = RouteInfo.DESC_ACTIVITY_SORT_COLOR)
@@ -63,20 +62,28 @@ class SortColorActivity: BaseActivity() {
 			VerticalSortColorView(sortColorViewRight, colorArray2, showResult) { from, to ->
 				viewModel.onBoxArray2Drag(from, to)
 			}
+			val enableCommit by viewModel.canTouch.collectAsStateWithLifecycle()
+			var buttonType by remember { mutableStateOf(BottomButtonType.Commit) }
 			TextButton(
+				enabled = enableCommit,
 				onClick = {
-					lifecycleScope.launch {
-						Log.d(TAG, "SortColorActivity#Page- start show result")
-						showResult.value = true
+					when (buttonType) {
+						BottomButtonType.Commit -> { showResult.value = true }
+						BottomButtonType.NextQuestion -> {
+							showResult.value = false
+							viewModel.nextQuestion() 
+						}
 					}
-					viewModel.checkResult()
+					buttonType = BottomButtonType.entries.let { entries ->
+						entries[(entries.indexOf(buttonType) + 1) % entries.size]
+					}
 				},
 				modifier = Modifier.constrainAs(commit) {
 					start.linkTo(parent.start)
 					end.linkTo(parent.end)
 					bottom.linkTo(parent.bottom)
-				}) {
-				Text(text = "提交", fontSize = 27.sp, color = colorResource(R.color.theme_txt_standard))
+				}.padding(bottom = 10.dp)) {
+				Text(text = buttonType.text, fontSize = 27.sp, color = colorResource(R.color.theme_txt_standard))
 			}
 		}
 	}
@@ -99,7 +106,12 @@ class SortColorActivity: BaseActivity() {
 			divider = 3.dp,
 			orientation = SortColorView.Orientation.VERTICAL,
 			showResult = showResult,
-			onBoxDrag = onBoxDrag
+			onBoxDrag = onBoxDrag,
+			onShowResultAnim = { finish -> viewModel.setCanTouch(finish)}
 		)
+	}
+	
+	private enum class BottomButtonType(val text: String) {
+		Commit("提交"), NextQuestion("下一题")
 	}
 }

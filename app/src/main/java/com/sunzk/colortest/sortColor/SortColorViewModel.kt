@@ -24,33 +24,48 @@ class SortColorViewModel: ViewModel() {
 	private val _colorArray2 = MutableStateFlow(randomRightColors())
 	val colorArray2: StateFlow<Array<SortColorData>> = _colorArray2
 
+	/**
+	 * 触摸拦截 - 动画过程中禁止点击按钮什么的
+	 */
+	private val _canTouch = MutableStateFlow(true)
+	val canTouch: StateFlow<Boolean> = _canTouch
+	
+	fun nextQuestion() {
+		_colorArray1.emitBy(randomLeftColors())
+		_colorArray2.emitBy(randomRightColors())
+	}
+	
 	private fun randomLeftColors(): Array<SortColorData> {
-		return randomColors(start = HSB.random(minH = 0f, maxH = 140f, minS = 40f, maxS = 70f, minB = 50f, maxB = 70f))
+		return randomColors(start = HSB.random(minH = 0f, maxH = 140f, minS = 40f, maxS = 70f, minB = 50f, maxB = 70f), positiveSequence = true)
 	}
 	private fun randomRightColors(): Array<SortColorData> {
-		return randomColors(start = HSB.random(minH = 180f, maxH = 320f, minS = 40f, maxS = 70f, minB = 50f, maxB = 70f))
+		return randomColors(start = HSB.random(minH = 180f, maxH = 320f, minS = 40f, maxS = 70f, minB = 50f, maxB = 70f), positiveSequence = false)
 	}
 
 	private fun randomColors(
 		start: HSB,
-		end: HSB = start.copy(h = start.h + 40, s = start.s + 30, b = start.b + 30),
+		end: HSB = start.copy(h = start.h + 30, s = start.s + 25, b = start.b + 25),
 		number: Int = COLOR_COUNT,
+		positiveSequence: Boolean = true
 	): Array<SortColorData> {
+		val fromColor = if (positiveSequence) start else end
+		val toColor = if (positiveSequence) end else start
 		val randomColorDataArray = Array(number - 2) { index ->
 			SortColorData(
 				ordinal = index + 1,
+				canMove = true,
 				color = HSB(
-					start.h + (end.h - start.h) * (index + 1) / (number - 1),
-					start.s + (end.s - start.s) * (index + 1) / (number - 1),
-					start.b + (end.b - start.b) * (index + 1) / (number - 1)
+					fromColor.h + (toColor.h - fromColor.h) * (index + 1) / (number - 1),
+					fromColor.s + (toColor.s - fromColor.s) * (index + 1) / (number - 1),
+					fromColor.b + (toColor.b - fromColor.b) * (index + 1) / (number - 1)
 				)
 			)
 		}
 		randomColorDataArray.shuffle()
 		val colors = Array(number) { index ->
 			when (index) {
-				0 -> SortColorData(start, index)
-				number - 1 -> SortColorData(end, index)
+				0 -> SortColorData(fromColor, index, false)
+				number - 1 -> SortColorData(toColor, index, false)
 				else -> randomColorDataArray[index - 1]
 			}
 		}
@@ -73,23 +88,14 @@ class SortColorViewModel: ViewModel() {
 		})
 	}
 	
-	fun checkResult(): Boolean {
-		colorArray1.value.forEachIndexed { index, sortColorData -> 
-			if (index != sortColorData.ordinal) {
-				return false
-			}
-		}
-		colorArray2.value.forEachIndexed { index, sortColorData ->
-			if (index != sortColorData.ordinal) {
-				return false
-			}
-		}
-		return true
+	fun setCanTouch(finish: Boolean) {
+		_canTouch.emitBy(finish)
 	}
 }
 
 data class SortColorData(
 	val color: HSB,
 	val ordinal: Int,
+	val canMove: Boolean,
 	val showResult: Boolean = false
 )
