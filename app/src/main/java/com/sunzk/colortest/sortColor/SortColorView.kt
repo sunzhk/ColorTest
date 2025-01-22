@@ -13,12 +13,10 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
-import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.sunzk.colortest.R
 import com.sunzk.demo.tools.ext.dp2px
+import kotlinx.coroutines.delay
 
 object SortColorView {
 	
@@ -48,7 +47,7 @@ object SortColorView {
 
 	private val cornerRadius = 5.dp2px.toFloat()
 	private const val SCALE_START = 1.0f
-	private const val SCALE_END = 1.08f
+	private const val SCALE_END = 1.1f
 	
 	@Composable
 	fun SortColorView(modifier: Modifier,
@@ -56,6 +55,7 @@ object SortColorView {
 	                  orientation: Orientation = Orientation.VERTICAL,
 	                  divider: Dp = 0.dp,
 	                  showResult: MutableState<Boolean>,
+	                  showResultAnim: ShowResultAnim = ShowResultAnim(),
 	                  onBoxDrag: ((from: Int, to: Int) -> Unit)? = null,
 	                  onShowResultAnim: ((finish: Boolean) -> Unit)? = null) {
 		val rightImage = ImageBitmap.imageResource(R.mipmap.icon_sort_color_right)
@@ -65,8 +65,7 @@ object SortColorView {
 		val touchBoxInfo = remember { mutableStateOf<TouchBoxInfo?>(null) }
 		val blockList = ArrayList<SortColorBlockData>()
 
-		val scaleIndex = remember { mutableIntStateOf(-1) }
-		val animatedScale = createBlockScaleAnim(colorArray, scaleIndex, showResult, onShowResultAnim)
+		val animatedArray = createBlockScaleAnim(colorArray, showResult, showResultAnim, onShowResultAnim)
 		Box(modifier.then(Modifier.zIndex(zIndex.floatValue))) {
 			Canvas(modifier = Modifier
 				.sortColorLayout(orientation, colorArray.size, divider)
@@ -75,7 +74,7 @@ object SortColorView {
 				}
 			) {
 				fillBlockList(colorArray, colorArray.size, blockList, orientation, divider)
-				drawColorBlockArray(blockList, scaleIndex.intValue, animatedScale.value, rightImage, wrongImage)
+				drawColorBlockArray(blockList, animatedArray, rightImage, wrongImage)
 				touchBoxInfo.value?.takeIf { it.offset != Offset.Zero }?.let { (offset, originalBoxInfo) ->
 					drawDragColorBlock(offset, originalBoxInfo)
 				}
@@ -83,15 +82,16 @@ object SortColorView {
 		}
 	}
 
+	// <editor-fold desc="显示结果动画">
 	@Composable
 	private fun createBlockScaleAnim(
 		colorArray: Array<SortColorData>,
-		scaleIndex: MutableIntState,
 		showResult: MutableState<Boolean>,
+		showResultAnim: ShowResultAnim,
 		onShowResultAnim: ((finish: Boolean) -> Unit)?
-	): State<Float> {
+	): Array<State<Float>> {
 		var animState by remember { mutableStateOf(false) }
-		val scale = remember { mutableFloatStateOf(SCALE_START) }
+		val scaleArray = Array(colorArray.size) { remember { mutableFloatStateOf(showResultAnim.scaleStart) } }
 		LaunchedEffect(showResult.value) {
 			Log.d(TAG, "SortColorView#SortColorView-scale-anim showResult=${showResult.value}, animState=$animState")
 			if (animState || !showResult.value) {
@@ -99,29 +99,45 @@ object SortColorView {
 			}
 			animState = true
 			Log.d(TAG, "SortColorView#SortColorView-scale-anim anim to $SCALE_END")
-			scaleIndex.intValue = 0
-			scale.floatValue = SCALE_END
+			val interval = (showResultAnim.allAnimDuration - showResultAnim.singleAnimDuration) / (colorArray.size - 1)
 			onShowResultAnim?.invoke(false)
-		}
-		return animateFloatAsState(
-			targetValue = scale.floatValue,
-			animationSpec = tween(durationMillis = 1000 / colorArray.size),
-			finishedListener = {
-				if (scale.floatValue == SCALE_END) {
-					Log.d(TAG, "SortColorView#SortColorView-scale-anim anim to 1")
-					scale.floatValue = SCALE_START
-					colorArray[scaleIndex.intValue] = colorArray[scaleIndex.intValue].copy(showResult = true)
-				} else if (scaleIndex.intValue < (colorArray.size - 1)) {
-					scaleIndex.intValue++
-					scale.floatValue = SCALE_END
-				} else {
-					Log.d(TAG, "SortColorView#SortColorView-scale-anim anim finish")
-					animState = false
-					onShowResultAnim?.invoke(true)
+			repeat(colorArray.size) { index ->
+				if (index > 0) {
+					delay(interval.toLong())
 				}
+				scaleArray[index].floatValue = showResultAnim.scaleEnd
 			}
-		)
+		}
+		return Array(colorArray.size) { index ->
+			val scale = scaleArray[index]
+			animateFloatAsState(
+				targetValue = scale.floatValue,
+				animationSpec = tween(showResultAnim.singleAnimDuration / 2),
+				finishedListener = {
+					if (scale.floatValue == SCALE_END) {
+						Log.d(TAG, "SortColorView#SortColorView-scale-anim anim to 1")
+						scale.floatValue = SCALE_START
+						colorArray[index] = colorArray[index].copy(showResult = true)
+					} else if (index == (colorArray.size - 1) && scale.floatValue == SCALE_START) {
+						Log.d(TAG, "SortColorView#SortColorView-scale-anim anim finish")
+						animState = false
+						onShowResultAnim?.invoke(true)
+					} else {
+//						scale.floatValue = SCALE_END
+					}
+				}
+			)
+		}
 	}
+
+	data class ShowResultAnim(
+		val singleAnimDuration: Int = 600,
+		val allAnimDuration: Int = 1800,
+		val scaleStart: Float = SCALE_START,
+		val scaleEnd: Float = SCALE_END
+	)
+
+	// </editor-fold>
 
 	// <editor-fold desc="触摸事件处理">
 	
@@ -288,22 +304,19 @@ object SortColorView {
 	/**
 	 * 绘制色块
 	 */
-	private fun DrawScope.drawColorBlockArray(blockList: ArrayList<SortColorBlockData>,
-	                                          scaleIndex: Int,
-	                                          animatedScale: Float,
-	                                          rightImage: ImageBitmap,
-	                                          wrongImage: ImageBitmap) {
+	private fun DrawScope.drawColorBlockArray(
+		blockList: ArrayList<SortColorBlockData>,
+		animatedScale: Array<State<Float>>,
+		rightImage: ImageBitmap,
+		wrongImage: ImageBitmap) {
 		val iconSize = IntSize((blockList[0].size.width / 3f).toInt(), (blockList[0].size.height / 3f).toInt())
 		val iconOffsetDiff = IntOffset((((blockList[0].size.width - iconSize.width) / 2).toInt()), (((blockList[0].size.height - iconSize.height) / 2).toInt()))
 		blockList.forEachIndexed { index, (color, offset, size) ->
 			val radius = (size.width / 10).coerceAtLeast(cornerRadius)
+			val scale = animatedScale[index].value
 			drawRoundRect(color = color.color.composeColor,
-				topLeft = if (scaleIndex == index && animatedScale != 1f) {
-					offset - Offset(size.width * (animatedScale - 1) / 2, size.height * (animatedScale - 1) / 2)
-				} else {
-					offset
-				},
-				size = if (scaleIndex == index) size * animatedScale else size,
+				topLeft = offset - Offset(size.width * (scale - 1) / 2, size.height * (scale - 1) / 2),
+				size = size * (scale),
 				cornerRadius = CornerRadius(radius, radius))
 			if (color.showResult && color.ordinal != index) {
 //				this.drawImage(if (color.ordinal == index) rightImage else wrongImage,
