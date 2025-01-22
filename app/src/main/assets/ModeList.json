@@ -2,12 +2,12 @@
   {
     "path": "ActivityMockColor",
     "gameMode": "MockColor",
-    "title": "标准模式"
+    "title": "模拟色彩"
   },
   {
     "path": "ActivityIntermediateColor",
     "gameMode": "IntermediateColor",
-    "title": "找中间色"
+    "title": "寻找中间色"
   },
   {
     "path": "ActivityFindDiffColor",
