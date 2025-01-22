@@ -1,11 +1,22 @@
 package com.sunzk.colortest.sortColor
 
+import android.graphics.fonts.FontStyle
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -14,8 +25,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
@@ -24,12 +39,15 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieClipSpec
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.sunzk.colortest.BaseActivity
 import com.sunzk.colortest.R
 import com.sunzk.colortest.RouteInfo
-import kotlinx.coroutines.launch
 
 @Route(path = RouteInfo.PATH_ACTIVITY_SORT_COLOR, group = RouteInfo.GROUP_GAME, name = RouteInfo.DESC_ACTIVITY_SORT_COLOR)
 class SortColorActivity: BaseActivity() {
@@ -48,6 +66,15 @@ class SortColorActivity: BaseActivity() {
 	
 	@Composable
 	private fun Page() {
+		Box(Modifier.fillMaxSize()) { 
+			GameArea()
+			ResultAnimation()
+		}
+		
+	}
+
+	@Composable
+	private fun GameArea() {
 		val colorArray1 by viewModel.colorArray1.collectAsStateWithLifecycle()
 		val colorArray2 by viewModel.colorArray2.collectAsStateWithLifecycle()
 		ConstraintLayout(modifier = Modifier
@@ -71,23 +98,25 @@ class SortColorActivity: BaseActivity() {
 						BottomButtonType.Commit -> { showResult.value = true }
 						BottomButtonType.NextQuestion -> {
 							showResult.value = false
-							viewModel.nextQuestion() 
+							viewModel.nextQuestion()
 						}
 					}
 					buttonType = BottomButtonType.entries.let { entries ->
 						entries[(entries.indexOf(buttonType) + 1) % entries.size]
 					}
 				},
-				modifier = Modifier.constrainAs(commit) {
-					start.linkTo(parent.start)
-					end.linkTo(parent.end)
-					bottom.linkTo(parent.bottom)
-				}.padding(bottom = 10.dp)) {
+				modifier = Modifier
+					.constrainAs(commit) {
+						start.linkTo(parent.start)
+						end.linkTo(parent.end)
+						bottom.linkTo(parent.bottom)
+					}
+					.padding(bottom = 10.dp)) {
 				Text(text = buttonType.text, fontSize = 27.sp, color = colorResource(R.color.theme_txt_standard))
 			}
 		}
 	}
-	
+
 	@Composable
 	private fun ConstraintLayoutScope.VerticalSortColorView(
 		ref: ConstrainedLayoutReference,
@@ -107,8 +136,52 @@ class SortColorActivity: BaseActivity() {
 			orientation = SortColorView.Orientation.VERTICAL,
 			showResult = showResult,
 			onBoxDrag = onBoxDrag,
-			onShowResultAnim = { finish -> viewModel.setCanTouch(finish)}
+			onShowResultAnim = { finish -> onShowResultAnim(finish) }
 		)
+	}
+	
+	@Composable
+	private fun BoxScope.ResultAnimation() {
+		val success by viewModel.resultAnim.collectAsStateWithLifecycle()
+		Log.d(TAG, "SortColorActivity#ResultAnimation- success=$success")
+		if (success == null) {
+			return
+		}
+		val text: String
+		if (success == true) {
+			text = "答对啦~"
+			val lottieAnimRes = rememberLottieComposition(LottieCompositionSpec.Asset("lottie/lottie_game_success_congratulation.json"))
+			Log.d(TAG, "SortColorActivity#ResultAnimation- lottieAnimRes isSuccess=${lottieAnimRes.isSuccess}, isLoading=${lottieAnimRes.isLoading}, isComplete=${lottieAnimRes.isComplete}", lottieAnimRes.error)
+			val progress by animateLottieCompositionAsState(lottieAnimRes.value, clipSpec = LottieClipSpec.Progress(0f, 0.73f), iterations = Int.MAX_VALUE)
+			LottieAnimation(lottieAnimRes.value, progress = { progress }, alignment = Alignment.TopCenter)
+		} else {
+			text = "答错咯~"
+			val lottieAnimRes = rememberLottieComposition(LottieCompositionSpec.Asset("lottie/lottie_game_failure.json"))
+			Log.d(TAG, "SortColorActivity#ResultAnimation- lottieAnimRes isSuccess=${lottieAnimRes.isSuccess}, isLoading=${lottieAnimRes.isLoading}, isComplete=${lottieAnimRes.isComplete}", lottieAnimRes.error)
+			val progress by animateLottieCompositionAsState(lottieAnimRes.value, clipSpec = LottieClipSpec.Progress(0f, 1f), iterations = Int.MAX_VALUE)
+			LottieAnimation(lottieAnimRes.value, progress = { progress }, alignment = Alignment.Center)
+		}
+		Box(modifier = Modifier
+			.align(Alignment.Center)
+			.wrapContentWidth()
+			.height(60.dp)
+			.alpha(0.8f)
+			.background(colorResource(R.color.theme_txt_standard), RoundedCornerShape(30.dp))
+			.padding(start = 25.dp, end = 25.dp)) {
+			Text(text,
+				fontSize = 37.sp,
+				color = colorResource(R.color.common_bt_bg),
+				fontWeight = FontWeight.Bold,
+				textAlign = TextAlign.Center,
+				modifier = Modifier.align(Alignment.Center))
+		}
+	}
+	
+	private fun onShowResultAnim(isFinished: Boolean) {
+		viewModel.setCanTouch(isFinished)
+		if (isFinished) {
+			viewModel.checkResult()
+		}
 	}
 	
 	private enum class BottomButtonType(val text: String) {

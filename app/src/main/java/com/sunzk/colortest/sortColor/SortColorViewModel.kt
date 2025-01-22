@@ -29,10 +29,17 @@ class SortColorViewModel: ViewModel() {
 	 */
 	private val _canTouch = MutableStateFlow(true)
 	val canTouch: StateFlow<Boolean> = _canTouch
+
+	/**
+	 * 结束动画 - true成功；false失败；null不显示动画
+	 */
+	private val _resultAnim = MutableStateFlow<Boolean?>(null)
+	val resultAnim: StateFlow<Boolean?> = _resultAnim
 	
 	fun nextQuestion() {
 		_colorArray1.emitBy(randomLeftColors())
 		_colorArray2.emitBy(randomRightColors())
+		_resultAnim.emitBy(null)
 	}
 	
 	private fun randomLeftColors(): Array<SortColorData> {
@@ -44,7 +51,7 @@ class SortColorViewModel: ViewModel() {
 
 	private fun randomColors(
 		start: HSB,
-		end: HSB = start.copy(h = start.h + 30, s = start.s + 25, b = start.b + 25),
+		end: HSB = start.copy(h = start.h + 25, s = start.s + 20, b = start.b + 25),
 		number: Int = COLOR_COUNT,
 		positiveSequence: Boolean = true
 	): Array<SortColorData> {
@@ -90,6 +97,23 @@ class SortColorViewModel: ViewModel() {
 	
 	fun setCanTouch(finish: Boolean) {
 		_canTouch.emitBy(finish)
+	}
+
+	fun checkResult() {
+		var result = true
+		colorArray1.value.forEachIndexed { index, sortColorData ->
+			if (index != sortColorData.ordinal) {
+				result = false
+				return@forEachIndexed
+			}
+		}
+		colorArray2.value.forEachIndexed { index, sortColorData ->
+			if (index != sortColorData.ordinal) {
+				result = false
+				return@forEachIndexed
+			}
+		}
+		_resultAnim.emitBy(result)
 	}
 }
 

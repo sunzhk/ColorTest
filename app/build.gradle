@@ -112,8 +112,9 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.fragment)
     implementation(libs.bundles.lifecycle)
-    
+
     implementation(libs.gson)
+    implementation(libs.bundles.lottie)
 
     //ARouter
     implementation("com.alibaba:arouter-api:1.4.1")
