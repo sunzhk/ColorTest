@@ -1,33 +1,33 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
+    id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-kapt")
     alias(libs.plugins.compose.compiler)
 }
 
 android {
-    namespace 'com.sunzk.colortest'
+    namespace = "com.sunzk.colortest"
 
     signingConfigs {
-        keystore {
-            keyAlias 'sunzk'
-            keyPassword '100807eqwuouieq'
-            storeFile file('ArtHelper.keystore')
-            storePassword '100807eqwuouieq'
+        create("keystore") {
+            keyAlias = localProperties["KEY_ALIAS"].toString()
+            keyPassword = localProperties["KEY_PASSWORD"].toString()
+            storeFile = File(project.projectDir, localProperties["STORE_FILE"].toString())
+            storePassword = localProperties["STORE_PASSWORD"].toString()
         }
     }
 
-    compileSdkVersion = 34
-    buildToolsVersion = "30.0.3"
+    compileSdk = 34
+    buildToolsVersion = "34.0.0"
 
     defaultConfig {
-        applicationId "com.sunzk.colortest"
-        minSdkVersion 23
-        targetSdkVersion 34
-        versionCode 20
-        versionName "2.7.2"
+        applicationId = "com.sunzk.colortest"
+        minSdk = 23
+        targetSdk = 34
+        versionCode = 20
+        versionName = "2.7.2"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         kapt {
             arguments {
@@ -39,45 +39,42 @@ android {
         }
     }
     buildFeatures {
-        buildConfig true
-        compose true
+        buildConfig = true
+        compose = true
     }
-    
-    flavorDimensions("colorTest")
+
+    flavorDimensions.add("colorTest")
     productFlavors {
-        local {
-            dimension "colorTest"
-            buildConfigField "boolean", "useLocalData", "true"
+        create("local") {
+            dimension = "colorTest"
+            buildConfigField("boolean", "useLocalData", "true")
         }
-        network {
-            dimension "colorTest"
-            buildConfigField "boolean", "useLocalData", "false"
+        create("network") {
+            dimension = "colorTest"
+            buildConfigField("boolean", "useLocalData", "false")
         }
     }
     
     buildTypes {
-        release {
-            minifyEnabled false
-            debuggable false
-            shrinkResources false
-            jniDebuggable true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.keystore
-            renderscriptDebuggable false
-            zipAlignEnabled true
+        getByName("release") {
+            isMinifyEnabled = false
+            isDebuggable = false
+            isShrinkResources = false
+            isJniDebuggable = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("keystore")
         }
-        debug {
-            minifyEnabled false
-            debuggable true
-            signingConfig signingConfigs.keystore
-            zipAlignEnabled true
-            shrinkResources false
+        getByName("debug") {
+            isMinifyEnabled = false
+            isDebuggable = true
+            signingConfig = signingConfigs.getByName("keystore")
+            isShrinkResources = false
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
@@ -85,13 +82,12 @@ android {
     }
 
     viewBinding {
-        enabled = true
+        enable = true
     }
-    
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
@@ -100,12 +96,12 @@ dependencies {
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.recyclerView)
-    implementation project(path: ':base')
+    implementation(project(":base"))
     testImplementation("junit:junit:4.13.2")
-    testImplementation libs.junit.jupiter
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testImplementation libs.junit
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation(libs.junit.jupiter)
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+    testImplementation(libs.junit)
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
@@ -118,7 +114,6 @@ dependencies {
 
     //ARouter
     implementation("com.alibaba:arouter-api:1.4.1")
-//    annotationProcessor 'com.alibaba:arouter-compiler:1.5.2'
     kapt("com.alibaba:arouter-compiler:1.2.2")
 
     // 动态权限申请
@@ -139,5 +134,5 @@ dependencies {
     implementation(libs.bundles.compose)
 
     // Android Studio Preview support
-    debugImplementation libs.compose.ui.tooling
+    debugImplementation(libs.compose.ui.tooling)
 }
