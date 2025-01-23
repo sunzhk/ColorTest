@@ -19,7 +19,7 @@ androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 junitJupiterVersion = "5.8.1"
 junitVersion = "4.12"
-
+navigationVersion = "2.8.4"
 [libraries]
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle_version" }
 
@@ -44,6 +44,16 @@ androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-p
 androidx_viewpager2 = { module = "androidx.viewpager2:viewpager2", version = "1.1.0" }
 androidx_cardview = { module = "androidx.cardview:cardview", version = "1.0.0" }
 androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
+
+androidx_navigation_compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationVersion" }
+
+androidx_navigation_fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "navigationVersion" }
+androidx_navigation_view = { module = "androidx.navigation:navigation-ui", version.ref = "navigationVersion" }
+androidx_navigation_dynamic_features_fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigationVersion" }
+
+androidx_navigation_test = { module = "androidx.navigation:navigation-testing", version.ref = "navigationVersion" }
+
+kotlinx_serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.3" }
 
 material = { module = "com.google.android.material:material", version = "1.12.0" }
 
@@ -83,5 +93,6 @@ junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
 "jiguang" = ["jiguang-jpush", "jiguang-jcore", "jiguang-plugin-vivo", "jiguang-plugin-oppo", "jiguang-plugin-xiaomi"]
 "compose" = ["androidx-compose-bom", "androidx-compose-foundation", "compose-material3", "compose-constraintlayout", "androidx-activity-compose", "androidx-lifecycle-viewmodel-compose", "compose-ui-tooling-preview"]
 "lottie" = ["lottie", "lottie-compose"]
+"androidx_navigation" = ["androidx_navigation_compose", "androidx_navigation_fragment", "androidx_navigation_view", "androidx_navigation_dynamic_features_fragment", "kotlinx_serialization_json"]
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
