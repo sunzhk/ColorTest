@@ -3,6 +3,7 @@ plugins {
     id("kotlin-android")
     id("kotlin-kapt")
     alias(libs.plugins.compose.compiler)
+    kotlin("plugin.serialization") version "2.0.21"
 }
 
 android {
@@ -127,12 +128,12 @@ dependencies {
     
     implementation(libs.kotlinx.coroutines.core)
 
-//    implementation("com.squareup.moshi:moshi:1.13.0")
-//    implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
-
+    // Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
-
-    // Android Studio Preview support
     debugImplementation(libs.compose.ui.tooling)
+    
+    // Navigation
+    implementation(libs.bundles.androidx.navigation)
+    testImplementation(libs.androidx.navigation.test)
 }
