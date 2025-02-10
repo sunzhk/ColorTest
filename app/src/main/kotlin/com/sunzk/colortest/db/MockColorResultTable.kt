@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.sunzk.colortest.Runtime
-import com.sunzk.colortest.mockColor.MockColorResult
+import com.sunzk.colortest.game.mockcolor.MockColorResult
 import com.sunzk.colortest.entity.HSB
 import java.util.ArrayList
 

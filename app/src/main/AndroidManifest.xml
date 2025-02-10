@@ -24,20 +24,17 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".mockColor.MockColorActivity"
-			android:exported="false"
-			android:windowSoftInputMode="adjustPan"/>
 		<activity android:name=".intermediateColor.IntermediateColorActivity" />
-		<activity android:name=".activity.ModeSelectActivity" />
 		<activity android:name=".findDiffColor.FindDiffColorActivity" />
 		<activity android:name=".activity.SelectPicActivity" />
-        <activity android:name=".mockColor.MockColorHistoryActivity" />
+        <activity android:name=".game.mockcolor.MockColorHistoryActivity" />
         <activity android:name=".intermediateColor.IntermediateColorHistoryActivity" />
 		<activity android:name=".activity.SettingActivity" />
 		<activity android:name=".findSameColor.FindSameColorActivity" />
 		<activity android:name=".sortColor.SortColorActivity" />
+        <activity android:name=".game.GameActivity" />
 
-		<!--	注册辅助功能服务	-->
+        <!--	注册辅助功能服务	-->
 <!--		<service android:name=".service.AccessibilityControlService"-->
 <!--			android:label="@string/accessibility_tip"-->
 <!--			android:exported="true"-->

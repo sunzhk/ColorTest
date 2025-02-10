@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -13,7 +14,7 @@ import com.sunzk.base.expand.emitBy
 import com.sunzk.colortest.service.BGMService
 import com.sunzk.colortest.tools.FloatingSettingWindowManager
 
-open class BaseActivity : FragmentActivity() {
+open class BaseActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "BaseActivity"

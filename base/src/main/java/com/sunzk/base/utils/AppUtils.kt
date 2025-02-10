@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.TrafficStats
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import com.sunzk.base.utils.Logger.d
@@ -83,11 +84,16 @@ object AppUtils {
      * @param context 上下文
      * @return 当前应用的版本号。获取失败则返回 -1
      */
-    fun getVersionCode(context: Context): Int {
+    fun getVersionCode(context: Context): Long {
         return try {
             val manager = context.packageManager
             val info = manager.getPackageInfo(context.packageName, 0)
-            info.versionCode
+	        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+		        info.longVersionCode
+	        } else {
+                @Suppress("DEPRECATION")
+		        info.versionCode.toLong()
+	        }
         } catch (e: Exception) {
             d(TAG, "getVersionCode", e)
             -1
@@ -208,23 +214,6 @@ object AppUtils {
     }
 
     /**
-     * 检测某ActivityUpdate是否在当前Task的栈顶
-     *
-     * @param activity 要判断的Activity
-     */
-    fun isTopActivy(activity: Activity): Boolean {
-        val manager = activity.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        val runningTaskInfos = manager.getRunningTasks(1)
-        var cmpNameTemp: String? = null
-        if (null != runningTaskInfos) {
-            cmpNameTemp = runningTaskInfos[0].topActivity.toString()
-            d(TAG, "当前栈顶:$cmpNameTemp")
-            d(TAG, "请求栈顶:" + activity.componentName)
-        }
-        return if (null == cmpNameTemp) false else cmpNameTemp == activity.componentName.toString()
-    }
-
-    /**
      * 判断应用是否在栈顶
      *
      * @param context 上下文
@@ -245,20 +234,6 @@ object AppUtils {
             d(TAG, "isAppOnForeground", e)
         }
         return false
-    }
-
-    /**
-     * 从Context获取真实的Activity
-     */
-    fun getActivity(context: Context?): Activity? {
-        var context: Context? = context ?: return null
-        while (context is ContextWrapper) {
-            if (context is Activity) {
-                return context
-            }
-            context = context.baseContext
-        }
-        return null
     }
 
     /**

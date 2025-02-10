@@ -1,4 +1,4 @@
-package com.sunzk.colortest.mockColor
+package com.sunzk.colortest.game.mockcolor
 
 import android.os.Bundle
 import android.util.Log

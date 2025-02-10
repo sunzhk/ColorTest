@@ -5,6 +5,9 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.sunzk.base.expand.collect
@@ -12,10 +15,24 @@ import com.sunzk.colortest.Runtime
 import com.sunzk.colortest.entity.HSB
 import kotlinx.coroutines.Job
 
+private const val TAG: String = "MergedColorPicker"
+
+@Composable
+fun MergedColorPicker(modifier: Modifier, hsb: HSB, onColorPick: ((HSB) -> Unit)? = null) {
+	AndroidView(
+		modifier = modifier,
+		factory = { context ->
+			val view = MergedColorPicker(context)
+			view.onColorPick = onColorPick
+			view
+		},
+		update = { view ->
+			view.updateHSB(hsb.h, hsb.s, hsb.b)
+		}
+	)
+}
+
 class MergedColorPicker: FrameLayout, IColorPicker {
-	companion object {
-		private const val TAG: String = "MergedColorPicker"
-	}
 
 	// <editor-fold desc="构造方法">
 	constructor(context: Context) : super(context)
