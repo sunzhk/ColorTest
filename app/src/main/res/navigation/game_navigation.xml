@@ -1,0 +1,19 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/game_nav_graph"
+    app:startDestination="@id/modeSelect">
+    
+    <fragment
+        android:id="@+id/modeSelect"
+        android:name="com.sunzk.colortest.game.ModeSelectFragment"
+        android:label="ModeSelectFragment">
+        <action android:id="@+id/action_modeSelect_to_mockColor"
+            app:destination="@id/mockColor"/>
+    </fragment>
+    
+    <fragment
+        android:id="@+id/mockColor"
+        android:name="com.sunzk.colortest.game.mockcolor.MockColorFragment"
+        android:label="MockColorFragment"/>
+
+</navigation>

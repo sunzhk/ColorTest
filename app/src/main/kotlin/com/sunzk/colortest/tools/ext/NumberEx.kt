@@ -2,6 +2,8 @@ package com.sunzk.demo.tools.ext
 
 import android.content.res.Resources
 import android.util.TypedValue
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.blankj.utilcode.util.ConvertUtils
@@ -120,3 +122,9 @@ inline val Float.px2dp: Float
 	get() = ConvertUtils.px2dp(this).toFloat()
 
 inline val Int.px: Dp get() = this.px2dp.dp
+
+@Composable
+fun Dp.toPx(): Float {
+	val density = LocalDensity.current
+	return with(density) { this@toPx.toPx() }
+}

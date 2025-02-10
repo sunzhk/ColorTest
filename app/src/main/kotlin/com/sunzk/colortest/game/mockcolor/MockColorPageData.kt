@@ -1,4 +1,4 @@
-package com.sunzk.colortest.mockColor
+package com.sunzk.colortest.game.mockcolor
 
 import com.sunzk.colortest.entity.HSB
 

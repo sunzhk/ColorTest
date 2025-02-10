@@ -2,6 +2,8 @@ package com.sunzk.colortest.intermediateColor
 
 import android.util.Log
 import com.sunzk.colortest.entity.HSB
+import com.sunzk.colortest.game.IDifficulty
+import kotlin.enums.EnumEntries
 import kotlin.math.abs
 
 /**
@@ -43,14 +45,14 @@ data class IntermediateColorResult(
 	}
 
 	enum class Difficulty(
-		val text: String,
+		override val text: String,
 		val fixedNumberOfParameters: Int,
 		val colorHDifferencePercent: Int,
 		val colorSDifferencePercent: Int,
 		val colorBDifferencePercent: Int,
 		val minSBPercent: Int,
 		val allowDeviation: Int,
-	) {
+	): IDifficulty {
 		Easy("中杯", 2, 40, 35, 35, 60, 5),
 		Normal("大杯", 1, 30, 30, 30, 40, 8),
 		Hard("超大杯", 0, 15, 25, 25, 20, 10);
