@@ -34,7 +34,6 @@ class ActivityBinderLazy<T : ViewBinding>(private val clazz: Class<T>, val activ
 		val method = clazz.getMethod("inflate", LayoutInflater::class.java)
 		return (method.invoke(null, activity.layoutInflater) as T).also {
 			activity.setContentView(it.root)
-			it
 		}
 	}
 }

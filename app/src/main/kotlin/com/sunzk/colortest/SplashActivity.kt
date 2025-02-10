@@ -11,8 +11,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.sunzk.base.expand.readFileAsString
 import com.sunzk.base.expand.threadInfo
-import com.sunzk.colortest.activity.ModeSelectActivity
 import com.sunzk.colortest.entity.ModeEntity
+import com.sunzk.colortest.game.GameActivity
 import kotlinx.coroutines.*
 
 class SplashActivity : BaseActivity() {
@@ -68,7 +68,7 @@ class SplashActivity : BaseActivity() {
 
 	private fun goToModeSelectActivity() {
 		Log.d(TAG, "goToTestActivity")
-		val intent = Intent(this, ModeSelectActivity::class.java)
+		val intent = Intent(this, GameActivity::class.java)
 		startActivity(intent)
 		finish()
 	}

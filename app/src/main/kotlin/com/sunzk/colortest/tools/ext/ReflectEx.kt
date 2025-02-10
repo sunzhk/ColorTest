@@ -1,4 +1,4 @@
-package com.sunzk.demo.tools.ext
+package com.sunzk.colortest.tools.ext
 
 import android.util.Log
 
