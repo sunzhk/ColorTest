@@ -1,4 +1,4 @@
-package com.sunzk.colortest.view
+package com.sunzk.colortest.view.colorSelector
 
 import android.content.Context
 import android.graphics.Color
@@ -6,7 +6,6 @@ import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.KeyEvent
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.SeekBar
@@ -15,6 +14,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.sunzk.base.expand.bindView
 import com.sunzk.base.expand.collect
 import com.sunzk.base.utils.ColorUtils
 import com.sunzk.base.utils.DisplayUtil
@@ -22,8 +22,9 @@ import com.sunzk.base.utils.NumberUtils
 import com.sunzk.colortest.R
 import com.sunzk.colortest.databinding.MergeHsbColorSelectorBinding
 import com.sunzk.colortest.entity.HSB
+import com.sunzk.colortest.view.HBSColorSelectorData
 
-class HSBColorSelector : LinearLayout {
+class HSBColorSelector : LinearLayout, IColorPicker {
 
     companion object {
         private const val TAG = "HSBColorSelector"
@@ -54,8 +55,13 @@ class HSBColorSelector : LinearLayout {
     )
 
     private var colorData: HBSColorSelectorData = HBSColorSelectorData()
-    private lateinit var viewBinding: MergeHsbColorSelectorBinding
-    var onColorSelectedListener: ((HSB) -> Unit)? = null
+    private val viewBinding by bindView<MergeHsbColorSelectorBinding>()
+
+    override val hsb: HSB
+        get() = HSB(viewBinding.sbH.progress.toFloat(),
+            viewBinding.sbS.progress.toFloat(),
+            viewBinding.sbB.progress.toFloat())
+    override var onColorPick: ((HSB) -> Unit)? = null
 
     // <editor-fold desc="构造方法">
     constructor(context: Context?) : super(context) {
@@ -89,9 +95,6 @@ class HSBColorSelector : LinearLayout {
 
     private fun init() {
         this.orientation = VERTICAL
-        viewBinding = MergeHsbColorSelectorBinding.inflate(
-            LayoutInflater.from(context), this
-        )
         initSeekBarArea()
     }
 
@@ -204,7 +207,7 @@ class HSBColorSelector : LinearLayout {
         val color = Color.HSVToColor(floatArrayOf(h.toFloat(), s.toFloat(), b.toFloat()))
         Log.d(TAG, "onSeekBarHDrag-resetResultColor: $h,$s,$b->${Integer.toHexString(color)}")
         colorData.setColorH(h)
-        onColorSelectedListener?.invoke(HSB(h.toFloat(), s.toFloat(), b.toFloat()))
+        onColorPick?.invoke(HSB(h.toFloat(), s.toFloat(), b.toFloat()))
     }
     private fun onSeekBarSDrag() {
         val h = viewBinding.sbH.progress
@@ -213,7 +216,7 @@ class HSBColorSelector : LinearLayout {
         val color = Color.HSVToColor(floatArrayOf(h.toFloat(), s.toFloat(), b.toFloat()))
         Log.d(TAG, "onSeekBarSDrag-resetResultColor: $h,$s,$b->${Integer.toHexString(color)}")
         colorData.setColorS(s)
-        onColorSelectedListener?.invoke(HSB(h.toFloat(), s.toFloat(), b.toFloat()))
+        onColorPick?.invoke(HSB(h.toFloat(), s.toFloat(), b.toFloat()))
     }
     private fun onSeekBarBDrag() {
         val h = viewBinding.sbH.progress
@@ -222,7 +225,7 @@ class HSBColorSelector : LinearLayout {
         val color = Color.HSVToColor(floatArrayOf(h.toFloat(), s.toFloat(), b.toFloat()))
         Log.d(TAG, "onSeekBarBDrag-resetResultColor: $h,$s,$b->${Integer.toHexString(color)}")
         colorData.setColorB(b)
-        onColorSelectedListener?.invoke(HSB(h.toFloat(), s.toFloat(), b.toFloat()))
+        onColorPick?.invoke(HSB(h.toFloat(), s.toFloat(), b.toFloat()))
     }
 
     private fun resetSeekBarProgressBackground() {
@@ -267,15 +270,6 @@ class HSBColorSelector : LinearLayout {
         }
     }
 
-//    val colorH: Float
-//        get() = colorData.colorH.value.toFloat()
-//
-//    val colorS: Float
-//        get() = colorData.colorS.value.toFloat()
-//
-//    val colorB: Float
-//        get() = colorData.colorB.value.toFloat()
-
     val progressH: Int
         get() = viewBinding.sbH.progress
 
@@ -296,19 +290,26 @@ class HSBColorSelector : LinearLayout {
         colorData.setColorB(HSB.COLOR_B_MAX * percent / 100)
     }
 
-    fun setHValue(h: Int) {
+    fun updateH(h: Int) {
         Log.d(TAG, "HSBColorSelector#setHValue- h: $h")
         colorData.setColorH(h)
     }
     
-    fun setSValue(s: Int) {
+    fun updateS(s: Int) {
         Log.d(TAG, "HSBColorSelector#setSValue- s: $s")
         colorData.setColorS(s)
     }
     
-    fun setBValue(b: Int) {
+    fun updateB(b: Int) {
         Log.d(TAG, "HSBColorSelector#setBValue- b: $b")
         colorData.setColorB(b)
+    }
+
+    override fun updateHSB(h: Float, s: Float, b: Float) {
+        Log.d(TAG, "HSBColorSelector#updateHSB- h: $h, s: $s, b: $b")
+        colorData.setColorH(h.toInt())
+        colorData.setColorB(b.toInt())
+        colorData.setColorS(s.toInt())
     }
 
     override fun setEnabled(enabled: Boolean) {

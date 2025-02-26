@@ -1,22 +1,24 @@
 <resources>
 
 	<!-- Base application theme. -->
-	<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+	<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 		<!-- Customize your theme here. -->
 		<item name="colorPrimary">@color/colorPrimary</item>
 		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 		<item name="colorAccent">@color/colorAccent</item>
 		<item name="actionBarSize">0dp</item>
+		<item name="android:statusBarColor">@color/colorPrimary</item>
+		<item name="android:windowLightStatusBar">true</item>
 	</style>
 
-	<style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-		<item name="background">@color/default_activity_background</item>
+	<style name="MyAppTheme" parent="AppTheme">
+		<item name="backgroundColor">@color/common_bg</item>
+		<item name="background">@color/common_bg</item>
+		<item name="android:windowBackground">@color/common_bg</item>
 	</style>
 
 
-	<style name="ModeItem">
-		<item name="android:background">@drawable/bg_common_bt</item>
-		<item name="android:textColor">#FF404040</item>
+	<style name="ModeItem" parent="CommonButton">
 		<item name="android:textSize">21sp</item>
 		<item name="android:gravity">center</item>
 		<item name="android:padding">10dp</item>
@@ -28,12 +30,6 @@
 		<item name="android:textSize">14sp</item>
 	</style>
 
-	<style name="CommonButton_Dark">
-		<item name="android:background">@drawable/bg_common_bt_dark</item>
-		<item name="android:textColor">@color/common_bt_text_dark</item>
-		<item name="android:textSize">14sp</item>
-	</style>
-	
 	<style name="HSBColorSelectorStepButton">
 		<item name="android:layout_width">@dimen/view_hsb_color_selector_step_button_size</item>
 		<item name="android:layout_height">@dimen/view_hsb_color_selector_step_button_size</item>
@@ -42,6 +38,19 @@
 		<item name="android:padding">@dimen/view_hsb_color_selector_step_button_padding</item>
 		<item name="android:clickable">true</item>
 		<item name="android:focusable">true</item>
+	</style>
+	
+	<style name="SettingItem">
+		<item name="android:clickable">true</item>
+		<item name="android:focusable">true</item>
+		<item name="android:layout_marginTop">10dp</item>
+		<item name="android:gravity">center_vertical</item>
+	</style>
+	
+	<style name="SettingItemIcon">
+		<item name="android:layout_width">@dimen/floating_setting_icon_size</item>
+		<item name="android:layout_height">@dimen/floating_setting_icon_size</item>
+		<item name="android:padding">@dimen/floating_setting_icon_padding</item>
 	</style>
 
 </resources>

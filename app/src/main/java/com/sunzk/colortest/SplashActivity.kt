@@ -5,31 +5,23 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Window
 import androidx.lifecycle.lifecycleScope
+import com.blankj.utilcode.util.BarUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.sunzk.base.expand.readFileAsString
 import com.sunzk.base.expand.threadInfo
-import com.sunzk.base.network.ServerSetting
-import com.sunzk.base.network.serverCreator
 import com.sunzk.colortest.activity.ModeSelectActivity
 import com.sunzk.colortest.entity.ModeEntity
-import com.sunzk.colortest.network.MainApi
 import kotlinx.coroutines.*
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.lang.StringBuilder
-import java.lang.reflect.Type
 
-class MainActivity : BaseActivity() {
+class SplashActivity : BaseActivity() {
 	private val TAG: String = "MainActivity"
-
-	private val mainApi: MainApi by serverCreator(Constant.BASE_URL_MOCK) {
-		ServerSetting(3000)
-	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		requestWindowFeature(Window.FEATURE_NO_TITLE)
+		BarUtils.setStatusBarColor(this, resources.getColor(R.color.app_base, null))
+		needFloatingWindow = false
 		setContentView(R.layout.activity_main)
 
 		Log.d(TAG, "onCreate: thread=${threadInfo()}")
@@ -58,8 +50,6 @@ class MainActivity : BaseActivity() {
 
 	private suspend fun requestModeList() {
 		val modeList = withContext(Dispatchers.IO) {
-			// 模拟用的接口网站挂了，先用本地数据吧
-//			mainApi.getModeList2()
 			assets.readFileAsString("ModeList.json")?.runCatching {
 				val type = object : TypeToken<MutableList<ModeEntity>>() {}.type
 				val entity = Gson().fromJson<MutableList<ModeEntity>>(this, type)

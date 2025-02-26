@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="app_base">#FF006396</color>
+	<color name="splash_title">#FFF0F0F0</color>
+	<color name="splash_hint">#FFA0A0A0</color>
+	<color name="common_bg">#FF333333</color>
+
+	<!--	通用按钮配置	-->
+	<color name="common_bt_bg">#FF333333</color>
+	<color name="common_bt_bg_disable">#FF333333</color>
+	<color name="common_bt_bg_pressed">#FF666666</color>
+	<color name="common_bt_stroke">#FFEEEEEE</color>
+	<color name="common_bt_text">#FFD0D0D0</color>
+
+	<color name="common_text_hint">#FFBBBBBB</color>
+
+	<!--    文字颜色    -->
+	<color name="theme_txt_standard">#FFD0D0D0</color>   <!-- 标准色号 -->
+
+	<color name="difficulty_easy">#FF008000</color>
+	<color name="difficulty_normal">#FFFFA500</color>
+	<color name="difficulty_hard">#FFFF4400</color>
+</resources>

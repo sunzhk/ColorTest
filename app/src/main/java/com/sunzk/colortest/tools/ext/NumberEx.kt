@@ -81,6 +81,27 @@ fun Double.round(): Int {
 	return kotlin.math.round(this).toInt()
 }
 
+/**
+ * 平方
+ */
+fun square(x: Int): Int {
+	return x * x
+}
+
+/**
+ * 平方
+ */
+fun square(x: Float): Float {
+	return x * x
+}
+
+/**
+ * 平方
+ */
+fun square(x: Double): Double {
+	return x * x
+}
+
 inline val Int.dp2px: Int
 	get() = ConvertUtils.dp2px(this.toFloat())
 
