@@ -1,11 +1,16 @@
-package com.sunzk.colortest.intermediateColor
+package com.sunzk.colortest.game.intermediateColor
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.base.expand.emitBy
+import com.sunzk.colortest.db.IntermediateColorResultTable
 import com.sunzk.colortest.entity.HSB
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import java.util.Random
 
 class IntermediateColorViewModel : ViewModel() {
@@ -20,6 +25,9 @@ class IntermediateColorViewModel : ViewModel() {
      * 页面数据
      */
     val pageData : StateFlow<IntermediateColorPageData> = _pageData
+
+    private val _pickColor = MutableStateFlow(_pageData.value.answerColor.clone())
+    val pickColor: StateFlow<HSB> = _pickColor
 
     fun switchDifficulty(difficulty: IntermediateColorResult.Difficulty) {
         if (difficulty == _pageData.value.difficulty) {
@@ -123,13 +131,22 @@ class IntermediateColorViewModel : ViewModel() {
         return lock
     }
 
-    fun updateAnswerColor(hsbColor: HSB, needNotify: Boolean = false) {
-        if (needNotify) {
-            _pageData.emitBy(_pageData.value.copy(answerColor = hsbColor))
-        } else {
-            _pageData.value.answerColor.h = hsbColor[0]
-            _pageData.value.answerColor.s = hsbColor[1]
-            _pageData.value.answerColor.b = hsbColor[2]
+    fun updatePickColor(hsbColor: HSB) {
+        _pickColor.emitBy(hsbColor.clone())
+        _pageData.value.answerColor.update(hsbColor)
+    }
+
+    fun saveToDB() {
+        val leftColor = pageData.value.questionLeftColor
+        val rightColor = pageData.value.questionRightColor
+        val answerColor = pageData.value.answerColor
+        viewModelScope.launch(GlobalDispatchers.IO) {
+            IntermediateColorResultTable.add(IntermediateColorResult(
+                difficulty = pageData.value.difficulty,
+                questionLeft = leftColor,
+                questionRight = rightColor,
+                answer = answerColor
+            ))
         }
     }
 }

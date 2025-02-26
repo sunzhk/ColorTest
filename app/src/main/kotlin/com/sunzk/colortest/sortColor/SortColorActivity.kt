@@ -44,12 +44,9 @@ import com.airbnb.lottie.compose.LottieClipSpec
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.alibaba.android.arouter.facade.annotation.Route
 import com.sunzk.colortest.BaseActivity
 import com.sunzk.colortest.R
-import com.sunzk.colortest.RouteInfo
 
-@Route(path = RouteInfo.PATH_ACTIVITY_SORT_COLOR, group = RouteInfo.GROUP_GAME, name = RouteInfo.DESC_ACTIVITY_SORT_COLOR)
 class SortColorActivity: BaseActivity() {
 	companion object {
 		private const val TAG: String = "SortColorActivity"

@@ -1,4 +1,4 @@
-package com.sunzk.colortest.intermediateColor
+package com.sunzk.colortest.game.intermediateColor
 
 import com.sunzk.colortest.entity.HSB
 
