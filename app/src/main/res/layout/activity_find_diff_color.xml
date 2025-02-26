@@ -6,32 +6,7 @@
 	android:id="@+id/fl_container"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/bg_activity_find_diff_color_dark"
 	android:clipChildren="false">
-
-	<TextView
-		android:id="@+id/tv_hint"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="50dp"
-		android:textSize="30sp"
-		android:visibility="invisible"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
-
-	<Button
-		android:id="@+id/bt_light_switch"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentTop="true"
-		android:layout_alignParentEnd="true"
-		android:layout_margin="15dp"
-		style="@style/CommonButton_Dark"
-		android:text="@string/light_switch_text_turn_off"
-		android:theme="@android:style/ThemeOverlay.Material.Dark"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
 
 	<com.sunzk.colortest.view.FindDiffView
 		android:id="@+id/find_diff_color"
@@ -39,8 +14,9 @@
 		android:layout_height="wrap_content"
 		android:layout_marginStart="15dp"
 		android:layout_marginEnd="15dp"
+		app:layout_constraintVertical_bias="0.6"
 		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintBottom_toTopOf="@+id/tv_level"
 		tools:layout_editor_absoluteX="20dp" />
 
 	<ImageView
@@ -60,7 +36,7 @@
 		android:layout_width="@dimen/activity_find_diff_color_controller_level_width"
 		android:layout_height="@dimen/activity_find_diff_color_controller_level_height"
 		android:layout_marginBottom="@dimen/activity_find_diff_color_controller_level_spacing_bottom"
-		android:textColor="@color/text_default_dark"
+		android:textColor="@color/theme_txt_standard"
 		android:textSize="@dimen/activity_find_diff_color_controller_text_size"
 		android:gravity="center|bottom"
 		android:padding="0dp"
@@ -82,31 +58,16 @@
 
 	<Button
 		android:id="@+id/bt_change"
+		style="@style/CommonButton"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="15dp"
-		android:layout_marginStart="15dp"
-		android:layout_marginEnd="15dp"
-		android:padding="20dp"
-		style="@style/CommonButton_Dark"
-		android:text="下一局"
+		android:layout_marginBottom="30dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginEnd="20dp"
+		android:text="换一换"
 		android:textSize="21sp"
-		android:theme="@android:style/ThemeOverlay.Material.Dark"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent" />
-
-	<CheckBox
-		android:id="@+id/cbAutoNext"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="15dp"
-		android:layout_marginTop="25dp"
-		android:text="自动下一关"
-		android:textColor="#FFD0D0D0"
-		android:checked="true"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		android:theme="@android:style/ThemeOverlay.Material.Dark"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

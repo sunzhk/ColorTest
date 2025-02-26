@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cl_floating_setting"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:animateLayoutChanges="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/iv_setting"
+        android:layout_width="@dimen/floating_setting_icon_size"
+        android:layout_height="@dimen/floating_setting_icon_size"
+        android:padding="@dimen/floating_setting_icon_padding"
+        android:background="@drawable/bg_floating_setting"
+        android:src="@mipmap/icon_setting"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ll_setting"/>
+    
+    <LinearLayout
+        android:id="@+id/ll_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="10dp"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:background="@drawable/bg_common_bt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_setting"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="@dimen/floating_setting_icon_size"
+            android:layout_height="@dimen/floating_setting_icon_size"
+            android:padding="@dimen/floating_setting_icon_padding"
+            android:src="@mipmap/icon_setting_close"/>
+
+        <LinearLayout
+            android:id="@+id/ll_background_music"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SettingItem">
+            <ImageView
+                style="@style/SettingItemIcon"
+                android:src="@mipmap/icon_setting_background_music"/>
+            <TextView
+                android:id="@+id/tv_background_music"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:lines="1"
+                android:text="背景音乐："
+                android:textColor="@color/common_bt_text"
+                android:textSize="@dimen/floating_setting_text_size"/>
+            <View
+                android:layout_width="@dimen/common_switch_width"
+                android:layout_height="@dimen/common_switch_height"
+                android:background="@drawable/bg_common_switch"
+                android:duplicateParentState="true"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/ll_dark_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SettingItem">
+            <ImageView
+                style="@style/SettingItemIcon"
+                android:src="@mipmap/icon_setting_dark_mode"/>
+            <TextView
+                android:id="@+id/tv_dark_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:lines="1"
+                android:text="深色模式"
+                android:textColor="@color/common_bt_text"
+                android:textSize="@dimen/floating_setting_text_size"/>
+        </LinearLayout>
+        
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,6 +43,7 @@ import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.base.expand.emitBy
 import com.sunzk.colortest.compose.ui.HistoryPageCommon
 import com.sunzk.colortest.compose.ui.HistoryPageCommon.drawColorContrast
+import com.sunzk.colortest.entity.HSB
 import com.sunzk.colortest.entity.StatisticsData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -62,6 +63,10 @@ class MockColorHistoryActivity: BaseActivity() {
 		super.onCreate(savedInstanceState)
 		setContent { Page() }
 		initData()
+	}
+
+	override fun needBGM(): Boolean {
+		return true
 	}
 
 	private fun initData() {
@@ -126,8 +131,8 @@ class MockColorHistoryActivity: BaseActivity() {
 		val itemShape = RoundedCornerShape(10.dp)
 		Column(Modifier
 			.padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
-			.border(1.5.dp, colorResource(R.color.theme_txt_disable), shape = itemShape)
-			.background(Color.White, shape = itemShape)
+			.border(1.5.dp, colorResource(R.color.common_bt_stroke), shape = itemShape)
+			.background(colorResource(R.color.common_bt_bg), shape = itemShape)
 			.padding(8.dp)
 			.clickable { expanded = expanded.not() }) {
 			HistoryItemTitle(history)

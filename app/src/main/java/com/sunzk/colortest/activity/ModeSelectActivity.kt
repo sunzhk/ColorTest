@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,11 +44,6 @@ class ModeSelectActivity : BaseActivity() {
 		}
 		showVersionUpgradeDialog()
 		initModeList()
-		resetBgmSwitchState(Runtime.isNeedBGM)
-		viewBinding.cbBgmSwitch.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
-			resetBgmSwitchState(isChecked)
-			Runtime.isNeedBGM = isChecked
-		}
 	}
 
 	private fun initModeList() {
@@ -133,16 +127,10 @@ class ModeSelectActivity : BaseActivity() {
 
 			private fun refreshModeEntityListInDataStore() {
 				Runtime.modeList = modeEntityList
-				Runtime.writeModeListToDataStore()
 			}
 		})
 		val touchHelper = ItemTouchHelper(callback)
 		touchHelper.attachToRecyclerView(viewBinding.rvModeList)
-	}
-
-	private fun resetBgmSwitchState(switchOn: Boolean) {
-		viewBinding.cbBgmSwitch.isChecked = switchOn
-		viewBinding.tvBgmSwitch.setText(if (switchOn) R.string.bgm_switch_on else R.string.bgm_switch_off)
 	}
 
 	private fun checkAccess(): Boolean {
