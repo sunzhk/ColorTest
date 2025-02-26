@@ -1,4 +1,4 @@
-package com.sunzk.colortest.view.colorSelector
+package com.sunzk.colortest.view.colorPicker
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,7 +6,9 @@ import android.graphics.Color
 import android.graphics.ComposeShader
 import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.Paint.FontMetrics
 import android.graphics.Point
+import android.graphics.PointF
 import android.graphics.PorterDuff
 import android.graphics.RectF
 import android.graphics.Shader
@@ -15,14 +17,22 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.annotation.UiThread
+import androidx.core.view.marginEnd
+import androidx.core.view.marginStart
+import com.arcsoft.closeli.utils.takeIfIs
+import com.blankj.utilcode.util.ScreenUtils
 import com.sunzk.base.utils.ColorUtils
+import com.sunzk.colortest.R
 import com.sunzk.colortest.entity.HSB
 import com.sunzk.demo.tools.ext.dp2px
+import com.sunzk.demo.tools.ext.sp2px
 import com.sunzk.demo.tools.ext.square
 import kotlin.math.atan2
 import kotlin.math.min
 import kotlin.math.sqrt
+
 
 /**
  * 色轮取色器
@@ -42,6 +52,9 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 	constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : this(context, attrs, defStyleAttr, 0)
 	// </editor-fold>
 
+	override val pickerView: View
+		get() = this
+	
 	override val hsb: HSB
 		get() = HSB(hValue, sPercent, bPercent)
 
@@ -100,21 +113,56 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 	}
 	// </editor-fold>
 
+	// <editor-fold desc="宽高计算">
+
+	private var widthSpecMode: Int = 0
+	private var heightSpecMode: Int = 0
+	private var widthSpecSize = 0
+	private var heightSpecSize = 0
+
+	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+		widthSpecMode = MeasureSpec.getMode(widthMeasureSpec)
+		heightSpecMode = MeasureSpec.getMode(heightMeasureSpec)
+		widthSpecSize = MeasureSpec.getSize(widthMeasureSpec)
+		heightSpecSize = MeasureSpec.getSize(heightMeasureSpec)
+		val spacing = paddingLeft + paddingRight + (layoutParams?.takeIfIs<MarginLayoutParams>()?.let { marginStart + marginEnd } ?: 0)
+		when (widthSpecMode) {
+			MeasureSpec.UNSPECIFIED, MeasureSpec.AT_MOST -> {
+				heightSpecSize = min(ScreenUtils.getAppScreenWidth(), ScreenUtils.getAppScreenHeight()) - spacing
+			}
+			MeasureSpec.EXACTLY -> {
+				heightSpecSize = min(widthSpecSize, heightSpecSize) - spacing
+			}
+		}
+		widthSpecSize = if (showHintText) {
+			(heightSpecSize - hintTextHeight - 4.dp2px).toInt()
+		} else {
+			heightSpecSize
+		}
+		Log.d(TAG, "ColorWheelColorPicker#onMeasure- UNSPECIFIED=${MeasureSpec.UNSPECIFIED}, AT_MOST=${MeasureSpec.AT_MOST}, EXACTLY=${MeasureSpec.EXACTLY}")
+		Log.d(TAG, "ColorWheelColorPicker#onMeasure- widthSpecMode=$widthSpecMode, heightSpecMode=$heightSpecMode, widthSpecSize=$widthSpecSize, heightSpecSize=$heightSpecSize")
+		setMeasuredDimension(widthSpecSize, heightSpecSize)
+	}
+
+	// </editor-fold>
+
 	override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
 		super.onLayout(changed, left, top, right, bottom)
-		drawWight= right - left
+		drawWidth= right - left
 		drawHeight = bottom - top
 		updateDrawParams()
 		updateColorPickerParams()
+		updateHintTextParams()
 	}
 
 	// <editor-fold desc="基础绘制参数及更新">
 	/**
 	 * 绘制区域宽度
  	 */
-	private var drawWight: Int = 0
+	private var drawWidth: Int = 0
 		get() {
-			if (field == 0) {
+			if (field == 0 && width > 0) {
 				field = width
 				updateDrawParams()
 			}
@@ -125,7 +173,7 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 	 */
 	private var drawHeight: Int = 0
 		get() {
-			if (field == 0) {
+			if (field == 0 && height > 0) {
 				field = height
 				updateDrawParams()
 			}
@@ -170,11 +218,11 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 	 * 更新绘制参数
 	 */
 	private fun updateDrawParams() {
-		// 绘制区域的变长
-		drawSideLength =  min(drawWight, drawHeight)
+		// 绘制区域的边长
+		drawSideLength = min(drawWidth, drawHeight)
 		// 环的参数 - 圆心
-		ringCenterPoint.x = drawWight / 2
-		ringCenterPoint.y = drawHeight / 2
+		ringCenterPoint.x = drawWidth / 2
+		ringCenterPoint.y = drawSideLength / 2
 		// 环的参数 - 半径
 		ringRadius = (drawSideLength - ringWidth) / 2f
 		// 环的参数 - 区域
@@ -196,6 +244,43 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 		squareRect.bottom = ringCenterPoint.y + squareSideLength / 2
 		squareRect.left = ringCenterPoint.x - squareSideLength / 2
 		squareRect.right = ringCenterPoint.x + squareSideLength / 2
+	}
+
+	/**
+	 * 是否要显示HSB锁的提示文字
+	 */
+	var showHintText = true
+		set(value) {
+			field = value
+			requestLayout()
+		}
+	/**
+	 * 提示文字
+	 */
+	private var hintText = ArrayList<Pair<String, PointF>>()
+
+	/**
+	 * 更新提示文字相关参数
+	 */
+	private fun updateHintTextParams() {
+		hintText.clear()
+		if (!showHintText) {
+			return
+		}
+		val y = drawHeight - 2f
+		val hText = "色相=${hValue.toInt()}"
+		val sText = "饱和度=${sPercent.toInt()}"
+		val sWidth = FloatArray(sText.length).also { hintTextPaint.getTextWidths(sText, it) }.sum()
+		val bText = "明度=${bPercent.toInt()}"
+		val bWidth = FloatArray(bText.length).also { hintTextPaint.getTextWidths(bText, it) }.sum()
+
+		hintText.add(hText to PointF(0f, y))
+		hintText.add(sText to PointF(((drawWidth - sWidth) / 2), y))
+		hintText.add(bText to PointF(drawWidth - bWidth, y))
+	}
+
+	private fun usableText(b: Boolean): String {
+		return if (b) "禁用" else "启用"
 	}
 	// </editor-fold>
 
@@ -300,6 +385,8 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 			),
 			PorterDuff.Mode.MULTIPLY
 		)
+		// 更新提示文字
+		updateHintTextParams()
 	}
 	
 	private fun onSaturationChange() {}
@@ -358,7 +445,21 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 		it.style = Paint.Style.STROKE
 		it.strokeWidth = 1.dp2px.toFloat()
 	}
-	
+
+	/**
+	 * 提示文字的画笔
+	 */
+	private val hintTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { 
+		it.color = resources.getColor(R.color.theme_txt_standard, null)
+		it.textSize = 14f.sp2px
+		val fm: FontMetrics = it.getFontMetrics()
+		hintTextHeight = fm.descent - fm.ascent // 文字总高度
+	}
+
+	/**
+	 * 提示文字的单行高度
+	 */
+	var hintTextHeight = 0f
 	// </editor-fold>
 	
 	// <editor-fold desc="触摸逻辑">
@@ -368,7 +469,20 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 		Hue,
 		Square
 	}
-	
+
+
+	/**
+	 * 色值锁，禁止/允许用户修改HSB中的一项
+	 */
+	private val hsbLock = booleanArrayOf(false, false, false)
+
+	@UiThread
+	override fun setLock(index: Int, lock: Boolean) {
+		hsbLock[index] = lock
+		updateHintTextParams()
+		invalidate()
+	}
+
 	private var currentTouchMode = TouchMode.None
 
 	override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
@@ -413,10 +527,16 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 	 * 触摸模式为Hue，手指在控件上滑动时判断角度
 	 */
 	private fun handleRingTouch(event: MotionEvent) {
-		// 计算点x,y与ringCenterPoint的夹角
-		val angle = Math.toDegrees(atan2((event.y - ringCenterPoint.y).toDouble(), (event.x - ringCenterPoint.x).toDouble()))
-		updateH(angle.toFloat() + 135)
-		Log.d(TAG, "ColorWheelColorPicker#handleRingTouchMove- angle=$angle, hValue=$hValue")
+		if (!hsbLock[0]) {
+			// 计算点x,y与ringCenterPoint的夹角
+			val angle = Math.toDegrees(atan2((event.y - ringCenterPoint.y).toDouble(), (event.x - ringCenterPoint.x).toDouble()))
+			var h = angle.toFloat() + 135
+			if (h < 0) {
+				h += 360
+			}
+			updateH(h)
+			Log.d(TAG, "ColorWheelColorPicker#handleRingTouchMove- angle=$angle, hValue=$hValue")
+		}
 		if (event.action == MotionEvent.ACTION_UP) {
 			currentTouchMode = TouchMode.None
 		}
@@ -426,19 +546,27 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 	 * 触摸模式为Square，手指在控件上滑动时判断位置
 	 */
 	private fun handleSquareTouch(event: MotionEvent) {
-		val s = if (event.x <= squareRect.left) {
-			0f
-		} else if (event.x >= squareRect.right) {
-			100f
+		val s = if (hsbLock[1]) {
+			sPercent
 		} else {
-			(event.x - squareRect.left) * 100f / squareSideLength
+			if (event.x <= squareRect.left) {
+				0f
+			} else if (event.x >= squareRect.right) {
+				100f
+			} else {
+				(event.x - squareRect.left) * 100f / squareSideLength
+			}
 		}
-		val b = if (event.y <= squareRect.top) {
-			100f
-		} else if (event.y >= squareRect.bottom) {
-			0f
+		val b = if (hsbLock[2]) {
+			bPercent
 		} else {
-			(squareRect.bottom - event.y) * 100f / squareSideLength
+			if (event.y <= squareRect.top) {
+				100f
+			} else if (event.y >= squareRect.bottom) {
+				0f
+			} else {
+				(squareRect.bottom - event.y) * 100f / squareSideLength
+			}
 		}
 		updateSB(s, b)
 		if (event.action == MotionEvent.ACTION_UP) {
@@ -447,10 +575,13 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 	}
 	// </editor-fold>
 	
+	// <editor-fold desc="绘制过程">
+	
 	override fun onDraw(canvas: Canvas) {
 		if (canDraw()) {
 			drawRing(canvas)
 			drawSquare(canvas)
+			drawHint(canvas)
 		}
 	}
 
@@ -476,8 +607,19 @@ class ColorWheelColorPicker(context: Context?, attrs: AttributeSet?, defStyleAtt
 		canvas.drawCircle(squareIndicatorCenterPoint.x.toFloat(), squareIndicatorCenterPoint.y.toFloat(), squareIndicatorOuterRingWidth, squareIndicatorOuterPaint)
 	}
 	
-	private fun canDraw(): Boolean {
-		return drawWight > 0 && drawHeight > 0
+	private fun drawHint(canvas: Canvas) {
+		if (!showHintText) {
+			return
+		}
+		hintText.forEachIndexed { index, (text, point) ->
+			canvas.drawText(text, point.x, point.y, hintTextPaint)
+		}
 	}
+	
+	private fun canDraw(): Boolean {
+		return drawWidth > 0 && drawHeight > 0
+	}
+
+	// </editor-fold>
 
 }

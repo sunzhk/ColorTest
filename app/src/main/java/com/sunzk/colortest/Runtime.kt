@@ -6,13 +6,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.stringPreferencesKey
 import com.arcsoft.closeli.utils.takeIfIs
-import com.google.gson.Gson
 import com.sunzk.base.expand.emitBy
-import com.sunzk.base.utils.Logger
 import com.sunzk.colortest.entity.ModeEntity
+import com.sunzk.colortest.view.colorPicker.ColorPickerType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.*
@@ -35,6 +32,7 @@ object Runtime {
         val sp = context.getSharedPreferences(Constant.SP_NAME_APP, Context.MODE_PRIVATE)
         initBGMSwitch(sp)
         initDarkMode(sp)
+        initColorPickerType(sp)
     }
 
     // <editor-fold desc="背景音乐">
@@ -73,8 +71,10 @@ object Runtime {
             application.sharedPreferences.edit().putInt(Constant.SP_KEY_NIGHT_MODE, value.ordinal).apply()
         }
     
-    fun nextDarkMode() {
-        darkMode = DarkMode.entries.getOrElse(darkMode.ordinal + 1) { DarkMode.entries[0] }
+    fun switchNextDarkMode(): DarkMode {
+        val nextMode = DarkMode.entries.getOrElse(darkMode.ordinal + 1) { DarkMode.entries[0] }
+        darkMode = nextMode
+        return nextMode
     }
 
     private fun initDarkMode(sharedPreferences: SharedPreferences) {
@@ -83,5 +83,30 @@ object Runtime {
         Runtime.darkMode = darkMode
     }
 
+    // </editor-fold>
+    
+    // <editor-fold desc="取色器">
+    private val _colorPickerType = MutableStateFlow(ColorPickerType.ColorWheel)
+    val colorPickerType: StateFlow<ColorPickerType> = _colorPickerType
+    
+    private fun initColorPickerType(sharedPreferences: SharedPreferences) {
+        val typeOrdinal = sharedPreferences.getInt(Constant.SP_KEY_COLOR_PICKER_TYPE, ColorPickerType.HSBProgress.ordinal)
+        val type = ColorPickerType.entries.getOrElse(typeOrdinal) { ColorPickerType.HSBProgress }
+        _colorPickerType.emitBy(type)
+    }
+    
+    fun switchNextColorPickerType(): ColorPickerType {
+        val next = ColorPickerType.entries.getOrElse(_colorPickerType.value.ordinal + 1) { ColorPickerType.entries[0] }
+        selectColorPickerType(next)
+        return next
+    }
+
+    fun selectColorPickerType(type: ColorPickerType) {
+        MyApplication.instance?.sharedPreferences?.edit()?.let { sp ->
+            sp.putInt(Constant.SP_KEY_COLOR_PICKER_TYPE, type.ordinal)?.apply()
+            _colorPickerType.emitBy(type)
+        }
+    }
+    
     // </editor-fold>
 }

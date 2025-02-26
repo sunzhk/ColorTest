@@ -1,4 +1,4 @@
-package com.sunzk.colortest.view.colorSelector
+package com.sunzk.colortest.view.colorPicker
 
 import android.content.Context
 import android.graphics.Color
@@ -20,14 +20,13 @@ import com.sunzk.base.utils.ColorUtils
 import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.base.utils.NumberUtils
 import com.sunzk.colortest.R
-import com.sunzk.colortest.databinding.MergeHsbColorSelectorBinding
+import com.sunzk.colortest.databinding.MergeHsbColorPickerBinding
 import com.sunzk.colortest.entity.HSB
-import com.sunzk.colortest.view.HBSColorSelectorData
 
-class HSBColorSelector : LinearLayout, IColorPicker {
+class HSBColorPicker : LinearLayout, IColorPicker {
 
     companion object {
-        private const val TAG = "HSBColorSelector"
+        private const val TAG = "HSBColorPicker"
     }
 
     /**
@@ -54,9 +53,12 @@ class HSBColorSelector : LinearLayout, IColorPicker {
         intArrayOf(-0x1000000, -0x1000000)
     )
 
-    private var colorData: HBSColorSelectorData = HBSColorSelectorData()
-    private val viewBinding by bindView<MergeHsbColorSelectorBinding>()
+    private var colorData: HBSColorPickerData = HBSColorPickerData()
+    private val viewBinding by bindView<MergeHsbColorPickerBinding>()
 
+    override val pickerView: View
+        get() = this
+    
     override val hsb: HSB
         get() = HSB(viewBinding.sbH.progress.toFloat(),
             viewBinding.sbS.progress.toFloat(),
@@ -132,7 +134,7 @@ class HSBColorSelector : LinearLayout, IColorPicker {
                 i: Int,
                 b: Boolean
             ) {
-                Log.d(TAG, "HSBColorSelector#onProgressChanged- ${resources.getResourceName(seekBar.id)} - $i - $b")
+                Log.d(TAG, "HSBColorPicker#onProgressChanged- ${resources.getResourceName(seekBar.id)} - $i - $b")
                 when (seekBar) {
                     viewBinding.sbH -> {
                         onSeekBarHDrag()
@@ -257,7 +259,7 @@ class HSBColorSelector : LinearLayout, IColorPicker {
                 resetSeekBarProgressBackground()
             }
             colorData.colorS.collect(lifecycleOwner.lifecycleScope) { t: Int ->
-                Log.d(TAG, "HSBColorSelector#bindDataToView- colorS: $t")
+                Log.d(TAG, "HSBColorPicker#bindDataToView- colorS: $t")
                 viewBinding.sbS.progress = t
                 viewBinding.tvS.setText(String.format("%d", t))
                 resetSeekBarProgressBackground()
@@ -284,29 +286,29 @@ class HSBColorSelector : LinearLayout, IColorPicker {
         if (percent < 0 || percent > 100) {
             return
         }
-        Log.d(TAG, "HSBColorSelector#reset- to $percent%: [${HSB.COLOR_H_MAX * percent / 100}, ${HSB.COLOR_S_MAX * percent / 100}, ${HSB.COLOR_B_MAX * percent / 100}]")
+        Log.d(TAG, "HSBColorPicker#reset- to $percent%: [${HSB.COLOR_H_MAX * percent / 100}, ${HSB.COLOR_S_MAX * percent / 100}, ${HSB.COLOR_B_MAX * percent / 100}]")
         colorData.setColorH(HSB.COLOR_H_MAX * percent / 100)
         colorData.setColorS(HSB.COLOR_S_MAX * percent / 100)
         colorData.setColorB(HSB.COLOR_B_MAX * percent / 100)
     }
 
     fun updateH(h: Int) {
-        Log.d(TAG, "HSBColorSelector#setHValue- h: $h")
+        Log.d(TAG, "HSBColorPicker#setHValue- h: $h")
         colorData.setColorH(h)
     }
     
     fun updateS(s: Int) {
-        Log.d(TAG, "HSBColorSelector#setSValue- s: $s")
+        Log.d(TAG, "HSBColorPicker#setSValue- s: $s")
         colorData.setColorS(s)
     }
     
     fun updateB(b: Int) {
-        Log.d(TAG, "HSBColorSelector#setBValue- b: $b")
+        Log.d(TAG, "HSBColorPicker#setBValue- b: $b")
         colorData.setColorB(b)
     }
 
     override fun updateHSB(h: Float, s: Float, b: Float) {
-        Log.d(TAG, "HSBColorSelector#updateHSB- h: $h, s: $s, b: $b")
+        Log.d(TAG, "HSBColorPicker#updateHSB- h: $h, s: $s, b: $b")
         colorData.setColorH(h.toInt())
         colorData.setColorB(b.toInt())
         colorData.setColorS(s.toInt())
@@ -327,7 +329,7 @@ class HSBColorSelector : LinearLayout, IColorPicker {
         viewBinding.tvB.isEnabled = enabled
     }
 
-    fun setLock(index: Int, lock: Boolean) {
+    override fun setLock(index: Int, lock: Boolean) {
         when (index) {
             0 -> {
                 viewBinding.llHContainer1.isVisible = !lock
