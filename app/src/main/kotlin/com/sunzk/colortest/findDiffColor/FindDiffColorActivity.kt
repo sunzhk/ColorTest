@@ -5,17 +5,14 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.alibaba.android.arouter.facade.annotation.Route
 import com.sunzk.base.expand.bindView
 import com.sunzk.base.expand.collect
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.colortest.BaseActivity
-import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.databinding.ActivityFindDiffColorBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@Route(path = RouteInfo.PATH_ACTIVITY_FIND_DIFF_COLOR, group = RouteInfo.GROUP_GAME)
 class FindDiffColorActivity : BaseActivity() {
 
 	private val TAG: String = "FindDiffColorActivity"

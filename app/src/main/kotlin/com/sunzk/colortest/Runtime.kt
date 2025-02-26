@@ -18,16 +18,6 @@ object Runtime {
     private const val TAG = "Runtime"
     var testResultNumber = 0
 
-    var modeList: List<ModeEntity>
-        get() = modeEntities
-        set(modeEntities) {
-            Runtime.modeEntities.clear()
-            Runtime.modeEntities.addAll(modeEntities)
-        }
-
-    private val modeEntities: MutableList<ModeEntity> =
-        ArrayList()
-
     fun initConfig(context: Context) {
         val sp = context.getSharedPreferences(Constant.SP_NAME_APP, Context.MODE_PRIVATE)
         initBGMSwitch(sp)
