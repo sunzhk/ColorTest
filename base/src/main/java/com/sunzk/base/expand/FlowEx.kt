@@ -20,17 +20,16 @@ fun <T> FlowCollector<T>.emitIn(value: T, scope: CoroutineScope = CoroutineScope
 	}
 }
 
-
-fun <T> Flow<T>.collect(scope: CoroutineScope, action: suspend (value: T) -> Unit) {
-	scope.launch(GlobalCoroutineExceptionHandler) {
-		collect (action)
+fun <T> Flow<T>.collect(scope: CoroutineScope, action: suspend (value: T) -> Unit): Job {
+	return scope.launch(GlobalCoroutineExceptionHandler) {
+		collect(action)
 	}
 }
 
 fun <T> Flow<T>.collect(scope: CoroutineScope, context: CoroutineContext = EmptyCoroutineContext, action: suspend (value: T) -> Unit) {
 	scope.launch(GlobalCoroutineExceptionHandler) { 
 		withContext(context) {
-			collect (action)
+			collect(action)
 		}
 	}
 }

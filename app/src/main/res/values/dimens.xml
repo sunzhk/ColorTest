@@ -1,6 +1,5 @@
 <resources>
 
-
     <dimen name="view_hsb_color_selector_seek_bar_height">28dp</dimen>
     <dimen name="view_hsb_color_selector_seek_bar_padding">3dp</dimen>
     <dimen name="view_hsb_color_selector_seek_bar_margin_bottom">5dp</dimen>
@@ -26,5 +25,7 @@
 
     <dimen name="common_switch_width">37dp</dimen>
     <dimen name="common_switch_height">37dp</dimen>
+    <dimen name="common_title_height">37dp</dimen>
 
+    <dimen name="common_dialog_width">280dp</dimen>
 </resources>

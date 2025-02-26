@@ -1,6 +1,5 @@
 package com.sunzk.colortest.mockColor
 
-import com.sunzk.colortest.db.bean.MockColorResult
 import com.sunzk.colortest.entity.HSB
 
 /**

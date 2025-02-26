@@ -20,4 +20,6 @@
 	<color name="difficulty_easy">#FF008000</color>
 	<color name="difficulty_normal">#FFFFA500</color>
 	<color name="difficulty_hard">#FFFF4400</color>
+
+	<color name="common_dialog_bg">#FF222222</color>
 </resources>

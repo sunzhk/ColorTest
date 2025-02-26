@@ -16,7 +16,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.arcsoft.closeli.utils.takeIfIs
-import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.sunzk.base.expand.onClick
 import com.sunzk.colortest.R
@@ -98,6 +97,8 @@ object FloatingSettingWindowManager {
 			viewBinding.root.tag = activity.hashCode()
 		}
 	}
+	
+	// <editor-fold desc="设置UI初始化">
 
 	private fun initView(viewBinding: FloatingSettingBinding) = with(viewBinding) {
 		val listener = ItemViewTouchListener(root)
@@ -113,17 +114,36 @@ object FloatingSettingWindowManager {
 		ivSetting.onClick {
 			unfold()
 		}
+		initBGMSetting(viewBinding)
+		initDarkModeSetting(viewBinding)
+		initColorPickerTypeSetting(viewBinding)
+	}
+
+	private fun initBGMSetting(viewBinding: FloatingSettingBinding) = with(viewBinding) {
 		llBackgroundMusic.isSelected = Runtime.globalBGMSwitch.value
-		llBackgroundMusic.onClick { 
+		llBackgroundMusic.onClick {
 			llBackgroundMusic.isSelected = !Runtime.globalBGMSwitch.value
 			Runtime.toggleGlobalBGMSwitch()
 		}
+	}
+
+	private fun initDarkModeSetting(viewBinding: FloatingSettingBinding) = with(viewBinding) {
 		tvDarkMode.text = "深色模式：${Runtime.darkMode.text}"
-		llDarkMode.onClick { 
-			Runtime.nextDarkMode()
-			tvDarkMode.text = "深色模式：${Runtime.darkMode.text}"
+		llDarkMode.onClick {
+			val nextMode = Runtime.switchNextDarkMode()
+			tvDarkMode.text = "深色模式：${nextMode.text}"
 		}
 	}
+	
+	private fun initColorPickerTypeSetting(viewBinding: FloatingSettingBinding) = with(viewBinding) {
+		tvColorPickerType.text = "取色器模式：${Runtime.colorPickerType.value.text}"
+		llColorPickerType.onClick {
+			val nextType = Runtime.switchNextColorPickerType()
+			tvColorPickerType.text = "取色器模式：${nextType.text}"
+		}
+	}
+
+	// </editor-fold>
 	
 	private fun fold() {
 		floatingView?.get()?.apply {

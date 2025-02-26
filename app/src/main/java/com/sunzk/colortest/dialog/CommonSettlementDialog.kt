@@ -9,7 +9,6 @@ import com.sunzk.base.expand.bindView
 import com.sunzk.base.expand.onClick
 import com.sunzk.colortest.R
 import com.sunzk.colortest.databinding.DialogMockColorSettlementBinding
-import com.sunzk.colortest.db.bean.MockColorResult
 
 class CommonSettlementDialog(
 	context: Context, 

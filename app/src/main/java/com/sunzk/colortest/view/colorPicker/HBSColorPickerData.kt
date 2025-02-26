@@ -1,4 +1,4 @@
-package com.sunzk.colortest.view
+package com.sunzk.colortest.view.colorPicker
 
 import android.util.Log
 import androidx.annotation.IntRange
@@ -12,10 +12,10 @@ import com.sunzk.colortest.entity.HSB.Companion.COLOR_S_MIN
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.math.min
 
-class HBSColorSelectorData {
+class HBSColorPickerData {
 
     companion object {
-        private const val TAG: String = "HBSColorSelectorData"
+        private const val TAG: String = "HBSColorPickerData"
     }
     
     /**

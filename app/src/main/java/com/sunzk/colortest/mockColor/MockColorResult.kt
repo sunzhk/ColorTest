@@ -1,4 +1,4 @@
-package com.sunzk.colortest.db.bean
+package com.sunzk.colortest.mockColor
 
 import android.util.Log
 import com.sunzk.colortest.entity.HSB
@@ -17,7 +17,6 @@ data class MockColorResult(
     companion object {
         private const val TAG: String = "MockColorResult"
     }
-
 
     val questionH: Float
         get() = question.h

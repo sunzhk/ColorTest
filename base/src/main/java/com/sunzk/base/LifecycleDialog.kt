@@ -1,8 +1,10 @@
 package com.sunzk.base
 
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.Gravity
 import androidx.appcompat.app.AppCompatDialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -60,4 +62,19 @@ open class LifecycleDialog : AppCompatDialog, LifecycleOwner {
 	override val lifecycle: Lifecycle
 		get() = mLifecycleRegistry
 
+	fun setGravityCenter(width: Int, height: Int) {
+		setGravity(width, height, Gravity.CENTER)
+	}
+
+	fun setGravity(width: Int, height: Int, gravity: Int) {
+		window?.let { window ->
+			window.decorView.setPadding(0, 0, 0, 0)
+			val layoutParams = window.attributes
+			layoutParams.width = width
+			layoutParams.height = height
+			layoutParams.horizontalMargin = 0f
+			layoutParams.gravity = gravity
+			window.attributes = layoutParams
+		}
+	}
 }

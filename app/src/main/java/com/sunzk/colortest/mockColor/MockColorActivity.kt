@@ -24,7 +24,6 @@ import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.Runtime
 import com.sunzk.colortest.databinding.ActivityMockColorBinding
 import com.sunzk.colortest.db.MockColorResultTable
-import com.sunzk.colortest.db.bean.MockColorResult
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.colortest.dialog.CommonSettlementDialog
 import com.sunzk.colortest.entity.HSB
@@ -66,7 +65,7 @@ class MockColorActivity : BaseActivity() {
 		btAnswer.setOnClickListener { v: View? ->
 			showAnswer(v)
 		}
-		hsbColorSelector.onColorPick = { hsb ->
+		hsbColorPicker.onColorPick = { hsb ->
 			viewModel.pageData.value.pickHSB.update(hsb)
 			viewResult.setBackgroundColor(hsb.rgbColor)
 		}
@@ -113,11 +112,10 @@ class MockColorActivity : BaseActivity() {
 		val rgbColor = questionHSB.rgbColor
 		Log.d(TAG, "MockColorActivity#nextQuestion- $questionHSB -> ${rgbColor.toHexString()}")
 		viewBinding.viewDemo.setBackgroundColor(rgbColor)
-		viewBinding.tvAnswer.text = null
 	}
 
 	private fun handlePickColor(pickHSB: HSB) {
-		viewBinding.hsbColorSelector.updateHSB(pickHSB.h, pickHSB.s, pickHSB.b)
+		viewBinding.hsbColorPicker.updateHSB(pickHSB.h, pickHSB.s, pickHSB.b)
 	}
 
 	override fun needBGM(): Boolean {
@@ -152,7 +150,7 @@ class MockColorActivity : BaseActivity() {
 
 	private fun showAnswer(v: View?) {
 		val question = viewModel.pageData.value.questionHSB
-		val answer = viewBinding.hsbColorSelector.hsb
+		val answer = viewBinding.hsbColorPicker.hsb
 		lifecycleScope.launch {
 			saveResult(question, answer)
 			showScore(Runtime.testResultNumber)

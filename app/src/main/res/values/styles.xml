@@ -17,6 +17,21 @@
 		<item name="android:windowBackground">@color/common_bg</item>
 	</style>
 
+	<style name="LifecycleDialogStyle" parent="launcherTheme">
+		<!-- 背景透明 -->
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:windowContentOverlay">@null</item>
+		<!-- 浮于Activity之上 -->
+		<item name="android:windowIsFloating">true</item>
+		<!-- 边框 -->
+		<item name="android:windowFrame">@null</item>
+		<!-- Dialog以外的区域模糊效果 -->
+		<item name="android:backgroundDimEnabled">true</item>
+		<!-- 无标题 -->
+		<item name="android:windowNoTitle">true</item>
+		<!-- 半透明 -->
+		<item name="android:windowIsTranslucent">true</item>
+	</style>
 
 	<style name="ModeItem" parent="CommonButton">
 		<item name="android:textSize">21sp</item>
@@ -30,7 +45,7 @@
 		<item name="android:textSize">14sp</item>
 	</style>
 
-	<style name="HSBColorSelectorStepButton">
+	<style name="HSBColorPickerStepButton">
 		<item name="android:layout_width">@dimen/view_hsb_color_selector_step_button_size</item>
 		<item name="android:layout_height">@dimen/view_hsb_color_selector_step_button_size</item>
 		<item name="android:layout_marginStart">@dimen/view_hsb_color_selector_seek_bar_fine_tuning_margin</item>

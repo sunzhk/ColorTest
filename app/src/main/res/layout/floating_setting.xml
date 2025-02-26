@@ -65,7 +65,7 @@
                 android:background="@drawable/bg_common_switch"
                 android:duplicateParentState="true"/>
         </LinearLayout>
-        
+
         <LinearLayout
             android:id="@+id/ll_dark_mode"
             android:layout_width="wrap_content"
@@ -81,6 +81,25 @@
                 android:singleLine="true"
                 android:lines="1"
                 android:text="深色模式"
+                android:textColor="@color/common_bt_text"
+                android:textSize="@dimen/floating_setting_text_size"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_color_picker_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SettingItem">
+            <ImageView
+                style="@style/SettingItemIcon"
+                android:src="@mipmap/icon_setting_color_picker"/>
+            <TextView
+                android:id="@+id/tv_color_picker_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:lines="1"
+                android:text="取色器模式："
                 android:textColor="@color/common_bt_text"
                 android:textSize="@dimen/floating_setting_text_size"/>
         </LinearLayout>

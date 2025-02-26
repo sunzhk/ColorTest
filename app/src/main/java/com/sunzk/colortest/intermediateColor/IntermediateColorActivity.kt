@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
@@ -25,7 +26,7 @@ import com.sunzk.colortest.R
 import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.databinding.ActivityGuessColorBinding
 import com.sunzk.colortest.db.IntermediateColorResultTable
-import com.sunzk.colortest.db.bean.IntermediateColorResult
+import com.sunzk.colortest.dialog.CommonConfirmDialog
 import com.sunzk.colortest.dialog.CommonSettlementDialog
 import com.sunzk.colortest.entity.HSB
 import kotlinx.coroutines.launch
@@ -55,7 +56,7 @@ class IntermediateColorActivity : BaseActivity() {
 	
 	private fun initView() = with(viewBinding) {
 		initDifficultyUI()
-		hsbColorSelector.onColorPick = { hsb ->
+		hsbColorPicker.onColorPick = { hsb ->
 			viewModel.updateAnswerColor(hsb)
 			cdColorCenter.setCardBackgroundColor(hsb.rgbColor)
 		}
@@ -76,8 +77,8 @@ class IntermediateColorActivity : BaseActivity() {
 
 			override fun onNothingSelected(parent: AdapterView<*>?) {
 			}
-
 		}
+		ivDifficultyHint.onClick { showDifficultyHint() }
 	}
 
 	private fun initColorContentView() {
@@ -107,6 +108,7 @@ class IntermediateColorActivity : BaseActivity() {
 
 	private fun bindData() {
 		viewModel.pageData.collect(lifecycleScope) { (difficulty, questionLeftColor, questionRightColor, answerColor, randomIndex, hsbBarLock) ->
+			Log.d(TAG, "IntermediateColorActivity#bindData- difficulty: $difficulty, questionLeftColor: $questionLeftColor, questionRightColor: $questionRightColor, answerColor: $answerColor, randomIndex: $randomIndex, hsbBarLock: $hsbBarLock")
 			bindDifficulty(difficulty)
 			bindColors(questionLeftColor, questionRightColor, answerColor)
 			lockHSBSelector(hsbBarLock, questionLeftColor)
@@ -132,13 +134,13 @@ class IntermediateColorActivity : BaseActivity() {
 		viewBinding.cdColorLeft.setCardBackgroundColor(questionLeftColor.rgbColor)
 		viewBinding.cdColorRight.setCardBackgroundColor(questionRightColor.rgbColor)
 		viewBinding.cdColorCenter.setCardBackgroundColor(answerColor.rgbColor)
-		viewBinding.hsbColorSelector.updateHSB(answerColor.h, answerColor.s, answerColor.b)
+		viewBinding.hsbColorPicker.updateHSB(answerColor.h, answerColor.s, answerColor.b)
 	}
 
 	private fun lockHSBSelector(hsbBarLock: BooleanArray, targetColor: HSB) = with(viewBinding) {
 		Log.d(TAG, "IntermediateColorActivity#lockHSBSelector- hsbBarLock: $hsbBarLock, targetColor: $targetColor")
 		hsbBarLock.forEachIndexed { index, lock ->
-			hsbColorSelector.setLock(index, lock)
+			hsbColorPicker.setLock(index, lock)
 		}
 	}
 
@@ -173,4 +175,18 @@ class IntermediateColorActivity : BaseActivity() {
 		dialog.show()
 	}
 
+	/**
+	 * 关于难度的提示信息，弹窗显示
+	 */
+	private fun showDifficultyHint() {
+		CommonConfirmDialog(this) {
+			title = "游戏说明"
+			message = "• 拖动下方的滚动条，使中间色块为左右两个色块的中间色\n" +
+					"• 无论哪种难度下，左右色块的色相、饱和度、明度中都有两项是相同的\n" +
+					"• 但是${IntermediateColorResult.Difficulty.Easy.text}会锁定相同的两个值\n" +
+					"    ${IntermediateColorResult.Difficulty.Normal.text}会锁定其中一个相同的值\n" +
+					"    ${IntermediateColorResult.Difficulty.Hard.text}不锁定任何值"
+			messageGravity = Gravity.START
+		}.show()
+	}
 }

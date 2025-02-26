@@ -23,6 +23,8 @@
 	<color name="difficulty_normal">#FFF4D03F</color>
 	<color name="difficulty_hard">#FFE55D87</color>
 	
+	<color name="common_dialog_bg">#FFFFFFFF</color>
+	
 	<!--	以下是未整理的颜色	-->
 	
 	<color name="colorAccent">@color/app_base</color>
