@@ -55,7 +55,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.alibaba.android.arouter.facade.annotation.Route
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.TimeUtils
 import com.sunzk.colortest.BaseActivity
@@ -71,7 +70,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.sqrt
 
-@Route(path = RouteInfo.PATH_ACTIVITY_FIND_SAME_COLOR, group = RouteInfo.GROUP_GAME)
 class FindSameColorActivity : BaseActivity() {
 	companion object {
 		private const val TAG: String = "FindSameColorActivity"

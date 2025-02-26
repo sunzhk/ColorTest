@@ -1,4 +1,4 @@
-package com.sunzk.colortest.intermediateColor
+package com.sunzk.colortest.game.intermediateColor
 
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
@@ -13,7 +13,6 @@ import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
-import com.alibaba.android.arouter.facade.annotation.Route
 import com.arcsoft.closeli.utils.takeIfIs
 import com.sunzk.base.expand.bindView
 import com.sunzk.base.expand.collect
@@ -22,7 +21,6 @@ import com.sunzk.base.expand.onClick
 import com.sunzk.base.utils.AppUtils
 import com.sunzk.colortest.BaseActivity
 import com.sunzk.colortest.R
-import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.databinding.ActivityGuessColorBinding
 import com.sunzk.colortest.db.IntermediateColorResultTable
 import com.sunzk.colortest.dialog.CommonConfirmDialog
@@ -34,7 +32,6 @@ import kotlinx.coroutines.launch
 /**
  * 猜两个颜色的中间色
  */
-@Route(path = RouteInfo.PATH_ACTIVITY_INTERMEDIATE_COLOR, group = RouteInfo.GROUP_GAME, name = RouteInfo.DESC_ACTIVITY_INTERMEDIATE_COLOR)
 class IntermediateColorActivity : BaseActivity() {
 
 	companion object {
@@ -57,7 +54,7 @@ class IntermediateColorActivity : BaseActivity() {
 	private fun initView() = with(viewBinding) {
 		initDifficultyUI()
 		hsbColorPicker.onColorPick = { hsb ->
-			viewModel.updateAnswerColor(hsb)
+			viewModel.updatePickColor(hsb)
 			cdColorCenter.setCardBackgroundColor(hsb.rgbColor)
 		}
 		btHistory.onClick { startActivity(Intent(this@IntermediateColorActivity, IntermediateColorHistoryActivity::class.java)) }

@@ -28,23 +28,7 @@ class SplashActivity : BaseActivity() {
 		Log.d(TAG, "onCreate: thread=${threadInfo()}")
 
 		lifecycleScope.launch(Dispatchers.Main) {
-			coroutineScope {
-				launch(Dispatchers.IO) {
-					Log.d(TAG, "onCreate: 调用requestModeList")
-					try {
-						requestModeList()
-					} catch (t: Throwable) {
-						Log.e(TAG, "onCreate: 请求数据失败", t)
-					}
-					Log.d(TAG, "onCreate: 调用requestModeList结束")
-				}
-				launch(Dispatchers.IO) {
-					delay(2000)
-					Log.d(TAG, "onCreate: 等待了2秒")
-				}
-				Log.d(TAG, "onCreate: coroutineScope算是跑完了")
-			}
-			Log.d(TAG, "onCreate: 跳转")
+			delay(1500)
 			goToModeSelectActivity()
 		}
 		onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
@@ -52,18 +36,6 @@ class SplashActivity : BaseActivity() {
 				// do nothing
 			}
 		})
-	}
-
-	private suspend fun requestModeList() {
-		val modeList = withContext(Dispatchers.IO) {
-			assets.readFileAsString("ModeList.json")?.runCatching {
-				val type = object : TypeToken<MutableList<ModeEntity>>() {}.type
-				val entity = Gson().fromJson<MutableList<ModeEntity>>(this, type)
-				entity
-			}?.getOrNull() ?: arrayListOf()
-		}
-		Runtime.modeList = modeList
-		Log.d(TAG, "requestModeList: 结束，模式数量${Runtime.modeList.size}")
 	}
 
 	private fun goToModeSelectActivity() {
