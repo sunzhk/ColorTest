@@ -29,6 +29,7 @@ allprojects {
         mavenCentral()
         maven ( "https://maven.aliyun.com/repository/public" )
         maven ( "https://maven.aliyun.com/repository/google" )
+        maven ( "https://oss.sonatype.org/content/repositories/snapshots/" )
         maven ( "https://artifact.bytedance.com/repository/Volcengine/")
         maven ( "https://jitpack.io" )
         google()

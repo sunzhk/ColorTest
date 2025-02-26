@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.BarUtils
 import com.google.gson.Gson
@@ -46,6 +47,11 @@ class SplashActivity : BaseActivity() {
 			Log.d(TAG, "onCreate: 跳转")
 			goToModeSelectActivity()
 		}
+		onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+			override fun handleOnBackPressed() {
+				// do nothing
+			}
+		})
 	}
 
 	private suspend fun requestModeList() {

@@ -7,23 +7,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.sunzk.base.expand.bindView
 import com.sunzk.base.utils.AppUtils
-import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.base.utils.Logger
 import com.sunzk.colortest.*
 import com.sunzk.colortest.databinding.ActivityModeSelectBinding
 import com.sunzk.colortest.databinding.ItemModeBinding
 import com.sunzk.colortest.entity.ModeEntity
-import com.sunzk.colortest.view.DragSwipeCallback
-import com.sunzk.colortest.view.IDragSwipe
 import com.sunzk.colortest.view.SpaceItemDecoration
+import com.sunzk.demo.tools.ext.dp2px
 import java.util.*
 
 @Route(path = RouteInfo.PATH_ACTIVITY_MODE_SELECT)
@@ -42,8 +40,14 @@ class ModeSelectActivity : BaseActivity() {
 			showAlertDialog()
 			return
 		}
-		showVersionUpgradeDialog()
+//		showVersionUpgradeDialog()
 		initModeList()
+		onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+			override fun handleOnBackPressed() {
+				Logger.d(TAG, "ModeSelectActivity#handleOnBackPressed")
+				moveTaskToBack(true)
+			}
+		})
 	}
 
 	private fun initModeList() {
@@ -53,7 +57,7 @@ class ModeSelectActivity : BaseActivity() {
 			LinearLayoutManager.VERTICAL,
 			false
 		)
-		val itemDecoration = DisplayUtil.dip2px(this, 6f)
+		val itemDecoration = 6.dp2px
 		viewBinding.rvModeList.addItemDecoration(
 			SpaceItemDecoration(
 				0,
@@ -85,52 +89,52 @@ class ModeSelectActivity : BaseActivity() {
 				}
 			}
 		viewBinding.rvModeList.adapter = adapter
-		val callback: ItemTouchHelper.Callback = DragSwipeCallback(object : IDragSwipe {
-			override fun onItemSwapped(fromPosition: Int, toPosition: Int) {
-				Logger.d(
-					TAG,
-					"ModeSelectActivity#onItemSwapped- ",
-					fromPosition,
-					toPosition
-				)
-				if (fromPosition < toPosition) {
-					for (i in fromPosition until toPosition) {
-						Collections.swap(modeEntityList, i, i + 1)
-					}
-				} else {
-					for (i in fromPosition downTo toPosition + 1) {
-						Collections.swap(modeEntityList, i, i - 1)
-					}
-				}
-				adapter.notifyItemMoved(fromPosition, toPosition)
-				refreshModeEntityListInDataStore()
-			}
-
-			override fun onItemDeleted(position: Int) {
-				Logger.d(
-					TAG,
-					"ModeSelectActivity#onItemDeleted- ",
-					position
-				)
-			}
-
-			override fun onItemDone(position: Int) {
-				Logger.d(
-					TAG,
-					"ModeSelectActivity#onItemDone- ",
-					position
-				)
-				modeEntityList.removeAt(position)
-				adapter.notifyItemRemoved(position)
-				refreshModeEntityListInDataStore()
-			}
-
-			private fun refreshModeEntityListInDataStore() {
-				Runtime.modeList = modeEntityList
-			}
-		})
-		val touchHelper = ItemTouchHelper(callback)
-		touchHelper.attachToRecyclerView(viewBinding.rvModeList)
+//		val callback: ItemTouchHelper.Callback = DragSwipeCallback(object : IDragSwipe {
+//			override fun onItemSwapped(fromPosition: Int, toPosition: Int) {
+//				Logger.d(
+//					TAG,
+//					"ModeSelectActivity#onItemSwapped- ",
+//					fromPosition,
+//					toPosition
+//				)
+//				if (fromPosition < toPosition) {
+//					for (i in fromPosition until toPosition) {
+//						Collections.swap(modeEntityList, i, i + 1)
+//					}
+//				} else {
+//					for (i in fromPosition downTo toPosition + 1) {
+//						Collections.swap(modeEntityList, i, i - 1)
+//					}
+//				}
+//				adapter.notifyItemMoved(fromPosition, toPosition)
+//				refreshModeEntityListInDataStore()
+//			}
+//
+//			override fun onItemDeleted(position: Int) {
+//				Logger.d(
+//					TAG,
+//					"ModeSelectActivity#onItemDeleted- ",
+//					position
+//				)
+//			}
+//
+//			override fun onItemDone(position: Int) {
+//				Logger.d(
+//					TAG,
+//					"ModeSelectActivity#onItemDone- ",
+//					position
+//				)
+//				modeEntityList.removeAt(position)
+//				adapter.notifyItemRemoved(position)
+//				refreshModeEntityListInDataStore()
+//			}
+//
+//			private fun refreshModeEntityListInDataStore() {
+//				Runtime.modeList = modeEntityList
+//			}
+//		})
+//		val touchHelper = ItemTouchHelper(callback)
+//		touchHelper.attachToRecyclerView(viewBinding.rvModeList)
 	}
 
 	private fun checkAccess(): Boolean {

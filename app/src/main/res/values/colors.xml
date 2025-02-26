@@ -25,6 +25,10 @@
 	
 	<color name="common_dialog_bg">#FFFFFFFF</color>
 	
+	<!--	标准色值，不受深色模式控制	-->
+	<color name="white_50">#80FFFFFF</color>
+	
+	
 	<!--	以下是未整理的颜色	-->
 	
 	<color name="colorAccent">@color/app_base</color>

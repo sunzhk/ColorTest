@@ -17,7 +17,6 @@ import com.arcsoft.closeli.utils.takeIfIs
 import com.sunzk.base.expand.bindView
 import com.sunzk.base.expand.collect
 import com.sunzk.base.utils.AppUtils
-import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.colortest.BaseActivity
 import com.sunzk.colortest.R
 import com.sunzk.colortest.RouteInfo
@@ -27,6 +26,7 @@ import com.sunzk.colortest.db.MockColorResultTable
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.colortest.dialog.CommonSettlementDialog
 import com.sunzk.colortest.entity.HSB
+import com.sunzk.demo.tools.ext.dp2px
 import kotlinx.coroutines.*
 import okhttp3.internal.toHexString
 import java.util.*
@@ -127,7 +127,7 @@ class MockColorActivity : BaseActivity() {
 	 */
 	private fun initColorArea() {
 		val screenSize = AppUtils.getScreenWidth(applicationContext)
-		val spacing = DisplayUtil.dip2px(this, 20f)
+		val spacing = 20.dp2px
 		val cardSideLength = (screenSize - spacing * 4) / 2
 		val radius = cardSideLength / 2
 		viewBinding.cvDemo.radius = radius.toFloat()
