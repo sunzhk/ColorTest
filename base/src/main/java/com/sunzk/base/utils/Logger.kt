@@ -1,14 +1,8 @@
 package com.sunzk.base.utils
 
-import android.content.Context
 import android.os.Process
 import android.util.Log
 import android.view.KeyEvent
-import android.widget.Toast
-import com.sunzk.base.utils.USBUtils.register
-import com.sunzk.base.utils.USBUtils.uSBPath
-import java.io.File
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,7 +16,6 @@ import java.util.*
  */
 object Logger {
     private const val TAG = "Logger"
-    private const val authorizationFileName = "IPTV_Log_Authorization_File"
     private val logDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
     private var printUSBLog = false
 
@@ -253,61 +246,5 @@ object Logger {
             }
         }
         return stringBuilder.toString()
-    }
-
-    //静态设置USB监听
-    init {
-        val listener: (isUSBReady: Boolean, usbPath: String?) -> Unit? = { isUSBReady, usbPath ->
-                printUSBLog = isUSBReady
-                //先确认U盘路径
-                if (!isUSBReady || StringUtils.isBlank(usbPath)) {
-                    printUSBLog = false
-                } else { // 再判断一下U盘中有没有授权文件，没有的话就不往U盘写
-                    val authFile: File = File(usbPath, authorizationFileName)
-                    if (!authFile.exists()) {
-//					Context application = Applications.context();
-//					if(application!=null){
-//						ToastUtil.show(application, "检测到U盘，未找到目标文件", true);
-//					}
-                        printUSBLog = false
-                    }
-                }
-                if (printUSBLog) {
-                    MainHandler.getInstance().post {
-                        val application: Context = Applications.context()
-                        if (application != null) {
-                            Toast.makeText(application, "检测到U盘，开始记录日志", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    object : Thread() {
-                        override fun run() {
-                            try {
-                                //先删除已有的日志文件，否则命令行执行时不会覆盖
-                                val logFileName: String = usbPath.toString() + "/logcat.log"
-                                val logFile = File(logFileName)
-                                if (logFile.exists()) {
-                                    logFile.delete()
-                                }
-                                Runtime.getRuntime().exec("logcat -f $logFileName")
-                            } catch (e: IOException) {
-                                e.printStackTrace()
-                            }
-                        }
-                    }.start()
-                } else if (!isUSBReady) {
-                    MainHandler.getInstance().post {
-                        //						Context application = Applications.context();
-//						if(application!=null){
-//							ToastUtil.show(application, "检测到U盘弹出", true);
-//						}
-                    }
-                }
-            Unit
-        }
-        register(listener)
-        //如果APK启动前U盘就已经插上了，就需要先判断一下当前的USB状态，直接写
-        if (!StringUtils.isBlank(uSBPath)) {
-            listener.invoke(true, uSBPath)
-        }
     }
 }

@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import com.sunzk.base.expand.onClick
-import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.colortest.R
 import com.sunzk.colortest.entity.HSB
 import com.sunzk.demo.tools.ext.dp2px
@@ -21,6 +20,11 @@ class FindDiffView : FrameLayout {
 		private const val CORNER_RADIUS = 5
 	}
 
+	var needSpacing: Boolean = true
+		set(value) {
+			field = value
+			resetCount(countPerSide, true)
+		}
 	private var spacing = 0
 	private lateinit var colorViewMap: Array<Array<CustomItemView?>>
 	private val viewArrayList = ArrayList<CustomItemView?>()
@@ -88,7 +92,9 @@ class FindDiffView : FrameLayout {
 	}
 
 	private fun calSpacing(context: Context, countPerSide: Int): Int {
-		return DisplayUtil.dip2px(context, 3 + 3 * 1.0f / countPerSide)
+		return if (needSpacing) {
+			(3 + 3f / countPerSide).dp2px
+		} else 0
 	}
 
 	/**
@@ -180,6 +186,7 @@ class FindDiffView : FrameLayout {
 		viewSideLength: Int,
 	): CustomItemView {
 		val finalCardView = cardView?.apply { reset() } ?: CustomItemView(context, itemBorderColor)
+		finalCardView.needCorner(needSpacing)
 		val layoutParams = createLayoutParams(row, column, viewSideLength)
 		Log.d(TAG, "createOrResetColorView: $row-$column : ${layoutParams.leftMargin}-${layoutParams.topMargin}")
 		this.addView(finalCardView, layoutParams)
@@ -228,11 +235,15 @@ class FindDiffView : FrameLayout {
 		}
 		
 		fun showBorder() {
-			drawable.setStroke(DisplayUtil.dip2px(context, 3f), itemBorderColor)
+			drawable.setStroke(3.dp2px, itemBorderColor)
 		}
 		
 		fun reset() {
 			drawable.setStroke(0, Color.TRANSPARENT)
+		}
+
+		fun needCorner(needSpacing: Boolean) {
+			drawable.cornerRadius = if (needSpacing) CORNER_RADIUS.dp2px.toFloat() else 0f
 		}
 	}
 }

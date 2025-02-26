@@ -2,11 +2,12 @@
 activityCompose = "1.9.3"
 app_lifecycle_version = "2.8.7"
 brv-fork = "1.5.5.1"
-coroutines_android_version = "1.7.3"
+coroutines_android_version = "1.10.1"
 ability_version = "1.0.0.27"
 datastorePreferencesVersion = "1.1.1"
 gradle_version = "8.4.2"
 gson_version = "2.11.0"
+lottie_version = "6.6.2"
 #hilt_version = "2.44"
 androidxComposeBom = "2024.12.01"
 lifecycleViewmodelCompose = "2.8.7"
@@ -16,6 +17,8 @@ kotlin = "2.1.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
+junitJupiterVersion = "5.8.1"
+junitVersion = "4.12"
 
 [libraries]
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle_version" }
@@ -26,6 +29,8 @@ lifecycle-runtime-ktx-json = { module = "androidx.lifecycle:lifecycle-runtime-kt
 lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "app_lifecycle_version" }
 
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines_android_version" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.10.1"}
 
 androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.13.1" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.0.1" }
@@ -44,12 +49,9 @@ material = { module = "com.google.android.material:material", version = "1.12.0"
 
 recyclerView = { module = "androidx.recyclerview:recyclerview", version = "1.3.2" }
 
-ability-annotation = { module = "com.closeli.widget:ability-annotation", version.ref = "ability_version" }
-ability-base = { module = "com.closeli.widget:ability-base", version.ref = "ability_version" }
-ability-ksp = { module = "com.closeli.widget:ability-ksp", version.ref = "ability_version" }
-
 gson = { module = "com.google.code.gson:gson", version.ref = "gson_version" }
-
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie_version" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie_version" }
 mmkv = { module = "com.tencent:mmkv", version = "2.0.2" }
 
 jiguang-jpush = { module = "cn.jiguang.sdk:jpush", version = "4.8.5"}
@@ -66,8 +68,11 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.0"}
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
+junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
 
 [bundles]
 "lifecycle" = ["lifecycle-livedata-ktx", "lifecycle-viewmodel-ktx", "lifecycle-runtime-ktx-json", "lifecycle-service"]
@@ -76,6 +81,7 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 "datastore" = ["androidx-datastore-preferences", "androidx-datastore-preferences-core"]
 "androidx_widget" = ["androidx_viewpager2", "androidx_cardview", "androidx_constraintlayout"]
 "jiguang" = ["jiguang-jpush", "jiguang-jcore", "jiguang-plugin-vivo", "jiguang-plugin-oppo", "jiguang-plugin-xiaomi"]
-"compose" = ["androidx-compose-bom", "androidx-compose-foundation", "compose-material3", "androidx-activity-compose", "androidx-lifecycle-viewmodel-compose", "compose-ui-tooling-preview"]
+"compose" = ["androidx-compose-bom", "androidx-compose-foundation", "compose-material3", "compose-constraintlayout", "androidx-activity-compose", "androidx-lifecycle-viewmodel-compose", "compose-ui-tooling-preview"]
+"lottie" = ["lottie", "lottie-compose"]
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

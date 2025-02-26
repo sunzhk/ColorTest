@@ -20,7 +20,6 @@ import com.sunzk.base.expand.collect
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
 import com.sunzk.base.expand.onClick
 import com.sunzk.base.utils.AppUtils
-import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.colortest.BaseActivity
 import com.sunzk.colortest.R
 import com.sunzk.colortest.RouteInfo
@@ -29,12 +28,13 @@ import com.sunzk.colortest.db.IntermediateColorResultTable
 import com.sunzk.colortest.dialog.CommonConfirmDialog
 import com.sunzk.colortest.dialog.CommonSettlementDialog
 import com.sunzk.colortest.entity.HSB
+import com.sunzk.demo.tools.ext.dp2px
 import kotlinx.coroutines.launch
 
 /**
  * 猜两个颜色的中间色
  */
-@Route(path = RouteInfo.PATH_ACTIVITY_GUESS_COLOR)
+@Route(path = RouteInfo.PATH_ACTIVITY_INTERMEDIATE_COLOR, group = RouteInfo.GROUP_GAME, name = RouteInfo.DESC_ACTIVITY_INTERMEDIATE_COLOR)
 class IntermediateColorActivity : BaseActivity() {
 
 	companion object {
@@ -82,10 +82,10 @@ class IntermediateColorActivity : BaseActivity() {
 	}
 
 	private fun initColorContentView() {
-		val spacing = DisplayUtil.dip2px(this, 25f)
+		val spacing = 25.dp2px
 		val sideLength = (AppUtils.getScreenWidth(this) - spacing * 4) / 3
 		var radius = sideLength / 8
-		val minRadius = DisplayUtil.dip2px(this, 10f)
+		val minRadius = 10.dp2px
 		if (radius < minRadius) {
 			radius = minRadius
 		}

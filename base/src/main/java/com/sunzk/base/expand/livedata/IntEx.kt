@@ -64,11 +64,17 @@ fun MutableLiveData<Int>.dec(): MutableLiveData<Int> {
 }
 
 
+/**
+ * 自增
+ */
 fun MutableStateFlow<Int>.inc(): MutableStateFlow<Int> {
     emitBy(this.value + 1)
     return this
 }
 
+/**
+ * 自减
+ */
 fun MutableStateFlow<Int>.dec(): MutableStateFlow<Int> {
     emitBy(this.value - 1)
     return this

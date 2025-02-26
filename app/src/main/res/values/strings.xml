@@ -1,6 +1,6 @@
 <resources>
 	<string name="app_name">预科色彩</string>
-	<string name="hint_send_suggestion_to_mail">有什么建议或想要的新功能，请\n发邮件至312797831@qq.com</string>
+	<string name="hint_send_suggestion_to_mail">练手之作。任何意见请\n发邮件至312797831@qq.com</string>
 	<string name="bgm_switch_on">BGM：开</string>
 	<string name="bgm_switch_off">BGM：关</string>
 	<string name="light_switch_text_turn_on">开灯</string>

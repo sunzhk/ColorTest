@@ -17,11 +17,11 @@ import androidx.lifecycle.lifecycleScope
 import com.sunzk.base.expand.bindView
 import com.sunzk.base.expand.collect
 import com.sunzk.base.utils.ColorUtils
-import com.sunzk.base.utils.DisplayUtil
 import com.sunzk.base.utils.NumberUtils
 import com.sunzk.colortest.R
 import com.sunzk.colortest.databinding.MergeHsbColorPickerBinding
 import com.sunzk.colortest.entity.HSB
+import com.sunzk.demo.tools.ext.dp2px
 
 class HSBColorPicker : LinearLayout, IColorPicker {
 
@@ -101,7 +101,7 @@ class HSBColorPicker : LinearLayout, IColorPicker {
     }
 
     private fun initSeekBarArea() {
-        val strokeWidth = DisplayUtil.dip2px(context, 1f)
+        val strokeWidth = 1.dp2px
         val dimension = resources.getDimension(R.dimen.view_hsb_color_selector_seek_bar_height)
         hueGradientDrawable.cornerRadius = dimension / 2
         hueGradientDrawable.setStroke(strokeWidth, Color.BLACK)

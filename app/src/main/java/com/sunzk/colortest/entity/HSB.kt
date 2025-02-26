@@ -21,6 +21,10 @@ class HSB {
 		const val COLOR_B_MAX = 100
 		const val COLOR_B_INTERVAL = 1
 
+		fun random(): HSB {
+			return HSB(ColorUtils.randomHSBColor())
+		}
+		
 		fun random(minH: Float, minS: Float, minB: Float): HSB {
 			return HSB(ColorUtils.randomHSBColor(minH, minS / 100, minB / 100))
 		}
@@ -103,6 +107,12 @@ class HSB {
 	val hsbColor: FloatArray
 		get() = floatArrayOf(h, s / 100f, b / 100f)
 
+	/**
+	 * 在Compose中使用的颜色
+	 */
+	val composeColor: androidx.compose.ui.graphics.Color
+		get() = androidx.compose.ui.graphics.Color(rgbColor)
+
 	override fun toString(): String {
 		val sb = StringBuilder("HSB{")
 		sb.append("h=").append(h)
@@ -118,9 +128,9 @@ class HSB {
 
 		other as HSB
 
-		if (h != other.h) return false
-		if (s != other.s) return false
-		if (b != other.b) return false
+		if (h.toInt() != other.h.toInt()) return false
+		if (s.toInt() != other.s.toInt()) return false
+		if (b.toInt() != other.b.toInt()) return false
 
 		return true
 	}
