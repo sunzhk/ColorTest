@@ -98,6 +98,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.recyclerView)
     implementation(project(":base"))
+    implementation(project(":compose-base"))
     testImplementation("junit:junit:4.13.2")
     testImplementation(libs.junit.jupiter)
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
@@ -118,7 +119,7 @@ dependencies {
 //    kapt("com.alibaba:arouter-compiler:1.2.2")
 
     // 动态权限申请
-    implementation("com.github.tbruyelle:rxpermissions:0.12")
+//    implementation("com.github.tbruyelle:rxpermissions:0.12") 已过时
     // 拍照或从相册选择图片
     implementation("com.github.wildma:PictureSelector:2.1.0")
     // 显示大图，缩放、拖动
@@ -136,4 +137,6 @@ dependencies {
     // Navigation
     implementation(libs.bundles.androidx.navigation)
     testImplementation(libs.androidx.navigation.test)
+    
+    implementation(libs.okhttp3)
 }

@@ -1,6 +1,6 @@
 package com.sunzk.colortest.activity
 
-import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Bitmap
@@ -19,15 +19,14 @@ import android.widget.Toast
 import com.shizhefei.view.largeimage.factory.FileBitmapDecoderFactory
 import com.sunzk.base.utils.Logger
 import com.sunzk.colortest.BaseActivity
-import com.sunzk.colortest.activity.SelectPicActivity
 import com.sunzk.colortest.databinding.ActivitySelectPicBinding
-import com.tbruyelle.rxpermissions3.RxPermissions
 import com.wildma.pictureselector.FileUtils
 import com.wildma.pictureselector.PictureBean
 import com.wildma.pictureselector.PictureSelector
 
 class SelectPicActivity : BaseActivity() {
     private lateinit var viewBinding: ActivitySelectPicBinding
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivitySelectPicBinding.inflate(layoutInflater)
@@ -39,18 +38,6 @@ class SelectPicActivity : BaseActivity() {
             }
             false
         }
-//        RxPermissions(this).request(
-//            Manifest.permission.READ_EXTERNAL_STORAGE,
-//            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//            Manifest.permission.CAMERA
-//        ).subscribe { granted: Boolean ->
-//            if (granted) { // Always true pre-M
-//                selectPic()
-//            } else {
-//                Toast.makeText(this, "请到设置修改权限", Toast.LENGTH_SHORT).show()
-//                finish()
-//            }
-//        }
     }
 
     private fun showColor(v: View, event: MotionEvent) {
