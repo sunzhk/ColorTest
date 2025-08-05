@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="280dp"
+	android:layout_height="wrap_content"
+	android:background="@drawable/dialog_common_bg"
+	tools:layout_height="400dp">
+	
+	<TextView
+		android:id="@+id/tv_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="18dp"
+		android:textStyle="bold"
+		android:textColor="@color/theme_txt_standard"
+		android:textSize="16sp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:text="提示标题"/>
+	
+	<TextView
+		android:id="@+id/tv_message"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:minHeight="40dp"
+		android:layout_marginTop="14dp"
+		android:layout_marginStart="16dp"
+		android:layout_marginEnd="16dp"
+		android:gravity="center_horizontal"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/tv_title"
+		tools:text="提示信息"/>
+	
+	<View
+		android:id="@+id/line"
+		android:layout_width="match_parent"
+		android:layout_height="0.5dp"
+		android:background="#FFDDDDDD"
+		android:layout_marginTop="13dp"
+		app:layout_constraintVertical_bias="1"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/tv_message"
+		app:layout_constraintBottom_toTopOf="@+id/bt_confirm"/>
+	
+	<TextView
+		android:id="@+id/bt_cancel"
+		android:layout_width="0dp"
+		android:layout_height="43dp"
+		android:gravity="center"
+		android:text="@string/common_cancel"
+		android:textColor="#FF007AFF"
+		android:textSize="17sp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toStartOf="@+id/bt_confirm"
+		app:layout_constraintTop_toTopOf="@+id/bt_confirm"
+		app:layout_constraintBottom_toBottomOf="@+id/bt_confirm"/>
+
+	<View
+		android:id="@+id/line_v"
+		android:layout_width="1dp"
+		android:layout_height="0dp"
+		android:background="#FFDDDDDD"
+		app:layout_constraintEnd_toStartOf="@+id/bt_confirm"
+		app:layout_constraintTop_toTopOf="@+id/bt_confirm"
+		app:layout_constraintBottom_toBottomOf="@+id/bt_confirm"/>
+	
+	<TextView
+		android:id="@+id/bt_confirm"
+		android:layout_width="0dp"
+		android:layout_height="43dp"
+		android:gravity="center"
+		android:text="@string/common_confirm"
+		android:textColor="#FF1079FF"
+		android:textSize="17sp"
+		android:textStyle="bold"
+		app:layout_constraintStart_toEndOf="@+id/bt_cancel"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"/>
+		
+
+</androidx.constraintlayout.widget.ConstraintLayout>

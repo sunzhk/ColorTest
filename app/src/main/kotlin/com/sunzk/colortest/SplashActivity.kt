@@ -13,6 +13,7 @@ import com.sunzk.base.expand.readFileAsString
 import com.sunzk.base.expand.threadInfo
 import com.sunzk.colortest.entity.ModeEntity
 import com.sunzk.colortest.game.GameActivity
+import com.sunzk.colortest.update.UpdateManager
 import kotlinx.coroutines.*
 
 class SplashActivity : BaseActivity() {
@@ -36,6 +37,7 @@ class SplashActivity : BaseActivity() {
 				// do nothing
 			}
 		})
+		UpdateManager.checkAppUpdate()
 	}
 
 	private fun goToModeSelectActivity() {

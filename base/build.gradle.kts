@@ -66,5 +66,5 @@ dependencies {
     implementation(libs.gson)
 
     api("androidx.multidex:multidex:2.0.1")
-    api("com.blankj:utilcodex:1.31.0")
+    api(libs.utilcodex)
 }

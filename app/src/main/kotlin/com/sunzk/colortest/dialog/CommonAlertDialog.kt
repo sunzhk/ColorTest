@@ -15,16 +15,17 @@ import com.arcsoft.closeli.utils.takeIfIs
 import com.sunzk.base.LifecycleDialog
 import com.sunzk.base.expand.bindView
 import com.sunzk.colortest.R
+import com.sunzk.colortest.databinding.DialogCommonAlertBinding
 import com.sunzk.colortest.databinding.DialogCommonConfirmBinding
 import com.sunzk.demo.tools.ext.dp2px
 
 /**
- * 通用确认提示框，只有一个确认按钮
+ * 通用提示框，有一个确认按钮和一个取消按钮
  */
-class CommonConfirmDialog(context: Context, build: Builder.() -> Unit) : LifecycleDialog(context,
+class CommonAlertDialog(context: Context, build: Builder.() -> Unit) : LifecycleDialog(context,
                                                                                          R.style.LifecycleDialogStyle) {
 
-	val viewBinding by bindView<DialogCommonConfirmBinding>()
+	val viewBinding by bindView<DialogCommonAlertBinding>()
 	val builder: Builder = Builder(context)
 
 	init {
@@ -43,20 +44,24 @@ class CommonConfirmDialog(context: Context, build: Builder.() -> Unit) : Lifecyc
 		if (builder.message is Spannable) {
 			viewBinding.tvMessage.movementMethod = LinkMovementMethod.getInstance()
 		}
-		viewBinding.btConfirm.text = builder.buttonText
+		viewBinding.btCancel.text = builder.leftButtonText
+		viewBinding.btConfirm.text = builder.rightButtonText
 		if (TextUtils.isEmpty(builder.message)) {
 			viewBinding.tvMessage.layoutParams.takeIfIs<ViewGroup.MarginLayoutParams>()?.topMargin = 5.dp2px
 		}
+		val dialogInterface = object : DialogInterface {
+			override fun cancel() {
+				this@CommonAlertDialog.cancel()
+			}
+			override fun dismiss() {
+				this@CommonAlertDialog.dismiss()
+			}
+		}
+		viewBinding.btCancel.setOnClickListener { view ->
+			builder.leftButtonOnClickListener?.invoke(view, dialogInterface) ?: dismiss()
+		}
 		viewBinding.btConfirm.setOnClickListener { view ->
-			builder.onClickListener?.invoke(view, object : DialogInterface {
-				override fun cancel() {
-					this@CommonConfirmDialog.cancel()
-				}
-
-				override fun dismiss() {
-					this@CommonConfirmDialog.dismiss()
-				}
-			}) ?: dismiss()
+			builder.rightButtonOnClickListener?.invoke(view, dialogInterface) ?: dismiss()
 		}
 	}
 
@@ -68,8 +73,10 @@ class CommonConfirmDialog(context: Context, build: Builder.() -> Unit) : Lifecyc
 		var titleGravity: Int = Gravity.CENTER
 		var message: CharSequence? = null
 		var messageGravity: Int = Gravity.CENTER
-		var buttonText: String? = context.resources.getString(R.string.common_confirm)
-		var onClickListener: ((view: View, dialog: DialogInterface) -> Unit)? = null
+		var rightButtonText: String? = context.resources.getString(R.string.common_confirm)
+		var rightButtonOnClickListener: ((view: View, dialog: DialogInterface) -> Unit)? = null
+		var leftButtonText: String? = context.resources.getString(R.string.common_cancel)
+		var leftButtonOnClickListener: ((view: View, dialog: DialogInterface) -> Unit)? = null
 
 		fun setTitle(@StringRes stringId: Int) {
 			this.title = context.resources.getString(stringId)
@@ -79,10 +86,14 @@ class CommonConfirmDialog(context: Context, build: Builder.() -> Unit) : Lifecyc
 			this.message = context.resources.getString(stringId)
 		}
 
-		fun setButtonText(@StringRes stringId: Int) {
-			this.buttonText = context.resources.getString(stringId)
+		fun setRightButtonText(@StringRes stringId: Int) {
+			this.rightButtonText = context.resources.getString(stringId)
 		}
 
+		fun setLeftButtonText(@StringRes stringId: Int) {
+			this.leftButtonText = context.resources.getString(stringId)
+		}
+		
 	}
 
 }
