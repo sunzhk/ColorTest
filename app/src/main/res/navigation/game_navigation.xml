@@ -28,7 +28,9 @@
         android:name="com.sunzk.colortest.game.intermediateColor.IntermediateColorFragment"
         android:label="IntermediateColorFragment"/>
     <fragment
-        android:id="@+id/findDiffColor"/>
+        android:id="@+id/findDiffColor"
+        android:name="com.sunzk.colortest.game.findDiffColor.FindDiffColorFragment"
+        android:label="FindDiffColorFragment"/>
     <fragment
         android:id="@+id/findSameColor"/>
     <fragment

@@ -2,12 +2,9 @@ package com.sunzk.colortest.game
 
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.NavHostFragment
-import com.arcsoft.closeli.utils.takeIfIs
+import com.sunzk.base.expand.takeIfIs
 import com.sunzk.base.expand.bindView
 import com.sunzk.colortest.BaseActivity
 import com.sunzk.colortest.databinding.ActivityGameBinding

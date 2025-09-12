@@ -1,29 +1,37 @@
-package com.sunzk.colortest.findDiffColor
+package com.sunzk.colortest.game.findDiffColor
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.viewModels
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.sunzk.base.expand.bindView
 import com.sunzk.base.expand.collect
 import com.sunzk.base.expand.coroutines.GlobalDispatchers
-import com.sunzk.colortest.BaseActivity
+import com.sunzk.colortest.BaseFragment
 import com.sunzk.colortest.databinding.ActivityFindDiffColorBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class FindDiffColorActivity : BaseActivity() {
+class FindDiffColorFragment : BaseFragment() {
 
 	private val TAG: String = "FindDiffColorActivity"
 
 	private val viewBinding by bindView<ActivityFindDiffColorBinding>()
 	private val viewModel: FindDiffColorViewModel by viewModels()
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
+//	override fun onCreate(savedInstanceState: Bundle?) {
+//		super.onCreate(savedInstanceState)
+//		initViews()
+//		bindData()
+//	}
+
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		initViews()
 		bindData()
+		return viewBinding.root
 	}
 
 	private fun initViews() = with(viewBinding) {
@@ -79,10 +87,6 @@ class FindDiffColorActivity : BaseActivity() {
 //					.setOnCancelListener(dialog -> resetColor())
 //					.create().show();
 		}
-	}
-
-	override fun needBGM(): Boolean {
-		return true
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.sunzk.colortest.game
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,13 +43,13 @@ import com.sunzk.colortest.BaseFragment
 import com.sunzk.colortest.BuildConfig
 import com.sunzk.colortest.R
 import com.sunzk.colortest.RouteInfo
-import com.sunzk.colortest.compose.ui.common.CommonAlertDialog
+import com.sunzk.colortest.RouteInfo.GameMap.*
+import com.sunzk.colortest.findSameColor.FindSameColorActivity
+import com.sunzk.colortest.sortColor.SortColorActivity
 import com.sunzk.colortest.tools.ext.onClick
 import com.sunzk.colortest.update.UpdateDialog
 import com.sunzk.colortest.update.UpdateManager
 import com.sunzk.colortest.update.bean.VersionInfo
-import com.sunzk.compose.clickableWithoutIndication
-import kotlinx.coroutines.launch
 
 class ModeSelectFragment: BaseFragment() {
 
@@ -108,9 +108,16 @@ class ModeSelectFragment: BaseFragment() {
 						.padding(10.dp)
 						.onClick {
 							Log.d(TAG, "handleModeByAction: name=${modeEntity.modeName}, action=${modeEntity.navigationAction}")
-							if (modeEntity.navigationAction > 0) {
+							if (modeEntity.enable && modeEntity.navigationAction > 0) {
 								findNavController().navigate(modeEntity.navigationAction)
 								return@onClick
+							} else {
+								when (modeEntity) {
+//									ActivityFindDiffColor -> startActivity(Intent(requireContext(), FindDiffColorActivity::class.java))
+									ActivityFindSameColor -> startActivity(Intent(requireContext(), FindSameColorActivity::class.java))
+									ActivitySortColor -> startActivity(Intent(requireContext(), SortColorActivity::class.java))
+									else -> {}
+								}
 							}
 						})
 			}
