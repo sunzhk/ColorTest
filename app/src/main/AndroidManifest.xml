@@ -26,8 +26,6 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".game.intermediateColor.IntermediateColorActivity" />
-		<activity android:name=".findDiffColor.FindDiffColorActivity" />
 		<activity android:name=".activity.SelectPicActivity" />
         <activity android:name=".game.mockcolor.MockColorHistoryActivity" />
         <activity android:name=".game.intermediateColor.IntermediateColorHistoryActivity" />

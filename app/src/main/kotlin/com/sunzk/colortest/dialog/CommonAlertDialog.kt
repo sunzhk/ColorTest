@@ -11,12 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.annotation.StringRes
-import com.arcsoft.closeli.utils.takeIfIs
+import com.sunzk.base.expand.takeIfIs
 import com.sunzk.base.LifecycleDialog
 import com.sunzk.base.expand.bindView
 import com.sunzk.colortest.R
 import com.sunzk.colortest.databinding.DialogCommonAlertBinding
-import com.sunzk.colortest.databinding.DialogCommonConfirmBinding
 import com.sunzk.demo.tools.ext.dp2px
 
 /**

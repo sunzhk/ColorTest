@@ -21,7 +21,7 @@ import android.view.ViewGroup.MarginLayoutParams
 import androidx.annotation.UiThread
 import androidx.core.view.marginEnd
 import androidx.core.view.marginStart
-import com.arcsoft.closeli.utils.takeIfIs
+import com.sunzk.base.expand.takeIfIs
 import com.blankj.utilcode.util.ScreenUtils
 import com.sunzk.base.utils.ColorUtils
 import com.sunzk.colortest.R

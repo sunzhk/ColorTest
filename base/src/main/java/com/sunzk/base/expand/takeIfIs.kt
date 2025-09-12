@@ -1,4 +1,4 @@
-package com.arcsoft.closeli.utils
+package com.sunzk.base.expand
 
 inline fun <reified R> Any.takeIfIs(): R? {
 	return this.takeIf { this is R }?.let { this as R }

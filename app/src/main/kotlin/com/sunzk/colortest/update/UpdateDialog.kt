@@ -17,12 +17,15 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.blankj.utilcode.util.GsonUtils
 
 import com.sunzk.colortest.R
+import com.sunzk.colortest.update.bean.Author
 import com.sunzk.colortest.update.bean.VersionInfo
 import com.sunzk.compose.clickableWithoutIndication
 import com.sunzk.compose.style.commonBlock
@@ -83,4 +86,10 @@ private fun DownloadButton(text: String, onClick: () -> Unit) {
 			modifier = Modifier.wrapContentSize().align(Alignment.Center))
 	}
 	
+}
+
+@Preview
+@Composable
+fun PreviewUpdateDialog() {
+	UpdateDialog(GsonUtils.fromJson<VersionInfo>(VersionInfo.testData, VersionInfo::class.java), {})
 }

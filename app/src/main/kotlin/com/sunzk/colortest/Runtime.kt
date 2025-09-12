@@ -6,13 +6,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
-import com.arcsoft.closeli.utils.takeIfIs
+import com.sunzk.base.expand.takeIfIs
 import com.sunzk.base.expand.emitBy
-import com.sunzk.colortest.entity.ModeEntity
 import com.sunzk.colortest.view.colorPicker.ColorPickerType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.util.*
 
 object Runtime {
     private const val TAG = "Runtime"
