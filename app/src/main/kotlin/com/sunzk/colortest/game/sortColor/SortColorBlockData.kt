@@ -1,9 +1,8 @@
-package com.sunzk.colortest.sortColor
+package com.sunzk.colortest.game.sortColor
 
 import android.util.Log
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import com.sunzk.colortest.entity.HSB
 
 /**
  * 色块数据实体

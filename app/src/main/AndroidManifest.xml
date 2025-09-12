@@ -30,8 +30,6 @@
         <activity android:name=".game.mockcolor.MockColorHistoryActivity" />
         <activity android:name=".game.intermediateColor.IntermediateColorHistoryActivity" />
 		<activity android:name=".activity.SettingActivity" />
-		<activity android:name=".findSameColor.FindSameColorActivity" />
-		<activity android:name=".sortColor.SortColorActivity" />
         <activity android:name=".game.GameActivity" />
 
         <!--	注册辅助功能服务	-->

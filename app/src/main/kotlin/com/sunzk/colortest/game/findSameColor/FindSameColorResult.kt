@@ -1,4 +1,4 @@
-package com.sunzk.colortest.findSameColor
+package com.sunzk.colortest.game.findSameColor
 
 import android.util.Range
 import com.sunzk.colortest.game.IDifficulty

@@ -1,4 +1,4 @@
-package com.sunzk.colortest.sortColor
+package com.sunzk.colortest.game.sortColor
 
 import androidx.lifecycle.ViewModel
 import com.sunzk.base.expand.emitBy

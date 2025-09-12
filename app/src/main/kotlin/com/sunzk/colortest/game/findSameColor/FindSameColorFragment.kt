@@ -1,7 +1,10 @@
-package com.sunzk.colortest.findSameColor
+package com.sunzk.colortest.game.findSameColor
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.core.animateFloatAsState
@@ -42,6 +45,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -53,15 +58,16 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.TimeUtils
 import com.sunzk.colortest.BaseActivity
+import com.sunzk.colortest.BaseFragment
 import com.sunzk.colortest.R
-import com.sunzk.colortest.RouteInfo
 import com.sunzk.colortest.entity.HSB
-import com.sunzk.colortest.findSameColor.FindSameColorViewModel.GameState
+import com.sunzk.colortest.game.findSameColor.FindSameColorViewModel.GameState
 import com.sunzk.colortest.tools.ext.get
 import com.sunzk.colortest.tools.ext.onClick
 import com.sunzk.demo.tools.ext.px2dp
@@ -70,16 +76,20 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.sqrt
 
-class FindSameColorActivity : BaseActivity() {
+class FindSameColorFragment : BaseFragment() {
 	companion object {
-		private const val TAG: String = "FindSameColorActivity"
+		private const val TAG: String = "FindSameColorFragment"
 	}
 
 	private val viewModel by viewModels<FindSameColorViewModel>()
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		setContent { Page() }
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+		return ComposeView(requireContext()).apply {
+			setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+			setContent { 
+				Page()
+			}
+		}
 	}
 
 	@Preview

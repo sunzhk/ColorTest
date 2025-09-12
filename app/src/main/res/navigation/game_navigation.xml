@@ -32,8 +32,12 @@
         android:name="com.sunzk.colortest.game.findDiffColor.FindDiffColorFragment"
         android:label="FindDiffColorFragment"/>
     <fragment
-        android:id="@+id/findSameColor"/>
+        android:id="@+id/findSameColor"
+        android:name="com.sunzk.colortest.game.findSameColor.FindSameColorFragment"
+        android:label="FindSameColorFragment"/>
     <fragment
-        android:id="@+id/sortColor"/>
+        android:id="@+id/sortColor"
+        android:name="com.sunzk.colortest.game.sortColor.SortColorFragment"
+        android:label="SortColorFragment"/>
 
 </navigation>
