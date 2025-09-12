@@ -1,4 +1,4 @@
-package com.sunzk.colortest.sortColor
+package com.sunzk.colortest.game.sortColor
 
 import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState

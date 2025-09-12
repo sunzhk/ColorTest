@@ -43,9 +43,6 @@ import com.sunzk.colortest.BaseFragment
 import com.sunzk.colortest.BuildConfig
 import com.sunzk.colortest.R
 import com.sunzk.colortest.RouteInfo
-import com.sunzk.colortest.RouteInfo.GameMap.*
-import com.sunzk.colortest.findSameColor.FindSameColorActivity
-import com.sunzk.colortest.sortColor.SortColorActivity
 import com.sunzk.colortest.tools.ext.onClick
 import com.sunzk.colortest.update.UpdateDialog
 import com.sunzk.colortest.update.UpdateManager
@@ -114,8 +111,8 @@ class ModeSelectFragment: BaseFragment() {
 							} else {
 								when (modeEntity) {
 //									ActivityFindDiffColor -> startActivity(Intent(requireContext(), FindDiffColorActivity::class.java))
-									ActivityFindSameColor -> startActivity(Intent(requireContext(), FindSameColorActivity::class.java))
-									ActivitySortColor -> startActivity(Intent(requireContext(), SortColorActivity::class.java))
+//									ActivityFindSameColor -> startActivity(Intent(requireContext(), FindSameColorActivity::class.java))
+//									ActivitySortColor -> startActivity(Intent(requireContext(), SortColorActivity::class.java))
 									else -> {}
 								}
 							}

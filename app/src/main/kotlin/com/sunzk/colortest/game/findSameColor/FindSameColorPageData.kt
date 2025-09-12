@@ -1,4 +1,4 @@
-package com.sunzk.colortest.findSameColor
+package com.sunzk.colortest.game.findSameColor
 
 import com.sunzk.colortest.entity.HSB
 
