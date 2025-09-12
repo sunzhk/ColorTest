@@ -2,18 +2,18 @@
 activityCompose = "1.9.3"
 app_lifecycle_version = "2.8.7"
 brv-fork = "1.5.5.1"
-coroutines_android_version = "1.10.1"
+coroutines_android_version = "1.10.2"
 ability_version = "1.0.0.27"
 datastorePreferencesVersion = "1.1.1"
-gradle_version = "8.4.2"
-gson_version = "2.11.0"
-lottie_version = "6.6.2"
+gradle_version = "8.8.2"
+gson_version = "2.13.1"
+lottie_version = "6.6.7"
 #hilt_version = "2.44"
 androidxComposeBom = "2024.12.01"
 lifecycleViewmodelCompose = "2.8.7"
 
 agp = "8.3.2"
-kotlin = "2.1.0"
+kotlin = "2.2.20"
 composeCompiler = "1.5.11"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
@@ -22,9 +22,9 @@ junitJupiterVersion = "5.8.1"
 junitVersion = "4.12"
 navigationVersion = "2.8.4"
 
-utilcodex = "1.31.0"
+utilcodex = "1.31.1"
 
-kotlinxSerialization = "1.7.3"
+kotlinxSerialization = "1.9.0"
 [libraries]
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle_version" }
 
@@ -35,7 +35,7 @@ lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.r
 
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines_android_version" }
 
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.10.1"}
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.10.2"}
 
 androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.13.1" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.0.1" }
@@ -61,7 +61,7 @@ androidx_navigation_test = { module = "androidx.navigation:navigation-testing", 
 
 material = { module = "com.google.android.material:material", version = "1.12.0" }
 
-recyclerView = { module = "androidx.recyclerview:recyclerview", version = "1.3.2" }
+recyclerView = { module = "androidx.recyclerview:recyclerview", version = "1.4.0" }
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson_version" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie_version" }
