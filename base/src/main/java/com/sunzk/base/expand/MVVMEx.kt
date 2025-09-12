@@ -8,8 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import java.lang.reflect.Method
 
-private const val TAG: String = "MVVMEx"
-
 /**
  * 为Activity绑定ViewBinding
  */
@@ -30,6 +28,7 @@ class ActivityBinderLazy<T : ViewBinding>(private val clazz: Class<T>, val activ
 		return binder != null
 	}
 
+	@Suppress("UNCHECKED_CAST")
 	private fun initValue(): T {
 		val method = clazz.getMethod("inflate", LayoutInflater::class.java)
 		return (method.invoke(null, activity.layoutInflater) as T).also {
@@ -57,7 +56,7 @@ class ViewGroupBinderLazy<T : ViewBinding>(private val clazz: Class<T>, val grou
 	override fun isInitialized(): Boolean {
 		return binder != null
 	}
-
+	@Suppress("UNCHECKED_CAST")
 	private fun initValue(): T {
 		var method: Method
 
@@ -67,14 +66,12 @@ class ViewGroupBinderLazy<T : ViewBinding>(private val clazz: Class<T>, val grou
 				group.addView(it.root)
 				it
 			}
-		} catch (t: Throwable) {
+		} catch (_: Throwable) {
 
 		}
 		// 为ViewGroup绑定时，存在merge等情况，需要使用另一个inflate方法
 		method = clazz.getMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java)
-		return (method.invoke(null, LayoutInflater.from(group.context), group) as T).let {
-			it
-		}
+		return (method.invoke(null, LayoutInflater.from(group.context), group) as T)
 	}
 }
 
@@ -95,11 +92,10 @@ class FragmentBinderLazy<T : ViewBinding>(private val clazz: Class<T>, val fragm
 		return binder != null
 	}
 
+	@Suppress("UNCHECKED_CAST")
 	private fun initValue(): T {
 		val method = clazz.getMethod("inflate", LayoutInflater::class.java)
-		return (method.invoke(null, fragment.layoutInflater) as T).let {
-			it
-		}
+		return (method.invoke(null, fragment.layoutInflater) as T)
 	}
 }
 
@@ -123,8 +119,9 @@ class DialogBinderLazy<T : ViewBinding>(private val clazz: Class<T>, val dialog:
 		return binder != null
 	}
 
+	@Suppress("UNCHECKED_CAST")
 	private fun initValue(): T {
-		var method = clazz.getMethod("inflate", LayoutInflater::class.java)
+		val method = clazz.getMethod("inflate", LayoutInflater::class.java)
 		return (method.invoke(null, dialog.layoutInflater) as T).let {
 			dialog.setContentView(it.root)
 			it

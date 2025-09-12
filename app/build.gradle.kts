@@ -18,7 +18,7 @@ android {
         }
     }
 
-    compileSdk = 34
+    compileSdk = 35
     buildToolsVersion = "34.0.0"
 
     defaultConfig {
@@ -29,15 +29,6 @@ android {
         versionName = "2.7.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-//        kapt {
-//            arguments {
-//                //根据模块名来命名路由根节点
-//                arg("AROUTER_MODULE_NAME", project.getName())
-//                //生成Json文件
-//                arg("AROUTER_GENERATE_DOC", "enable")
-//            }
-//        }
     }
     buildFeatures {
         buildConfig = true
@@ -113,10 +104,6 @@ dependencies {
 
     implementation(libs.gson)
     implementation(libs.bundles.lottie)
-
-//    //ARouter
-//    implementation("com.alibaba:arouter-api:1.4.1")
-//    kapt("com.alibaba:arouter-compiler:1.2.2")
 
     // 动态权限申请
 //    implementation("com.github.tbruyelle:rxpermissions:0.12") 已过时
