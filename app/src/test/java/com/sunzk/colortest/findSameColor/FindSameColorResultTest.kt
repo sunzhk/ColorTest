@@ -1,5 +1,6 @@
 package com.sunzk.colortest.findSameColor
 
+import com.sunzk.colortest.game.findSameColor.FindSameColorResult
 import org.junit.Assert.*
 
 class FindSameColorResultTest {

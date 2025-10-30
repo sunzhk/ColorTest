@@ -23,7 +23,6 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
-import com.arcsoft.closeli.utils.takeIfIs
 import com.sunzk.base.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

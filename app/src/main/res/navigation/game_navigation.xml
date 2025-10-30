@@ -1,0 +1,43 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/game_nav_graph"
+    app:startDestination="@id/modeSelect">
+    
+    <fragment
+        android:id="@+id/modeSelect"
+        android:name="com.sunzk.colortest.game.ModeSelectFragment"
+        android:label="ModeSelectFragment">
+        <action android:id="@+id/action_modeSelect_to_mockColor"
+            app:destination="@id/mockColor"/>
+        <action android:id="@+id/action_modeSelect_to_intermediateColor"
+            app:destination="@+id/intermediateColor"/>
+        <action android:id="@+id/action_modeSelect_to_findDiffColor"
+            app:destination="@+id/findDiffColor"/>
+        <action android:id="@+id/action_modeSelect_to_findSameColor"
+            app:destination="@+id/findSameColor"/>
+        <action android:id="@+id/action_modeSelect_to_sortColor"
+            app:destination="@+id/sortColor"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/mockColor"
+        android:name="com.sunzk.colortest.game.mockcolor.MockColorFragment"
+        android:label="MockColorFragment"/>
+    <fragment
+        android:id="@+id/intermediateColor"
+        android:name="com.sunzk.colortest.game.intermediateColor.IntermediateColorFragment"
+        android:label="IntermediateColorFragment"/>
+    <fragment
+        android:id="@+id/findDiffColor"
+        android:name="com.sunzk.colortest.game.findDiffColor.FindDiffColorFragment"
+        android:label="FindDiffColorFragment"/>
+    <fragment
+        android:id="@+id/findSameColor"
+        android:name="com.sunzk.colortest.game.findSameColor.FindSameColorFragment"
+        android:label="FindSameColorFragment"/>
+    <fragment
+        android:id="@+id/sortColor"
+        android:name="com.sunzk.colortest.game.sortColor.SortColorFragment"
+        android:label="SortColorFragment"/>
+
+</navigation>

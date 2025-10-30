@@ -3,7 +3,7 @@ package com.sunzk.base.utils
 import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
-import com.sunzk.base.utils.AppUtils.getActivity
+import com.blankj.utilcode.util.ActivityUtils
 
 /**
  * 控件工具类
@@ -18,7 +18,7 @@ object ViewUtils {
      * @return true 如果child是parent的子控件(直接、间接)
      */
     fun isChildOf(child: View, parent: View): Boolean {
-        val activity = getActivity(parent.context)
+        val activity = ActivityUtils.getActivityByContext(parent.context)
         return isChildOf(activity!!, child, parent)
     }
 

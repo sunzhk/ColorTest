@@ -2,24 +2,29 @@
 activityCompose = "1.9.3"
 app_lifecycle_version = "2.8.7"
 brv-fork = "1.5.5.1"
-coroutines_android_version = "1.10.1"
+coroutines_android_version = "1.10.2"
 ability_version = "1.0.0.27"
 datastorePreferencesVersion = "1.1.1"
-gradle_version = "8.4.2"
-gson_version = "2.11.0"
-lottie_version = "6.6.2"
+gradle_version = "8.8.2"
+gson_version = "2.13.1"
+lottie_version = "6.6.7"
 #hilt_version = "2.44"
 androidxComposeBom = "2024.12.01"
 lifecycleViewmodelCompose = "2.8.7"
 
 agp = "8.3.2"
-kotlin = "2.1.0"
+kotlin = "2.2.20"
+composeCompiler = "1.5.11"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 junitJupiterVersion = "5.8.1"
 junitVersion = "4.12"
+navigationVersion = "2.8.4"
 
+utilcodex = "1.31.1"
+
+kotlinxSerialization = "1.9.0"
 [libraries]
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle_version" }
 
@@ -30,7 +35,7 @@ lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.r
 
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines_android_version" }
 
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.10.1"}
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.10.2"}
 
 androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.13.1" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.0.1" }
@@ -45,9 +50,18 @@ androidx_viewpager2 = { module = "androidx.viewpager2:viewpager2", version = "1.
 androidx_cardview = { module = "androidx.cardview:cardview", version = "1.0.0" }
 androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
 
+androidx_navigation_compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationVersion" }
+
+androidx_navigation_fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "navigationVersion" }
+androidx_navigation_view = { module = "androidx.navigation:navigation-ui", version.ref = "navigationVersion" }
+androidx_navigation_dynamic_features_fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigationVersion" }
+
+androidx_navigation_test = { module = "androidx.navigation:navigation-testing", version.ref = "navigationVersion" }
+
+
 material = { module = "com.google.android.material:material", version = "1.12.0" }
 
-recyclerView = { module = "androidx.recyclerview:recyclerview", version = "1.3.2" }
+recyclerView = { module = "androidx.recyclerview:recyclerview", version = "1.4.0" }
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson_version" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie_version" }
@@ -74,6 +88,15 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
 
+utilcodex = { module = "com.blankj:utilcodex", version.ref = "utilcodex" }
+
+# Network
+okhttp3 = { module = "com.squareup.okhttp3:okhttp", version = "4.12.0" }
+
+# serialization
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+
 [bundles]
 "lifecycle" = ["lifecycle-livedata-ktx", "lifecycle-viewmodel-ktx", "lifecycle-runtime-ktx-json", "lifecycle-service"]
 "coroutines" = ["coroutines-android"]
@@ -83,5 +106,6 @@ junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
 "jiguang" = ["jiguang-jpush", "jiguang-jcore", "jiguang-plugin-vivo", "jiguang-plugin-oppo", "jiguang-plugin-xiaomi"]
 "compose" = ["androidx-compose-bom", "androidx-compose-foundation", "compose-material3", "compose-constraintlayout", "androidx-activity-compose", "androidx-lifecycle-viewmodel-compose", "compose-ui-tooling-preview"]
 "lottie" = ["lottie", "lottie-compose"]
+"androidx_navigation" = ["androidx_navigation_compose", "androidx_navigation_fragment", "androidx_navigation_view", "androidx_navigation_dynamic_features_fragment", "kotlinx_serialization_json"]
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

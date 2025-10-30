@@ -9,4 +9,8 @@
     <string name="list_history">历史</string>
 
 	<string name="common_confirm">确定</string>
+	<string name="common_cancel">取消</string>
+	<string name="hint_current_is_latest_version">当前已经是最新版本%s</string>
+	<string name="hint_find_new_version">发现新版本%s</string>
+	<string name="hint_update_title">发现新版本</string>
 </resources>
