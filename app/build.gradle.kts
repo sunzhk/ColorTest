@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -11,6 +13,8 @@ android {
 
     signingConfigs {
         create("keystore") {
+	        val localProperties = Properties()
+	        localProperties.load(File(project.rootDir, "local.properties").reader())
             keyAlias = localProperties["KEY_ALIAS"].toString()
             keyPassword = localProperties["KEY_PASSWORD"].toString()
             storeFile = File(project.projectDir, localProperties["STORE_FILE"].toString())
