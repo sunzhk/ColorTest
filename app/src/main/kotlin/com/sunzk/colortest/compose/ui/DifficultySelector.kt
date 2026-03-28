@@ -38,7 +38,7 @@ fun <T: IDifficulty> DifficultySelector(modifier: Modifier, difficulty: T, list:
 				.fillMaxHeight()
 				.width(60.dp),
 			onClick = {
-				Log.d(TAG, "MockColorFragment#DifficultySelector- on DifficultyText click")
+				Log.d(TAG, "DifficultySelector- on DifficultyText click")
 				showDifficultyDropdownMenu = !showDifficultyDropdownMenu
 			})
 		CustomDropdownMenu(
@@ -52,7 +52,7 @@ fun <T: IDifficulty> DifficultySelector(modifier: Modifier, difficulty: T, list:
 					modifier = Modifier
 						.fillMaxWidth(),
 					onClick = {
-						Log.d(TAG, "MockColorFragment#DifficultySelector- on DifficultyText click")
+						Log.d(TAG, "DifficultySelector- on DifficultyText click")
 						showDifficultyDropdownMenu = false
 						onDifficultySelect(difficultyItem)
 					})
@@ -77,7 +77,7 @@ private fun DifficultyText(text: String, modifier: Modifier, onClick: (() -> Uni
 			.commonButtonStyle()
 			.padding(5.dp)
 			.onClick {
-				Log.d(TAG, "MockColorFragment#DifficultyText- $text onClick!")
+				Log.d(TAG, "DifficultyText- $text onClick!")
 				if (onClick != null) {
 					onClick()
 				}

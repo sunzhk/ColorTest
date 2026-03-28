@@ -16,7 +16,6 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -33,31 +32,37 @@ import com.sunzk.compose.style.commonBlock
 
 
 @Composable
-fun CommonAlertDialog(title: String,
-                      message: String,
-                      onDismissRequest: () -> Unit,
-                      leftButtonText: String = stringResource(R.string.common_cancel),
-                      rightButtonText: String = stringResource(R.string.common_confirm),
-                      onLeftButtonClick: () -> Unit = { onDismissRequest() },
-					  onRightButtonClick: () -> Unit = { onDismissRequest() },
-                      properties: DialogProperties = DialogProperties()) {
-	Dialog(onDismissRequest = onDismissRequest,
-		properties = properties) {
-		Column(modifier = Modifier.wrapContentSize().commonBlock()) {
-			Text(title, fontWeight = FontWeight.Bold, fontSize = 17.sp, color = colorResource(R.color.theme_txt_standard), 
-				modifier = Modifier.padding(top = 18.dp).wrapContentWidth().align(Alignment.CenterHorizontally))
-			Text(message, fontSize = 14.sp, color = colorResource(R.color.theme_txt_standard), 
-				modifier = Modifier.padding(top = 14.dp).padding(horizontal = 16.dp).align(Alignment.CenterHorizontally))
-			HorizontalDivider(modifier = Modifier.padding(top = 13.dp), thickness = (0.5).dp, color = Color(0xFFDDDDDD))
-			Row(modifier = Modifier.height(43.dp)) {
-				Text(leftButtonText, textAlign = TextAlign.Center, fontSize = 17.sp, color = Color(0xFF007AFF), modifier = Modifier.wrapContentHeight().weight(1f)
-					.align(Alignment.CenterVertically)
-					.clickableWithoutIndication { onLeftButtonClick() })
-				VerticalDivider(modifier = Modifier.fillMaxHeight(), thickness = 1.dp, color = Color(0xFFDDDDDD))
-				Text(rightButtonText, textAlign = TextAlign.Center, fontSize = 17.sp, color = Color(0xFF1079FF), modifier = Modifier.wrapContentHeight().weight(1f)
-					.align(Alignment.CenterVertically)
-					.clickableWithoutIndication { onRightButtonClick() })
-			}
-		}
-	}
+fun CommonAlertDialog(
+    title: String,
+    message: String,
+    onDismissRequest: () -> Unit,
+    leftButtonText: String = stringResource(R.string.common_cancel),
+    rightButtonText: String = stringResource(R.string.common_confirm),
+    onLeftButtonClick: () -> Unit = { onDismissRequest() },
+    onRightButtonClick: () -> Unit = { onDismissRequest() },
+    properties: DialogProperties = DialogProperties(),
+) {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        properties = properties,
+    ) {
+        Column(modifier = Modifier.wrapContentSize().commonBlock()) {
+            Text(title, fontWeight = FontWeight.Bold, fontSize = 17.sp, color = colorResource(R.color.theme_txt_standard),
+                modifier = Modifier.padding(top = 18.dp).wrapContentWidth().align(Alignment.CenterHorizontally))
+            Text(message, fontSize = 14.sp, color = colorResource(R.color.theme_txt_standard),
+                modifier = Modifier.padding(top = 14.dp).padding(horizontal = 16.dp).align(Alignment.CenterHorizontally))
+            HorizontalDivider(modifier = Modifier.padding(top = 13.dp), thickness = (0.5).dp, color = colorResource(R.color.common_dialog_divider))
+            Row(modifier = Modifier.height(43.dp)) {
+                Text(leftButtonText, textAlign = TextAlign.Center, fontSize = 17.sp, color = colorResource(R.color.common_dialog_btn_left),
+                    modifier = Modifier.wrapContentHeight().weight(1f)
+                        .align(Alignment.CenterVertically)
+                        .clickableWithoutIndication { onLeftButtonClick() })
+                VerticalDivider(modifier = Modifier.fillMaxHeight(), thickness = 1.dp, color = colorResource(R.color.common_dialog_divider))
+                Text(rightButtonText, textAlign = TextAlign.Center, fontSize = 17.sp, color = colorResource(R.color.common_dialog_btn_right),
+                    modifier = Modifier.wrapContentHeight().weight(1f)
+                        .align(Alignment.CenterVertically)
+                        .clickableWithoutIndication { onRightButtonClick() })
+            }
+        }
+    }
 }

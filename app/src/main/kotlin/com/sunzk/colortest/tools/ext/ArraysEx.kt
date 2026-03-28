@@ -1,4 +1,4 @@
-package com.sunzk.demo.tools.ext
+package com.sunzk.colortest.tools.ext
 
 fun ByteArray.startWith(array: ByteArray): Boolean {
 	if (array.size > this.size) {

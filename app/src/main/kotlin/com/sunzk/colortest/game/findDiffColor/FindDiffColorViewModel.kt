@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.sunzk.base.expand.emitBy
 import com.sunzk.colortest.entity.HSB
-import com.sunzk.demo.tools.ext.square
+import com.sunzk.colortest.tools.ext.square
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Random
 

@@ -6,10 +6,16 @@
 	<string name="light_switch_text_turn_on">开灯</string>
 	<string name="light_switch_text_turn_off">关灯</string>
     <string name="accessibility_tip">此功能需要开启辅助功能权限</string>
-    <string name="list_history">历史</string>
+	<string name="list_history">历史</string>
+	<string name="find_diff_shuffle">换一换</string>
 
 	<string name="common_confirm">确定</string>
 	<string name="common_cancel">取消</string>
+	<string name="settlement_correct">答对了，可喜可贺</string>
+	<string name="settlement_wrong">答错了，再接再厉</string>
+	<string name="settlement_hint_history">可以通过查看历史记录，了解更多信息</string>
+	<string name="settlement_cancel">累了，下次再来</string>
+	<string name="settlement_next">下一题</string>
 	<string name="hint_current_is_latest_version">当前已经是最新版本%s</string>
 	<string name="hint_find_new_version">发现新版本%s</string>
 	<string name="hint_update_title">发现新版本</string>

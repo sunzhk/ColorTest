@@ -2,40 +2,34 @@ package com.sunzk.colortest.game
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import com.sunzk.base.expand.takeIfIs
-import com.sunzk.base.expand.bindView
+import androidx.navigation.compose.rememberNavController
 import com.sunzk.colortest.BaseActivity
-import com.sunzk.colortest.databinding.ActivityGameBinding
+import com.sunzk.colortest.game.navigation.GameNavHost
 
-class GameActivity: BaseActivity() {
+class GameActivity : BaseActivity() {
 
-	companion object {
-		private const val TAG: String = "GameActivity"
-	}
-	
-	private val viewBinding by bindView<ActivityGameBinding>()
-	private var navController: NavController? = null
+    companion object {
+        private const val TAG: String = "GameActivity"
+    }
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		initView()
-		initNavigation()
-	}
-	
-	private fun initView() = with(viewBinding) {
-		Log.d(TAG, "GameActivity#initView- $navHostFragment")
-	}
-	
-	private fun initNavigation() {
-		navController = supportFragmentManager.findFragmentById(viewBinding.navHostFragment.id)
-			?.takeIfIs<NavHostFragment>()
-			?.navController
-		Log.d(TAG, "GameActivity#initNavigation- $navController")
-	}
+    private var navController: NavController? = null
 
-	override fun onSupportNavigateUp(): Boolean {
-		return (navController?.navigateUp() ?: false) || super.onSupportNavigateUp()
-	}
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            val controller = rememberNavController()
+            LaunchedEffect(controller) {
+                navController = controller
+                Log.d(TAG, "GameActivity#onCreate- navController=$controller")
+            }
+            GameNavHost(navController = controller)
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return (navController?.navigateUp() == true) || super.onSupportNavigateUp()
+    }
 }

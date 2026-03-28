@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.sunzk.colortest.R
-import com.sunzk.demo.tools.ext.dp2px
+import com.sunzk.colortest.tools.ext.dp2px
 import kotlinx.coroutines.delay
 
 object SortColorView {

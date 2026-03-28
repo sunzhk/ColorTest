@@ -38,8 +38,8 @@ import com.blankj.utilcode.util.ScreenUtils
 import com.sunzk.colortest.R
 import com.sunzk.colortest.entity.HSB
 import com.sunzk.colortest.entity.StatisticsData
-import com.sunzk.demo.tools.ext.px
-import com.sunzk.demo.tools.ext.toLimitedString
+import com.sunzk.colortest.tools.ext.px
+import com.sunzk.colortest.tools.ext.toLimitedString
 
 object HistoryPageCommon {
 	

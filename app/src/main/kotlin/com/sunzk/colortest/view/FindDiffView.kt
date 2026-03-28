@@ -10,7 +10,7 @@ import android.widget.FrameLayout
 import com.sunzk.base.expand.onClick
 import com.sunzk.colortest.R
 import com.sunzk.colortest.entity.HSB
-import com.sunzk.demo.tools.ext.dp2px
+import com.sunzk.colortest.tools.ext.dp2px
 import java.util.*
 
 class FindDiffView : FrameLayout {

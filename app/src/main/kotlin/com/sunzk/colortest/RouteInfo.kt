@@ -1,12 +1,14 @@
 package com.sunzk.colortest
 
+import com.sunzk.colortest.game.navigation.GameRoutes
+
 object RouteInfo {
 
-	enum class GameMap(val modeName: String, val navigationAction: Int, val enable: Boolean = false) {
-		ActivityMockColor("模拟色彩", R.id.action_modeSelect_to_mockColor, true),
-		ActivityIntermediateColor("寻找中间色", R.id.action_modeSelect_to_intermediateColor, true),
-		ActivityFindDiffColor("找不同", R.id.action_modeSelect_to_findDiffColor, true),
-		ActivityFindSameColor("找相同", R.id.action_modeSelect_to_findSameColor, true),
-		ActivitySortColor("色彩排序", R.id.action_modeSelect_to_sortColor, true),
-	}
+    enum class GameMap(val modeName: String, val route: String, val enable: Boolean = false) {
+        ActivityMockColor("模拟色彩", GameRoutes.MOCK_COLOR, true),
+        ActivityIntermediateColor("寻找中间色", GameRoutes.INTERMEDIATE_COLOR, true),
+        ActivityFindDiffColor("找不同", GameRoutes.FIND_DIFF_COLOR, true),
+        ActivityFindSameColor("找相同", GameRoutes.FIND_SAME_COLOR, true),
+        ActivitySortColor("色彩排序", GameRoutes.SORT_COLOR, true),
+    }
 }

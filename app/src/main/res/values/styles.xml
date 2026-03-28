@@ -40,7 +40,6 @@
 	</style>
 
 	<style name="CommonButton">
-		<item name="android:background">@drawable/bg_common_bt</item>
 		<item name="android:textColor">@color/common_bt_text</item>
 		<item name="android:textSize">14sp</item>
 	</style>

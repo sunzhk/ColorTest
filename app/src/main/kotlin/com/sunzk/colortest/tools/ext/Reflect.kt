@@ -1,7 +1,6 @@
-package com.sunzk.demo.tools.ext
+package com.sunzk.colortest.tools.ext
 
 import android.util.Log
-import androidx.viewbinding.ViewBinding
 import java.lang.reflect.Method
 
 fun Any.invoke(methodName: String, params: Array<Any?>?, parameterTypes: Array<Class<*>>?): Any? {

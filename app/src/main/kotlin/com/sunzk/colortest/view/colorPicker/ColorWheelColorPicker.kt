@@ -26,9 +26,9 @@ import com.blankj.utilcode.util.ScreenUtils
 import com.sunzk.base.utils.ColorUtils
 import com.sunzk.colortest.R
 import com.sunzk.colortest.entity.HSB
-import com.sunzk.demo.tools.ext.dp2px
-import com.sunzk.demo.tools.ext.sp2px
-import com.sunzk.demo.tools.ext.square
+import com.sunzk.colortest.tools.ext.dp2px
+import com.sunzk.colortest.tools.ext.sp2px
+import com.sunzk.colortest.tools.ext.square
 import kotlin.math.atan2
 import kotlin.math.min
 import kotlin.math.sqrt
